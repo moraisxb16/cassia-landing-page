@@ -1,0 +1,34 @@
+import { CartProvider } from './cart/CartContext';
+import { Header } from './components/layout/Header';
+import { Hero } from './components/sections/Hero';
+import { Services } from './components/sections/Services';
+import { Courses } from './components/sections/Courses';
+import { Products } from './components/sections/Products';
+import { Footer } from './components/layout/Footer';
+import { CartDrawer } from './cart/CartDrawer';
+import { CheckoutForm } from './payment/CheckoutForm';
+
+export default function App() {
+  return (
+    <CartProvider>
+      <div className="min-h-screen bg-[var(--cassia-white)] relative overflow-hidden">
+        {/* Background Effects - Místico e Claro */}
+        <div className="fixed inset-0 bg-gradient-to-br from-[var(--cassia-lavender)]/20 via-[var(--cassia-white)] to-[var(--cassia-gold-light)]/20 pointer-events-none" />
+        <div className="fixed top-0 right-0 w-[600px] h-[600px] bg-[var(--cassia-purple)]/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-[var(--cassia-gold)]/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[var(--cassia-lavender)]/15 rounded-full blur-[150px] pointer-events-none" />
+
+        <Header />
+        <Hero />
+        <Services />
+        <Courses />
+        <Products />
+        <Footer />
+
+        {/* Fluxo de Carrinho & Checkout montado globalmente */}
+        <CartDrawer />
+        <CheckoutForm />
+      </div>
+    </CartProvider>
+  );
+}

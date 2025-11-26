@@ -1,0 +1,71 @@
+@import 'tailwindcss';
+
+:root {
+  /* 🎨 Cores Principais — Cássia Corvini */
+  --cassia-purple: #A275E3;
+  --cassia-purple-dark: #8A4FC3;
+  --cassia-lavender: #D6C0F4;
+  --cassia-gold: #CFAF63;
+  --cassia-gold-light: #F8E3BB;
+  --cassia-white: #FDF6FF;
+  --cassia-night: #4A2671;
+  --cassia-deep: #2B163F;
+  
+  /* Compatibilidade (alias das novas cores) */
+  --lilac-magico: var(--cassia-purple);
+  --lavanda-suave: var(--cassia-lavender);
+  --dourado-claro: var(--cassia-gold-light);
+  --branco-magico: var(--cassia-white);
+  --roxo-profundo: var(--cassia-purple-dark);
+  --dourado-puro: var(--cassia-gold);
+  
+  /* Tons Auxiliares */
+  --lilac-light: rgba(162, 117, 227, 0.15);
+  --lilac-medium: rgba(162, 117, 227, 0.3);
+  --lilac-dark: rgba(138, 79, 195, 0.4);
+  --gold-light: rgba(248, 227, 187, 0.2);
+  --gold-medium: rgba(207, 175, 99, 0.3);
+  
+  /* ✨ Sombras / Glow Místicos */
+  --shadow-soft: 0 4px 20px rgba(0,0,0,.05);
+  --shadow-medium: 0 4px 30px rgba(162,117,227,.25);
+  --shadow-glow: 0 0 40px rgba(162,117,227,.55);
+  --shadow-strong: 0 8px 40px rgba(0,0,0,.15);
+  
+  /* 🌙 Blur / Glow Etéreo */
+  --blur-soft: blur(20px);
+  --blur-mid: blur(40px);
+  --blur-hard: blur(100px);
+}
+
+/* 🔮 Animação de Gradiente Místico */
+@keyframes cassiaGradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Classe do gradiente animado para Hero */
+.cassia-hero-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--cassia-lavender),
+    var(--cassia-purple),
+    var(--cassia-gold-light),
+    var(--cassia-purple-dark)
+  );
+  background-size: 300% 300%;
+  animation: cassiaGradientShift 18s ease-in-out infinite;
+}
+
+body {
+  font-family: var(--font-geist-sans);
+  background: var(--cassia-white);
+  color: var(--cassia-purple-dark);
+}
