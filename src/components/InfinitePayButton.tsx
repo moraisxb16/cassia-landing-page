@@ -12,43 +12,31 @@ declare global {
   }
 }
 
+type PaymentType = 'pix' | 'card';
+
 interface InfinitePayButtonProps {
   amount: number;
   description: string;
+  types?: PaymentType[]; // quais meios habilitar no checkout (padrão: ['pix', 'card'])
 }
 
-export function InfinitePayButton({ amount, description }: InfinitePayButtonProps) {
-  const [isReady, setIsReady] = useState(false);
-
+export function InfinitePayButton({
+  amount,
+  description,
+  types = ['pix', 'card'],
+}: InfinitePayButtonProps) {
+  // carrega o script uma vez; não bloqueia o botão, apenas tenta garantir que o script existe
   useEffect(() => {
     const url = 'https://checkout.infinitepay.io/v1';
     const existing = document.querySelector<HTMLScriptElement>(`script[src="${url}"]`);
 
-    if (window.InfiniteCheckout) {
-      setIsReady(true);
+    if (existing || typeof window !== 'undefined') {
       return;
-    }
-
-    if (existing) {
-      const onLoad = () => {
-        if (window.InfiniteCheckout) {
-          setIsReady(true);
-        }
-      };
-      existing.addEventListener('load', onLoad);
-      return () => {
-        existing.removeEventListener('load', onLoad);
-      };
     }
 
     const script = document.createElement('script');
     script.src = url;
     script.async = true;
-    script.onload = () => {
-      if (window.InfiniteCheckout) {
-        setIsReady(true);
-      }
-    };
     script.onerror = () => {
       console.error(
         '[InfinitePay] Não foi possível carregar o script do Link Integrado. Verifique o domínio autorizado na InfinitePay.',
@@ -57,7 +45,6 @@ export function InfinitePayButton({ amount, description }: InfinitePayButtonProp
     document.body.appendChild(script);
 
     return () => {
-      script.onload = null;
       script.onerror = null;
     };
   }, []);
@@ -67,7 +54,7 @@ export function InfinitePayButton({ amount, description }: InfinitePayButtonProp
       window.InfiniteCheckout.open({
         name: description,
         amount,
-        type: ['pix', 'card'],
+        type: types,
       });
     } else {
       console.warn('InfiniteCheckout ainda não está disponível no window.');
@@ -82,10 +69,9 @@ export function InfinitePayButton({ amount, description }: InfinitePayButtonProp
     <button
       type="button"
       onClick={handlePay}
-      disabled={!isReady}
-      className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+      className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
     >
-      {isReady ? 'Finalizar Compra' : 'Carregando pagamento...'}
+      Finalizar Compra
     </button>
   );
 }

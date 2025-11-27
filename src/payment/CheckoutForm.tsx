@@ -4,7 +4,7 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { useCart } from '../cart/useCart';
 import { InfinitePayButton } from '../components/InfinitePayButton';
-import type { CheckoutFormData } from '../types';
+import type { CheckoutFormData, PaymentMethod } from '../types';
 
 const defaultForm: CheckoutFormData = {
   name: '',
@@ -27,6 +27,7 @@ export function CheckoutForm() {
   } = useCart();
 
   const [form, setForm] = useState<CheckoutFormData>(defaultForm);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('pix');
 
   const handleClose = () => {
     setForm(defaultForm);
@@ -168,9 +169,38 @@ export function CheckoutForm() {
               </div>
             </div>
 
+            <div className="space-y-3">
+              <h3 className="text-purple-900">Forma de Pagamento</h3>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod('pix')}
+                  className={`flex-1 rounded-md border px-4 py-2 text-sm font-medium transition-colors ${
+                    paymentMethod === 'pix'
+                      ? 'bg-purple-600 text-white border-purple-600'
+                      : 'bg-white text-gray-700 border-gray-200 hover:border-purple-300'
+                  }`}
+                >
+                  PIX
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod('card')}
+                  className={`flex-1 rounded-md border px-4 py-2 text-sm font-medium transition-colors ${
+                    paymentMethod === 'card'
+                      ? 'bg-purple-600 text-white border-purple-600'
+                      : 'bg-white text-gray-700 border-gray-200 hover:border-purple-300'
+                  }`}
+                >
+                  Cartão de Crédito
+                </button>
+              </div>
+            </div>
+
             <InfinitePayButton
               amount={Math.round(totalPrice * 100)}
               description="Compra na Cassia Corviniy"
+              types={[paymentMethod]}
             />
           </div>
         </>
