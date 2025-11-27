@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 declare global {
   interface Window {
@@ -18,16 +18,48 @@ interface InfinitePayButtonProps {
 }
 
 export function InfinitePayButton({ amount, description }: InfinitePayButtonProps) {
+  const [isReady, setIsReady] = useState(false);
+
   useEffect(() => {
-    const existing = document.querySelector<HTMLScriptElement>(
-      'script[src="https://checkout.infinitepay.io/v1"]',
-    );
-    if (!existing) {
-      const script = document.createElement('script');
-      script.src = 'https://checkout.infinitepay.io/v1';
-      script.async = true;
-      document.body.appendChild(script);
+    const url = 'https://checkout.infinitepay.io/v1';
+    const existing = document.querySelector<HTMLScriptElement>(`script[src="${url}"]`);
+
+    if (window.InfiniteCheckout) {
+      setIsReady(true);
+      return;
     }
+
+    if (existing) {
+      const onLoad = () => {
+        if (window.InfiniteCheckout) {
+          setIsReady(true);
+        }
+      };
+      existing.addEventListener('load', onLoad);
+      return () => {
+        existing.removeEventListener('load', onLoad);
+      };
+    }
+
+    const script = document.createElement('script');
+    script.src = url;
+    script.async = true;
+    script.onload = () => {
+      if (window.InfiniteCheckout) {
+        setIsReady(true);
+      }
+    };
+    script.onerror = () => {
+      console.error(
+        '[InfinitePay] Não foi possível carregar o script do Link Integrado. Verifique o domínio autorizado na InfinitePay.',
+      );
+    };
+    document.body.appendChild(script);
+
+    return () => {
+      script.onload = null;
+      script.onerror = null;
+    };
   }, []);
 
   function handlePay() {
@@ -38,8 +70,11 @@ export function InfinitePayButton({ amount, description }: InfinitePayButtonProp
         type: ['pix', 'card'],
       });
     } else {
-      // opcional: feedback simples caso o script ainda não tenha carregado
       console.warn('InfiniteCheckout ainda não está disponível no window.');
+      alert(
+        'Não foi possível iniciar o pagamento agora.\n' +
+          'Verifique se o domínio atual está autorizado na InfinitePay e tente recarregar a página.',
+      );
     }
   }
 
@@ -47,9 +82,10 @@ export function InfinitePayButton({ amount, description }: InfinitePayButtonProp
     <button
       type="button"
       onClick={handlePay}
-      className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+      disabled={!isReady}
+      className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
     >
-      Finalizar Compra
+      {isReady ? 'Finalizar Compra' : 'Carregando pagamento...'}
     </button>
   );
 }
