@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import { Instagram, ShoppingCart, Sparkles } from 'lucide-react';
 import { Button } from '../ui/button';
 import { motion } from 'motion/react';
@@ -5,13 +6,27 @@ import { useCart } from '../../cart/useCart';
 
 export function Header() {
   const { totalItems, openCart } = useCart();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <motion.header 
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className="fixed top-0 left-0 right-0 z-50 bg-[var(--cassia-lavender-light)]/70 backdrop-blur-xl border-b border-[var(--cassia-border-soft)]"
-      style={{ boxShadow: 'var(--shadow-soft)' }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? 'bg-[var(--cassia-lavender-light)]/65 backdrop-blur-xl border-b border-[rgba(255,255,255,0.15)]'
+          : 'bg-[var(--cassia-lavender-light)]/40 border-b border-transparent'
+      }`}
+      style={{ boxShadow: isScrolled ? '0 8px 24px rgba(15, 10, 40, 0.16)' : 'var(--shadow-soft)' }}
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">

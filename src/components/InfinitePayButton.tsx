@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React from 'react';
 
 declare global {
   interface Window {
@@ -25,43 +25,15 @@ export function InfinitePayButton({
   description,
   types = ['pix', 'card'],
 }: InfinitePayButtonProps) {
-  // carrega o script uma vez; não bloqueia o botão, apenas tenta garantir que o script existe
-  useEffect(() => {
-    const url = 'https://checkout.infinitepay.io/v1';
-    const existing = document.querySelector<HTMLScriptElement>(`script[src="${url}"]`);
-
-    if (existing || typeof window !== 'undefined') {
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = url;
-    script.async = true;
-    script.onerror = () => {
-      console.error(
-        '[InfinitePay] Não foi possível carregar o script do Link Integrado. Verifique o domínio autorizado na InfinitePay.',
-      );
-    };
-    document.body.appendChild(script);
-
-    return () => {
-      script.onerror = null;
-    };
-  }, []);
-
   function handlePay() {
     if (window.InfiniteCheckout) {
       window.InfiniteCheckout.open({
         name: description,
         amount,
-        type: types,
+        type: ['pix', 'card'],
       });
     } else {
-      console.warn('InfiniteCheckout ainda não está disponível no window.');
-      alert(
-        'Não foi possível iniciar o pagamento agora.\n' +
-          'Verifique se o domínio atual está autorizado na InfinitePay e tente recarregar a página.',
-      );
+      console.warn('InfiniteCheckout não carregou');
     }
   }
 
