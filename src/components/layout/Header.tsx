@@ -10,7 +10,7 @@ export function Header() {
     <motion.header 
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-[var(--cassia-purple)]/20"
+      className="fixed top-0 left-0 right-0 z-50 bg-[var(--cassia-lavender-light)]/70 backdrop-blur-xl border-b border-[var(--cassia-border-soft)]"
       style={{ boxShadow: 'var(--shadow-soft)' }}
     >
       <div className="container mx-auto px-4 py-4">
@@ -65,7 +65,7 @@ export function Header() {
             <Button
               variant="outline"
               size="sm"
-              className="relative bg-[var(--cassia-purple)]/10 border-[var(--cassia-purple)]/30 hover:bg-[var(--cassia-purple)]/20 hover:border-[var(--cassia-purple)]/50 text-[var(--cassia-purple-dark)]"
+              className="relative bg-[var(--cassia-surface)] border-[var(--cassia-border-soft)] hover:bg-[var(--cassia-lavender-light)] hover:border-[var(--cassia-purple)] text-[var(--cassia-purple-dark)]"
               onClick={openCart}
               style={{ boxShadow: 'var(--shadow-soft)' }}
             >

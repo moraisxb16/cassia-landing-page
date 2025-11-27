@@ -55,7 +55,7 @@ export function Courses() {
   return (
     <section id="courses" className="py-20 relative">
       <motion.div 
-        className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#A275E3]/10 rounded-full blur-3xl"
+        className="absolute top-1/4 left-1/4 w-96 h-96 bg-[var(--cassia-lavender)]/40 rounded-full blur-3xl"
         animate={{
           scale: [1, 1.2, 1],
           opacity: [0.3, 0.5, 0.3],
@@ -75,7 +75,7 @@ export function Courses() {
             whileHover={{ scale: 1.05 }}
           >
             <Badge 
-              className="px-6 py-2 bg-gradient-to-r from-[#8A4FC3] to-[#A275E3] border-0 text-white"
+              className="px-6 py-2 bg-gradient-to-r from-[var(--cassia-purple)] to-[var(--cassia-gold)] border-0 text-white"
               style={{ boxShadow: 'var(--shadow-glow)' }}
             >
               <Sparkles className="w-4 h-4 mr-2" />
@@ -83,11 +83,11 @@ export function Courses() {
             </Badge>
           </motion.div>
           
-          <h2 className="text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-[#8A4FC3] via-[#A275E3] to-[#CFAF63] mb-6">
+          <h2 className="text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] via-[var(--cassia-purple)] to-[var(--cassia-gold)] mb-6">
             Domine a Arte da Cura Energética
           </h2>
           
-          <p className="text-lg text-[#8A4FC3]/70 max-w-3xl mx-auto">
+          <p className="text-lg text-[var(--cassia-purple-dark)]/72 max-w-3xl mx-auto">
             O Sistema Dragonlight é uma poderosa técnica de cura que conecta você 
             à energia ancestral dos dragões para transformação e cura profunda.
           </p>
@@ -103,7 +103,7 @@ export function Courses() {
               transition={{ delay: index * 0.2 }}
             >
               <Card 
-                className="overflow-hidden bg-white/60 backdrop-blur-sm border-[#A275E3]/20 hover:border-[#A275E3]/50 transition-all duration-500 group h-full flex flex-col"
+                className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
                 style={{ boxShadow: 'var(--shadow-soft)' }}
               >
                 <div className="relative h-56 overflow-hidden">
@@ -113,7 +113,7 @@ export function Courses() {
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                   {/* Overlay místico */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#8A4FC3]/40 via-transparent to-transparent opacity-60" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--cassia-purple)]/40 via-transparent to-transparent opacity-70" />
                   
                   {/* Floating badge */}
                   <motion.div
@@ -138,30 +138,30 @@ export function Courses() {
                 </div>
                 
                 <CardContent className="p-6 flex-grow">
-                  <h3 className="text-xl text-[#8A4FC3] mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#8A4FC3] group-hover:to-[#A275E3] transition-all">
+                  <h3 className="text-xl text-[var(--cassia-purple-dark)] mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all">
                     {course.name}
                   </h3>
                   
-                  <p className="text-[#8A4FC3]/70 text-sm mb-5 leading-relaxed">
+                  <p className="text-[var(--cassia-purple-dark)]/72 text-sm mb-5 leading-relaxed">
                     {course.description}
                   </p>
                   
-                  <div className="flex flex-wrap gap-3 text-sm text-[#8A4FC3]/80 mb-5">
-                    <div className="flex items-center gap-1.5 bg-[#A275E3]/10 px-3 py-1.5 rounded-full">
+                  <div className="flex flex-wrap gap-3 text-sm text-[var(--cassia-purple-dark)]/80 mb-5">
+                    <div className="flex items-center gap-1.5 bg-[var(--cassia-lavender)]/60 px-3 py-1.5 rounded-full">
                       <Clock className="w-4 h-4" />
                       <span>{course.duration}</span>
                     </div>
-                    <div className="flex items-center gap-1.5 bg-[#A275E3]/10 px-3 py-1.5 rounded-full">
+                    <div className="flex items-center gap-1.5 bg-[var(--cassia-lavender)]/60 px-3 py-1.5 rounded-full">
                       <Users className="w-4 h-4" />
                       <span>{course.students}</span>
                     </div>
-                    <div className="flex items-center gap-1.5 bg-[#A275E3]/10 px-3 py-1.5 rounded-full">
+                    <div className="flex items-center gap-1.5 bg-[var(--cassia-lavender)]/60 px-3 py-1.5 rounded-full">
                       <Award className="w-4 h-4" />
                       <span>Certificado</span>
                     </div>
                   </div>
 
-                  <div className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-[#8A4FC3] to-[#CFAF63]">
+                  <div className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
                     R$ {course.price.toFixed(2)}
                   </div>
                 </CardContent>

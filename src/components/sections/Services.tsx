@@ -92,7 +92,7 @@ export function Services() {
                 transition={{ delay: index * 0.1 }}
               >
                 <Card 
-                  className={`group relative overflow-hidden bg-white/60 backdrop-blur-sm border-[#A275E3]/20 hover:border-[#A275E3]/50 transition-all duration-500 h-full ${service.bg}`}
+                  className={`group relative overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 h-full ${service.bg}`}
                   style={{ boxShadow: 'var(--shadow-soft)' }}
                 >
                   {/* Animated gradient background on hover */}
@@ -114,11 +114,11 @@ export function Services() {
                       <Icon className="w-8 h-8 text-white" />
                     </motion.div>
                     
-                    <h3 className="text-xl text-[#8A4FC3] mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#8A4FC3] group-hover:to-[#A275E3] transition-all">
+                    <h3 className="text-xl text-[var(--cassia-purple-dark)] mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all">
                       {service.title}
                     </h3>
                     
-                    <p className="text-[#8A4FC3]/70 text-sm leading-relaxed">
+                    <p className="text-[var(--cassia-purple-dark)]/72 text-sm leading-relaxed">
                       {service.description}
                     </p>
 
@@ -137,13 +137,13 @@ export function Services() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <p className="text-[#8A4FC3]/70">
+          <p className="text-[var(--cassia-purple-dark)]/72">
             Entre em contato pelo{' '}
             <a 
               href="https://www.instagram.com/cassiacorviniy/" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-transparent bg-clip-text bg-gradient-to-r from-[#8A4FC3] to-[#A275E3] hover:from-[#A275E3] hover:to-[#CFAF63] underline underline-offset-4 transition-all"
+              className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple)] to-[var(--cassia-gold)] hover:from-[var(--cassia-gold)] hover:to-[var(--cassia-purple)] underline underline-offset-4 transition-all"
             >
               Instagram
             </a>
