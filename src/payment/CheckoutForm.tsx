@@ -198,9 +198,8 @@ export function CheckoutForm() {
             </div>
 
             <InfinitePayButton
-              amount={Math.round(totalPrice * 100)}
               description="Compra na Cassia Corviniy"
-              types={[paymentMethod]}
+              totalPrice={totalPrice}
             />
           </div>
         </>

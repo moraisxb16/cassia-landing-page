@@ -12,29 +12,28 @@ declare global {
   }
 }
 
-type PaymentType = 'pix' | 'card';
-
 interface InfinitePayButtonProps {
-  amount: number;
   description: string;
-  types?: PaymentType[]; // quais meios habilitar no checkout (padrão: ['pix', 'card'])
+  totalPrice: number;
 }
 
 export function InfinitePayButton({
-  amount,
   description,
-  types = ['pix', 'card'],
+  totalPrice,
 }: InfinitePayButtonProps) {
   function handlePay() {
-    if (window.InfiniteCheckout) {
-      window.InfiniteCheckout.open({
-        name: description,
-        amount,
-        type: ['pix', 'card'],
-      });
-    } else {
-      console.warn('InfiniteCheckout não carregou');
+    if (!window.InfiniteCheckout) {
+      console.warn("InfiniteCheckout não carregou");
+      return;
     }
+
+    const payload = {
+      name: description,  // nome do item ou descrição final
+      amount: Math.round(totalPrice * 100), // valor em centavos
+      type: ['pix', 'card'],
+    };
+
+    window.InfiniteCheckout.open(payload);
   }
 
   return (
