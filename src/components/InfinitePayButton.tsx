@@ -21,14 +21,14 @@ export function InfinitePayButton({
   description,
   totalPrice,
 }: InfinitePayButtonProps) {
-  async function handlePay() {
+  function handlePay() {
     if (!window.InfiniteCheckout) {
-      alert("InfiniteCheckout ainda não carregou. Tente novamente em 1 segundo.");
+      alert("O sistema de pagamento ainda está carregando. Tente novamente.");
       return;
     }
 
     window.InfiniteCheckout.open({
-      name: description,
+      name: description || "Compra na Cássia Corviniy",
       amount: Math.round(totalPrice * 100),
       type: ['pix', 'card'],
     });
