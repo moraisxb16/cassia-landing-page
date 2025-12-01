@@ -23,12 +23,12 @@ export function InfinitePayButton({
 }: InfinitePayButtonProps) {
   function handlePay() {
     if (!window.InfiniteCheckout) {
-      alert("O sistema de pagamento ainda está carregando. Tente novamente.");
+      alert('O sistema de pagamento ainda está carregando. Tente novamente em alguns segundos.');
       return;
     }
 
     window.InfiniteCheckout.open({
-      name: description || "Compra na Cássia Corviniy",
+      name: description || 'Compra',
       amount: Math.round(totalPrice * 100),
       type: ['pix', 'card'],
     });
