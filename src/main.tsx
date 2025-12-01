@@ -16,59 +16,31 @@ declare global {
   }
 }
 
-// Carregar script do InfinitePay dinamicamente se ainda não estiver carregado
+// Carregar script do InfinitePay dinamicamente
 function loadInfinitePayScript() {
-  // Verificar se o script já existe
-  const existingScript = document.querySelector('script[src*="checkout.infinitepay.io"]');
-  if (existingScript) {
-    console.log('Script InfinitePay já existe no DOM');
-    return;
-  }
+  return new Promise<void>((resolve, reject) => {
+    if (window.InfiniteCheckout) {
+      resolve();
+      return;
+    }
 
-  // Verificar se já está disponível globalmente
-  if (window.InfiniteCheckout) {
-    console.log('InfiniteCheckout já está disponível');
-    return;
-  }
-
-  // Criar e adicionar o script
-  const script = document.createElement('script');
-  script.src = 'https://checkout.infinitepay.io/v1';
-  script.async = true;
-  script.onload = () => {
-    console.log('✅ Script InfinitePay carregado com sucesso!');
-    console.log('window.InfiniteCheckout:', window.InfiniteCheckout);
-  };
-  script.onerror = () => {
-    console.error('❌ Erro ao carregar script InfinitePay');
-  };
-  
-  document.head.appendChild(script);
-  console.log('Script InfinitePay adicionado ao DOM');
+    const script = document.createElement('script');
+    script.src = 'https://checkout.infinitepay.io/v1';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Erro ao carregar InfinitePay'));
+    document.body.appendChild(script);
+  });
 }
 
-// Carregar o script imediatamente
-loadInfinitePayScript();
-
-// Verificar se InfiniteCheckout carregou após o load da página
-window.addEventListener('load', () => {
-  console.log('Página carregada. Verificando InfiniteCheckout...');
-  console.log('window.InfiniteCheckout:', window.InfiniteCheckout);
-  
-  if (window.InfiniteCheckout) {
-    console.log('✅ InfiniteCheckout carregado com sucesso!');
-  } else {
-    console.warn('⚠️ InfiniteCheckout ainda não está disponível. Aguardando...');
-    // Tentar novamente após um delay
-    setTimeout(() => {
-      console.log('Verificação após delay - window.InfiniteCheckout:', window.InfiniteCheckout);
-      if (!window.InfiniteCheckout) {
-        console.warn('⚠️ InfiniteCheckout ainda não disponível após delay. Tentando recarregar script...');
-        loadInfinitePayScript();
-      }
-    }, 2000);
-  }
-});
-
-createRoot(document.getElementById('root')!).render(<App />);
+// Carregar o script ANTES de renderizar o React
+loadInfinitePayScript()
+  .then(() => {
+    console.log('InfinitePay carregado!');
+    createRoot(document.getElementById('root')!).render(<App />);
+  })
+  .catch((error) => {
+    console.error('Erro ao carregar InfinitePay:', error);
+    // Renderizar mesmo assim para não quebrar a aplicação
+    createRoot(document.getElementById('root')!).render(<App />);
+  });
   

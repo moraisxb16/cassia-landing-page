@@ -21,36 +21,17 @@ export function InfinitePayButton({
   description,
   totalPrice,
 }: InfinitePayButtonProps) {
-  function handlePay(e: React.MouseEvent<HTMLButtonElement>) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    console.log('handlePay chamado');
-    console.log('window.InfiniteCheckout:', window.InfiniteCheckout);
-    console.log('totalPrice:', totalPrice);
-    console.log('description:', description);
-
+  async function handlePay() {
     if (!window.InfiniteCheckout) {
-      console.error("InfiniteCheckout não carregou. Verifique se o script está no index.html");
-      alert("Erro: InfiniteCheckout não está disponível. Verifique o console para mais detalhes.");
+      alert("InfiniteCheckout ainda não carregou. Tente novamente em 1 segundo.");
       return;
     }
 
-    const payload = {
-      name: description,  // nome do item ou descrição final
-      amount: Math.round(totalPrice * 100), // valor em centavos
+    window.InfiniteCheckout.open({
+      name: description,
+      amount: Math.round(totalPrice * 100),
       type: ['pix', 'card'],
-    };
-
-    console.log('Payload:', payload);
-    
-    try {
-      window.InfiniteCheckout.open(payload);
-      console.log('InfiniteCheckout.open chamado com sucesso');
-    } catch (error) {
-      console.error('Erro ao abrir InfiniteCheckout:', error);
-      alert("Erro ao abrir o checkout. Verifique o console para mais detalhes.");
-    }
+    });
   }
 
   return (
