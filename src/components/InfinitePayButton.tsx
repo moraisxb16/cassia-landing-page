@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 
 declare global {
   interface Window {
     InfiniteCheckout?: {
       open: (options: {
         name: string;
-        amount: number; // em centavos
-        type: Array<'pix' | 'card'>;
+        amount: number; 
+        type: Array<"pix" | "card">;
       }) => void;
     };
   }
@@ -17,56 +17,53 @@ interface InfinitePayButtonProps {
   totalPrice: number;
 }
 
-export function InfinitePayButton({
-  description,
-  totalPrice,
-}: InfinitePayButtonProps) {
-  function handlePay() {
-    // Verificar se InfiniteCheckout está disponível
-    if (!window.InfiniteCheckout) {
-      console.warn('⚠️ InfiniteCheckout não está disponível ainda');
-      
-      // Tentar recarregar o script se não estiver disponível
-      const existingScript = document.querySelector('script[src*="checkout.infinitepay.io"]');
-      if (!existingScript) {
-        console.log('🔄 Tentando recarregar script InfinitePay...');
-        const script = document.createElement('script');
-        script.src = 'https://checkout.infinitepay.io/v1';
-        script.async = true;
-        script.defer = true;
-        script.onload = () => {
-          console.log('✅ Script recarregado, tentando abrir checkout...');
-          // Tentar novamente após o script carregar
-          setTimeout(() => {
-            if (window.InfiniteCheckout) {
-              window.InfiniteCheckout.open({
-                name: description || 'Compra na Cássia Corviniy',
-                amount: Math.round(totalPrice * 100),
-                type: ['pix', 'card'],
-              });
-            } else {
-              alert('O sistema de pagamento ainda está inicializando. Por favor, aguarde alguns segundos e tente novamente.');
-            }
-          }, 500);
-        };
-        document.head.appendChild(script);
-      } else {
-        alert('O sistema de pagamento ainda está carregando. Por favor, aguarde alguns segundos e tente novamente.');
-      }
+export function InfinitePayButton({ description, totalPrice }: InfinitePayButtonProps) {
+  const [loading, setLoading] = useState(true);
+
+  // Carregar SDK corretamente
+  useEffect(() => {
+    if (window.InfiniteCheckout) {
+      setLoading(false);
       return;
     }
 
-    // Abrir checkout normalmente
+    const script = document.createElement("script");
+    script.src = "https://checkout.infinitepay.io/v1";
+    script.async = true;
+
+    script.onload = () => {
+      // Retry automático até o SDK aparecer
+      const interval = setInterval(() => {
+        if (window.InfiniteCheckout) {
+          clearInterval(interval);
+          setLoading(false);
+          console.log("✅ InfinitePay carregado com sucesso");
+        }
+      }, 200);
+    };
+
+    script.onerror = () => {
+      console.error("❌ Erro ao carregar script da InfinitePay");
+    };
+
+    document.head.appendChild(script);
+  }, []);
+
+  function handlePay() {
+    if (loading || !window.InfiniteCheckout) {
+      alert("O sistema de pagamento ainda está carregando. Aguarde alguns segundos e tente novamente.");
+      return;
+    }
+
     try {
       window.InfiniteCheckout.open({
-        name: description || 'Compra na Cássia Corviniy',
+        name: description || "Compra na Cássia Corviniy",
         amount: Math.round(totalPrice * 100),
-        type: ['pix', 'card'],
+        type: ["pix", "card"],
       });
-      console.log('✅ Checkout InfinitePay aberto com sucesso');
     } catch (error) {
-      console.error('❌ Erro ao abrir checkout:', error);
-      alert('Erro ao abrir o checkout. Por favor, tente novamente.');
+      console.error("Erro ao abrir checkout:", error);
+      alert("Erro ao abrir o checkout. Tente novamente.");
     }
   }
 
@@ -74,11 +71,11 @@ export function InfinitePayButton({
     <button
       type="button"
       onClick={handlePay}
-      className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+      disabled={loading}
+      className={`w-full px-4 py-2 rounded-md text-sm font-medium transition-colors 
+        ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700 text-white"}`}
     >
-      Finalizar Compra
+      {loading ? "Carregando Pagamento..." : "Finalizar Compra"}
     </button>
   );
 }
-
-
