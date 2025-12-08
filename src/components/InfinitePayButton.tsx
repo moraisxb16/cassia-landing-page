@@ -60,11 +60,23 @@ export function InfinitePayButton({ description, totalPrice }: InfinitePayButton
 
       // Timeout máximo de 15 segundos
       timeoutId = setTimeout(() => {
-        if (checkInterval) clearInterval(checkInterval);
         if (!window.InfiniteCheckout) {
           console.warn("⚠️ Timeout: InfiniteCheckout não carregou após 15 segundos");
-          console.warn("⚠️ Verifique se o domínio está autorizado na InfinitePay");
+          console.warn("⚠️ Verifique se o domínio cassiacorviniy.com.br está autorizado na InfinitePay");
+          console.warn("⚠️ Continuando verificação em background...");
           setLoading(false); // Liberar o botão mesmo assim
+          // Continuar verificando em background (sem bloquear)
+          const backgroundCheck = setInterval(() => {
+            if (window.InfiniteCheckout) {
+              clearInterval(backgroundCheck);
+              setSdkReady(true);
+              console.log("✅ InfiniteCheckout carregou após o timeout! SDK pronto.");
+            }
+          }, 500);
+          // Limpar após 30 segundos totais
+          setTimeout(() => clearInterval(backgroundCheck), 30000);
+        } else {
+          if (checkInterval) clearInterval(checkInterval);
         }
       }, 15000);
     } else {
@@ -87,11 +99,23 @@ export function InfinitePayButton({ description, totalPrice }: InfinitePayButton
 
         // Timeout máximo de 15 segundos
         timeoutId = setTimeout(() => {
-          if (retryInterval) clearInterval(retryInterval);
           if (!window.InfiniteCheckout) {
             console.warn("⚠️ Timeout: InfiniteCheckout não carregou após 15 segundos");
             console.warn("⚠️ Verifique se o domínio cassiacorviniy.com.br está autorizado na InfinitePay");
+            console.warn("⚠️ Continuando verificação em background...");
             setLoading(false); // Liberar o botão mesmo assim
+            // Continuar verificando em background (sem bloquear)
+            const backgroundCheck = setInterval(() => {
+              if (window.InfiniteCheckout) {
+                clearInterval(backgroundCheck);
+                setSdkReady(true);
+                console.log("✅ InfiniteCheckout carregou após o timeout! SDK pronto.");
+              }
+            }, 500);
+            // Limpar após 30 segundos totais
+            setTimeout(() => clearInterval(backgroundCheck), 30000);
+          } else {
+            if (retryInterval) clearInterval(retryInterval);
           }
         }, 15000);
       };
@@ -114,12 +138,40 @@ export function InfinitePayButton({ description, totalPrice }: InfinitePayButton
   }, []);
 
   function handlePay() {
-    // Verificar novamente antes de abrir
+    // Verificar novamente antes de abrir (última tentativa)
     if (!window.InfiniteCheckout) {
-      console.error("❌ InfiniteCheckout não está disponível");
-      console.error("❌ Verifique no console se o script carregou corretamente");
+      console.error("❌ InfiniteCheckout não está disponível no momento do clique");
+      
+      // Tentar uma última vez: verificar se o script existe e aguardar um pouco
+      const existingScript = document.querySelector('script[src*="checkout.infinitepay.io"]');
+      if (existingScript) {
+        console.log("🔄 Script existe, aguardando 1 segundo e tentando novamente...");
+        setTimeout(() => {
+          if (window.InfiniteCheckout) {
+            console.log("✅ InfiniteCheckout apareceu! Abrindo checkout...");
+            try {
+              window.InfiniteCheckout.open({
+                name: description || "Compra na Cássia Corviniy",
+                amount: Math.round(totalPrice * 100),
+                type: ["pix", "card"],
+              });
+              console.log("✅ Checkout aberto com sucesso");
+            } catch (error) {
+              console.error("❌ Erro ao abrir checkout:", error);
+              alert("Erro ao abrir o checkout. Tente novamente.");
+            }
+          } else {
+            console.error("❌ InfiniteCheckout ainda não está disponível após espera");
+            console.error("❌ Verifique se o domínio cassiacorviniy.com.br está autorizado na InfinitePay");
+            alert("O sistema de pagamento não está disponível. Verifique se o domínio está autorizado na InfinitePay ou entre em contato com o suporte.");
+          }
+        }, 1000);
+        return;
+      }
+      
+      console.error("❌ Script não existe no DOM");
       console.error("❌ Verifique se o domínio cassiacorviniy.com.br está autorizado na InfinitePay");
-      alert("O sistema de pagamento não está disponível. Verifique o console para mais detalhes ou entre em contato com o suporte.");
+      alert("O sistema de pagamento não está disponível. Verifique se o domínio está autorizado na InfinitePay ou entre em contato com o suporte.");
       return;
     }
 
