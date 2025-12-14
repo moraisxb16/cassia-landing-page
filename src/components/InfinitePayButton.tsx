@@ -120,13 +120,30 @@ export function InfinitePayButton({ description, totalPrice }: InfinitePayButton
         }, 15000);
       };
 
-      script.onerror = () => {
+      script.onerror = (error) => {
         console.error("❌ Erro ao carregar script da InfinitePay");
-        console.error("❌ Verifique se o domínio está autorizado e se há bloqueadores de script");
+        console.error("❌ Erro detalhado:", error);
+        console.error("❌ URL tentada: https://checkout.infinitepay.io/v1");
+        console.error("❌ Verifique se o domínio cassiacorviniy.com.br está autorizado na InfinitePay");
+        console.error("❌ Verifique se há bloqueadores de script (AdBlock, etc)");
+        console.error("❌ Verifique o Network tab do DevTools para ver se o script foi bloqueado");
         setLoading(false); // Liberar o botão em caso de erro
       };
 
+      // Adicionar ID para facilitar debug
+      script.id = "infinite-pay-script";
       document.head.appendChild(script);
+      console.log("📦 Script InfinitePay adicionado ao DOM com ID: infinite-pay-script");
+      
+      // Verificar se o script foi realmente adicionado
+      setTimeout(() => {
+        const addedScript = document.getElementById("infinite-pay-script");
+        if (addedScript) {
+          console.log("✅ Script confirmado no DOM");
+        } else {
+          console.error("❌ Script não foi adicionado ao DOM corretamente");
+        }
+      }, 100);
     }
 
     // Cleanup

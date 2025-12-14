@@ -1,56 +1,233 @@
 import { Button } from '../ui/button';
 import { Card, CardContent, CardFooter } from '../ui/card';
 import { Badge } from '../ui/badge';
-import { Clock, Users, Award, Sparkles } from 'lucide-react';
+import { Clock, Users, Award, Sparkles, Package, Calendar } from 'lucide-react';
 import { motion } from 'motion/react';
 import { ImageWithFallback } from '../shared/ImageWithFallback';
 import { useCart } from '../../cart/useCart';
 import type { Course } from '../../types';
 
+// Imagem padrão para cursos
+const defaultCourseImage = 'https://images.unsplash.com/photo-1643682661044-f0c34205dd65?auto=format&fit=crop&w=1080&q=80';
+
 const courses: Course[] = [
+  // CURSOS
   {
-    id: 'dragonlight-1',
-    name: 'Dragonlight Nível 1',
-    description:
-      'Introdução ao sistema de cura energética Dragonlight. Aprenda técnicas fundamentais de canalização e limpeza energética.',
-    price: 497,
-    duration: '8 semanas',
-    students: '120+',
-    image:
-      'https://images.unsplash.com/photo-1643682661044-f0c34205dd65?auto=format&fit=crop&w=1080&q=80',
+    id: 'mesa-dragon-coaching',
+    name: 'Curso Mesa Dragon Coaching',
+    description: 'Ferramenta de limpeza e cocriação para acelerar resultados, trabalhando intenção e clareza energética.',
+    price: 1497.00,
+    hours: '8h',
+    includes: 'Mesa Dragon Coaching, pêndulo, cartas, apostila e certificado PDF',
+    updatePrice: 748.50,
+    image: defaultCourseImage,
+    type: 'course',
+    category: 'course',
+    level: 'Para todos',
+    gradient: 'from-[var(--cassia-purple)] to-[var(--cassia-purple-dark)]',
+  },
+  {
+    id: 'mesa-turquesa-dragonlight',
+    name: 'Curso Mesa Turquesa Dragonlight',
+    description: 'Curso introdutório para terapeutas. Trabalha identidade, futuro, carma familiar e técnicas de atendimento energético.',
+    price: 2257.00,
+    hours: '16h',
+    includes: 'Mesa Turquesa, cartas, pêndulo, 09 essências, apostila, certificado PDF',
+    updatePrice: 1128.00,
+    image: defaultCourseImage,
+    type: 'course',
+    category: 'course',
     level: 'Iniciante',
-    type: 'course',
+    gradient: 'from-[var(--cassia-purple)] to-[var(--cassia-lavender)]',
   },
   {
-    id: 'dragonlight-2',
-    name: 'Dragonlight Nível 2',
-    description:
-      'Aprofunde sua conexão com a energia do Dragão. Técnicas avançadas de cura à distância e trabalho com cristais.',
-    price: 697,
-    duration: '10 semanas',
-    students: '80+',
-    image:
-      'https://images.unsplash.com/photo-1643682661044-f0c34205dd65?auto=format&fit=crop&w=1080&q=80',
+    id: 'mesa-violet-dragonlight',
+    name: 'Curso Mesa Violet Dragonlight',
+    description: 'Expansão da Mesa Turquesa. Aprofunda sabedoria espiritual, limpeza energética profunda e conexão com equipe espiritual.',
+    price: 2529.00,
+    hours: '22h',
+    includes: 'Mesa Violeta, pêndulo, cristal, apostila, certificado PDF',
+    updatePrice: 1264.50,
+    image: defaultCourseImage,
+    type: 'course',
+    category: 'course',
     level: 'Intermediário',
-    type: 'course',
+    gradient: 'from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]',
+  },
+  // ATENDIMENTOS
+  {
+    id: 'atendimento-mesa-radionica',
+    name: 'Atendimento Individual Mesa Radiônica Dragonlight',
+    description: 'Processo profundo de autoconhecimento, limpeza energética e cocriação. Atuação nos níveis físico, mental e espiritual.',
+    price: 630.00,
+    image: defaultCourseImage,
+    type: 'service',
+    category: 'service',
+    format: 'Individual',
+    gradient: 'from-[var(--cassia-gold)] to-[var(--cassia-gold-light)]',
   },
   {
-    id: 'dragonlight-master',
-    name: 'Dragonlight Master',
-    description:
-      'Torne-se um mestre facilitador Dragonlight. Aprenda a ensinar e iniciar outros praticantes no sistema.',
-    price: 997,
-    duration: '12 semanas',
-    students: '45+',
-    image:
-      'https://images.unsplash.com/photo-1643682661044-f0c34205dd65?auto=format&fit=crop&w=1080&q=80',
-    level: 'Avançado',
-    type: 'course',
+    id: 'atendimento-terapeutico-individual',
+    name: 'Atendimento Terapêutico Individual',
+    description: 'Sessão com Aromaterapia, Reiki e técnicas sistêmicas, para clareza emocional e direcionamento.',
+    price: 470.00,
+    image: defaultCourseImage,
+    type: 'service',
+    category: 'service',
+    format: 'Individual',
+    gradient: 'from-[var(--cassia-lavender)] to-[var(--cassia-purple)]',
+  },
+  {
+    id: 'pacote-5-atendimentos',
+    name: 'Pacote 5 Atendimentos Terapêuticos',
+    description: '5 sessões de atendimento terapêutico com economia. Ideal para acompanhamento contínuo.',
+    price: 1375.00,
+    image: defaultCourseImage,
+    type: 'service',
+    category: 'service',
+    format: 'Pacote (R$ 275,00 cada)',
+    gradient: 'from-[var(--cassia-purple)] to-[var(--cassia-gold)]',
+  },
+  // MENTORIA
+  {
+    id: 'mentoria-grupo',
+    name: 'Mentoria em Grupo',
+    description: 'Acompanhamento profundo de autoestima, criança interior, pais, adolescência e evolução emocional. 10 meses com 2 encontros mensais.',
+    price: 2100.00,
+    format: '10 meses / 2 encontros mensais',
+    image: defaultCourseImage,
+    type: 'mentoring',
+    category: 'mentoring',
+    gradient: 'from-[var(--cassia-gold)] to-[var(--cassia-purple-dark)]',
   },
 ];
 
 export function Courses() {
   const { addItem } = useCart();
+
+  // Separar por categoria
+  const coursesList = courses.filter(c => c.category === 'course');
+  const servicesList = courses.filter(c => c.category === 'service');
+  const mentoringList = courses.filter(c => c.category === 'mentoring');
+
+  const renderCourseCard = (course: Course, index: number) => (
+    <motion.div
+      key={course.id}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1 }}
+    >
+      <Card 
+        className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
+        style={{ boxShadow: 'var(--shadow-soft)' }}
+      >
+        <div className="relative h-56 overflow-hidden">
+          <ImageWithFallback
+            src={course.image}
+            alt={course.name}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--cassia-purple)]/40 via-transparent to-transparent opacity-70" />
+          
+          {course.level && (
+            <motion.div
+              className="absolute top-4 right-4"
+              whileHover={{ scale: 1.1, rotate: 5 }}
+            >
+              <Badge 
+                className={`bg-gradient-to-r ${course.gradient || 'from-[var(--cassia-purple)] to-[var(--cassia-gold)]'} border-0 text-white px-4 py-1`}
+                style={{ boxShadow: 'var(--shadow-medium)' }}
+              >
+                {course.level}
+              </Badge>
+            </motion.div>
+          )}
+        </div>
+        
+        <CardContent className="p-6 flex-grow">
+          <h3 className="text-xl text-[var(--cassia-purple-dark)] mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all">
+            {course.name}
+          </h3>
+          
+          <p className="text-[var(--cassia-purple-dark)]/72 text-sm mb-5 leading-relaxed">
+            {course.description}
+          </p>
+          
+          <div className="flex flex-wrap gap-3 text-sm text-[var(--cassia-purple-dark)]/80 mb-4">
+            {course.hours && (
+              <div className="flex items-center gap-1.5 bg-[var(--cassia-lavender)]/60 px-3 py-1.5 rounded-full">
+                <Clock className="w-4 h-4" />
+                <span>{course.hours}</span>
+              </div>
+            )}
+            {course.format && (
+              <div className="flex items-center gap-1.5 bg-[var(--cassia-lavender)]/60 px-3 py-1.5 rounded-full">
+                <Calendar className="w-4 h-4" />
+                <span>{course.format}</span>
+              </div>
+            )}
+            {course.includes && (
+              <div className="flex items-center gap-1.5 bg-[var(--cassia-lavender)]/60 px-3 py-1.5 rounded-full">
+                <Package className="w-4 h-4" />
+                <span>Material Incluso</span>
+              </div>
+            )}
+            {(course.type === 'course' || course.type === 'mentoring') && (
+              <div className="flex items-center gap-1.5 bg-[var(--cassia-lavender)]/60 px-3 py-1.5 rounded-full">
+                <Award className="w-4 h-4" />
+                <span>Certificado</span>
+              </div>
+            )}
+          </div>
+
+          {course.includes && (
+            <div className="mb-4 p-3 bg-[var(--cassia-lavender)]/30 rounded-lg">
+              <p className="text-xs text-[var(--cassia-purple-dark)]/80 leading-relaxed">
+                <strong className="text-[var(--cassia-purple-dark)]">Inclui:</strong> {course.includes}
+              </p>
+            </div>
+          )}
+
+          <div className="mb-3">
+            <div className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
+              R$ {course.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </div>
+            {course.updatePrice && (
+              <div className="text-sm text-[var(--cassia-purple-dark)]/70 mt-1">
+                Atualização: R$ {course.updatePrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </div>
+            )}
+          </div>
+        </CardContent>
+
+        <CardFooter className="p-6 pt-0">
+          <motion.div 
+            className="w-full"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Button 
+              className={`w-full bg-gradient-to-r ${course.gradient || 'from-[var(--cassia-purple)] to-[var(--cassia-gold)]'} hover:opacity-90 text-white border-0`}
+              style={{ boxShadow: 'var(--shadow-medium)' }}
+              onClick={() =>
+                addItem({
+                  id: course.id,
+                  name: course.name,
+                  price: course.price,
+                  image: course.image,
+                  type: 'course',
+                })
+              }
+            >
+              <Sparkles className="w-4 h-4 mr-2" />
+              Adicionar ao Carrinho
+            </Button>
+          </motion.div>
+        </CardFooter>
+      </Card>
+    </motion.div>
+  );
 
   return (
     <section id="courses" className="py-20 relative">
@@ -79,124 +256,106 @@ export function Courses() {
               style={{ boxShadow: 'var(--shadow-glow)' }}
             >
               <Sparkles className="w-4 h-4 mr-2" />
-              Cursos Dragonlight
+              Cursos e Atendimentos Dragonlight
             </Badge>
           </motion.div>
           
           <h2 className="text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] via-[var(--cassia-purple)] to-[var(--cassia-gold)] mb-6">
-            Domine a Arte da Cura Energética
+            Transformação e Cura Energética
           </h2>
           
-          <p className="text-lg text-[var(--cassia-purple-dark)]/72 max-w-3xl mx-auto">
-            O Sistema Dragonlight é uma poderosa técnica de cura que conecta você 
-            à energia ancestral dos dragões para transformação e cura profunda.
+          <p className="text-lg text-[var(--cassia-purple-dark)]/72 max-w-3xl mx-auto mb-6">
+            Descubra ferramentas poderosas de autoconhecimento, limpeza energética e cocriação 
+            através do Sistema Dragonlight.
           </p>
+          
+          {/* Diagnóstico Terapêutico - Gratuito */}
+          <motion.div
+            className="max-w-2xl mx-auto bg-gradient-to-r from-[var(--cassia-lavender)]/30 to-[var(--cassia-gold)]/30 p-6 rounded-lg border border-[var(--cassia-purple)]/30"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0">
+                <Sparkles className="w-6 h-6 text-[var(--cassia-gold)]" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-[var(--cassia-purple-dark)] mb-2">
+                  Diagnóstico Terapêutico (20 minutos gratuito)
+                </h3>
+                <p className="text-[var(--cassia-purple-dark)]/80 mb-4">
+                  Um momento especial de troca de informações e de sentir o que você necessita dentro das ferramentas terapêuticas que trabalho. 
+                  Juntos definiremos um caminho inicial para sua jornada de transformação.
+                </p>
+                <Button
+                  className="bg-[var(--cassia-purple)] hover:bg-[var(--cassia-purple-dark)] text-white"
+                  onClick={() => {
+                    // Abrir WhatsApp ou link de agendamento
+                    // ATUALIZAR: Substituir pelo número de WhatsApp correto ou link do ClickUp
+                    const whatsappNumber = '5519999999999'; // ATUALIZAR COM O NÚMERO REAL
+                    const message = encodeURIComponent('Olá! Gostaria de agendar um Diagnóstico Terapêutico (20 minutos gratuito).');
+                    window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+                  }}
+                >
+                  Agendar Diagnóstico Gratuito
+                </Button>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {courses.map((course, index) => (
-            <motion.div
-              key={course.id}
-              initial={{ opacity: 0, y: 30 }}
+        {/* CURSOS */}
+        {coursesList.length > 0 && (
+          <div className="mb-16">
+            <motion.h3
+              className="text-3xl md:text-4xl text-[var(--cassia-purple-dark)] mb-8 text-center"
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.2 }}
             >
-              <Card 
-                className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
-                style={{ boxShadow: 'var(--shadow-soft)' }}
-              >
-                <div className="relative h-56 overflow-hidden">
-                  <ImageWithFallback
-                    src={course.image}
-                    alt={course.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  {/* Overlay místico */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--cassia-purple)]/40 via-transparent to-transparent opacity-70" />
-                  
-                  {/* Floating badge */}
-                  <motion.div
-                    className="absolute top-4 right-4"
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                  >
-                    <Badge 
-                      className={`bg-gradient-to-r ${course.gradient} border-0 text-white px-4 py-1`}
-                      style={{ boxShadow: 'var(--shadow-medium)' }}
-                    >
-                      {course.level}
-                    </Badge>
-                  </motion.div>
+              Cursos
+            </motion.h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {coursesList.map((course, index) => renderCourseCard(course, index))}
+            </div>
+          </div>
+        )}
 
-                  {/* Decoração de canto animada */}
-                  <motion.div
-                    className={`absolute bottom-0 left-0 w-20 h-20 bg-gradient-to-tr ${course.gradient} opacity-30`}
-                    initial={{ scale: 0, rotate: 0 }}
-                    whileInView={{ scale: 1, rotate: 45 }}
-                    transition={{ delay: 0.5 }}
-                  />
-                </div>
-                
-                <CardContent className="p-6 flex-grow">
-                  <h3 className="text-xl text-[var(--cassia-purple-dark)] mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all">
-                    {course.name}
-                  </h3>
-                  
-                  <p className="text-[var(--cassia-purple-dark)]/72 text-sm mb-5 leading-relaxed">
-                    {course.description}
-                  </p>
-                  
-                  <div className="flex flex-wrap gap-3 text-sm text-[var(--cassia-purple-dark)]/80 mb-5">
-                    <div className="flex items-center gap-1.5 bg-[var(--cassia-lavender)]/60 px-3 py-1.5 rounded-full">
-                      <Clock className="w-4 h-4" />
-                      <span>{course.duration}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 bg-[var(--cassia-lavender)]/60 px-3 py-1.5 rounded-full">
-                      <Users className="w-4 h-4" />
-                      <span>{course.students}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 bg-[var(--cassia-lavender)]/60 px-3 py-1.5 rounded-full">
-                      <Award className="w-4 h-4" />
-                      <span>Certificado</span>
-                    </div>
-                  </div>
+        {/* ATENDIMENTOS */}
+        {servicesList.length > 0 && (
+          <div className="mb-16">
+            <motion.h3
+              className="text-3xl md:text-4xl text-[var(--cassia-purple-dark)] mb-8 text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              Atendimentos
+            </motion.h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {servicesList.map((course, index) => renderCourseCard(course, index))}
+            </div>
+          </div>
+        )}
 
-                  <div className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
-                    R$ {course.price.toFixed(2)}
-                  </div>
-                </CardContent>
-
-                <CardFooter className="p-6 pt-0">
-                  <motion.div 
-                    className="w-full"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <Button 
-                      className={`w-full bg-gradient-to-r ${course.gradient} hover:opacity-90 text-white border-0`}
-                      style={{ boxShadow: 'var(--shadow-medium)' }}
-                      onClick={() =>
-                        addItem({
-                          id: course.id,
-                          name: course.name,
-                          price: course.price,
-                          image: course.image,
-                          type: 'course',
-                        })
-                      }
-                    >
-                      <Sparkles className="w-4 h-4 mr-2" />
-                      Adicionar ao Carrinho
-                    </Button>
-                  </motion.div>
-                </CardFooter>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
+        {/* MENTORIA */}
+        {mentoringList.length > 0 && (
+          <div>
+            <motion.h3
+              className="text-3xl md:text-4xl text-[var(--cassia-purple-dark)] mb-8 text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              Mentoria
+            </motion.h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {mentoringList.map((course, index) => renderCourseCard(course, index))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
 }
-
-

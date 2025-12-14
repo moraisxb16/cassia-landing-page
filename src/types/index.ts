@@ -1,4 +1,4 @@
-export type ProductType = 'product' | 'course';
+export type ProductType = 'product' | 'course' | 'service' | 'mentoring';
 
 export interface Product {
   id: string;
@@ -15,11 +15,17 @@ export interface Course {
   name: string;
   description: string;
   price: number;
-  duration: string;
-  students: string;
+  duration?: string;
+  students?: string;
   image: string;
-  level: 'Iniciante' | 'Intermediário' | 'Avançado' | string;
-  type: 'course';
+  level?: 'Iniciante' | 'Intermediário' | 'Avançado' | string;
+  type: 'course' | 'service' | 'mentoring';
+  category?: 'course' | 'service' | 'mentoring';
+  hours?: string; // Carga horária
+  includes?: string; // O que está incluído
+  updatePrice?: number; // Preço de atualização (quando aplicável)
+  format?: string; // Formato (online, presencial, etc)
+  gradient?: string; // Para manter compatibilidade com o layout atual
 }
 
 export interface CartItem {
