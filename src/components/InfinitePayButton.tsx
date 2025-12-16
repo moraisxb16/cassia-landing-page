@@ -45,8 +45,8 @@ export function InfinitePayButton({ description, totalPrice }: InfinitePayButton
       return;
     }
 
-    // Verificar se o script já existe no DOM
-    const existingScript = document.querySelector('script[src*="checkout.infinitepay.io"]');
+    // Verificar se o script já existe no DOM (agora no <head> do index.html)
+    const existingScript = document.querySelector('script[src*="checkout-sdk.infinitepay.io"]');
     
     if (existingScript) {
       console.log("⏳ Script já existe, aguardando SDK...");
@@ -80,10 +80,11 @@ export function InfinitePayButton({ description, totalPrice }: InfinitePayButton
         }
       }, 15000);
     } else {
-      // Criar novo script se não existir
-      console.log("📦 Criando script InfinitePay...");
+      // O script já deve estar no <head> do index.html
+      // Mas se não estiver, criar dinamicamente como fallback
+      console.log("📦 Script não encontrado no DOM, criando dinamicamente...");
       const script = document.createElement("script");
-      script.src = "https://checkout.infinitepay.io/v1";
+      script.src = "https://checkout-sdk.infinitepay.io/v2";
       script.async = true;
       script.defer = true;
 
@@ -123,7 +124,7 @@ export function InfinitePayButton({ description, totalPrice }: InfinitePayButton
       script.onerror = (error) => {
         console.error("❌ Erro ao carregar script da InfinitePay");
         console.error("❌ Erro detalhado:", error);
-        console.error("❌ URL tentada: https://checkout.infinitepay.io/v1");
+        console.error("❌ URL tentada: https://checkout-sdk.infinitepay.io/v2");
         console.error("❌ Verifique se o domínio cassiacorviniy.com.br está autorizado na InfinitePay");
         console.error("❌ Verifique se há bloqueadores de script (AdBlock, etc)");
         console.error("❌ Verifique o Network tab do DevTools para ver se o script foi bloqueado");
@@ -160,7 +161,7 @@ export function InfinitePayButton({ description, totalPrice }: InfinitePayButton
       console.error("❌ InfiniteCheckout não está disponível no momento do clique");
       
       // Tentar uma última vez: verificar se o script existe e aguardar um pouco
-      const existingScript = document.querySelector('script[src*="checkout.infinitepay.io"]');
+      const existingScript = document.querySelector('script[src*="checkout-sdk.infinitepay.io"]');
       if (existingScript) {
         console.log("🔄 Script existe, aguardando 1 segundo e tentando novamente...");
         setTimeout(() => {
