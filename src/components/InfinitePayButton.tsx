@@ -86,7 +86,6 @@ export function InfinitePayButton({ description, totalPrice }: InfinitePayButton
       const script = document.createElement("script");
       script.src = "https://checkout-sdk.infinitepay.io/v2";
       script.async = true;
-      script.defer = true;
 
       script.onload = () => {
         console.log("✅ Script InfinitePay carregado, aguardando SDK...");
