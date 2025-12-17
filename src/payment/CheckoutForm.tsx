@@ -211,6 +211,13 @@ export function CheckoutForm() {
                 phone: form.phone,
                 cpf: form.cpf
               }}
+              addressData={{
+                street: form.street,
+                number: form.number,
+                city: form.city,
+                state: form.state,
+                zip: form.zip
+              }}
             />
           </div>
         </>

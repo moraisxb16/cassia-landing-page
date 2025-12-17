@@ -10,107 +10,99 @@ interface InfinitePayButtonProps {
     phone?: string;
     cpf?: string;
   };
+  addressData?: {
+    street?: string;
+    number?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+  };
 }
 
 /**
- * InfinitePayButton - Implementa checkout via Link Integrado (redirecionamento)
+ * InfinitePayButton - Implementa checkout via API oficial InfinitePay
  * 
- * A InfinitePay não oferece SDK client-side. Esta implementação usa o Link Integrado,
- * que redireciona o usuário para o checkout hospedado da InfinitePay.
- * 
- * Configuração necessária:
- * 1. Configure o Link Integrado no painel da InfinitePay
- * 2. Defina INFINITEPAY_CHECKOUT_URL com a URL base do checkout
- * 3. Ou configure a URL diretamente na constante abaixo
+ * Esta implementação segue a documentação oficial da InfinitePay:
+ * - Gera link de checkout via API serverless (Netlify Function)
+ * - Redireciona usuário para checkout hospedado
+ * - NÃO usa SDK client-side (não existe)
  */
 export function InfinitePayButton({ 
   description, 
   totalPrice,
   items = [],
-  customerData = {}
+  customerData = {},
+  addressData = {}
 }: InfinitePayButtonProps) {
   const [loading, setLoading] = useState(false);
 
   /**
-   * Gera o link de checkout da InfinitePay usando Link Integrado
-   * 
-   * Formato esperado pela InfinitePay (Link Integrado):
-   * https://checkout.infinitepay.io/pay?amount=XXX&description=XXX&...
-   * 
-   * Parâmetros comuns:
-   * - amount: valor em centavos
-   * - description: descrição do pedido
-   * - return_url: URL de retorno após pagamento
-   * - cancel_url: URL de cancelamento
-   * - customer_name, customer_email, customer_phone, customer_document: dados do cliente
+   * Chama a função serverless para gerar link de checkout
    */
-  function generateCheckoutLink(): string {
-    // URL base do checkout InfinitePay (Link Integrado)
-    // IMPORTANTE: Substitua pela URL configurada no seu painel InfinitePay
-    // Ou configure a variável de ambiente VITE_INFINITEPAY_CHECKOUT_URL no .env
-    const envUrl = (import.meta as any).env?.VITE_INFINITEPAY_CHECKOUT_URL;
-    const baseUrl = envUrl || 'https://checkout.infinitepay.io/pay';
+  async function createCheckoutLink(): Promise<string> {
+    // URL da função serverless (Netlify Functions)
+    const envApiUrl = (import.meta as any).env?.VITE_API_BASE_URL;
+    const apiUrl = envApiUrl || '/.netlify/functions/create-checkout-link';
     
-    const params = new URLSearchParams();
-    
-    // Valor em centavos (obrigatório)
-    params.append('amount', Math.round(totalPrice * 100).toString());
-    
-    // Descrição do pedido
-    params.append('description', description || 'Compra na Cássia Corviniy');
-    
-    // URLs de retorno (ajuste conforme necessário)
-    const returnUrl = `${window.location.origin}/pagamento/sucesso`;
-    const cancelUrl = `${window.location.origin}/pagamento/cancelado`;
-    params.append('return_url', returnUrl);
-    params.append('cancel_url', cancelUrl);
-    
-    // Dados do cliente (se disponíveis)
-    if (customerData.name) {
-      params.append('customer_name', customerData.name);
+    const payload = {
+      amount: Math.round(totalPrice * 100), // converter para centavos
+      description: description || 'Compra na Cássia Corviniy',
+      items: items.length > 0 ? items.map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price, // será convertido para centavos na função
+      })) : undefined,
+      customer: Object.keys(customerData).length > 0 ? customerData : undefined,
+      address: Object.keys(addressData).length > 0 ? addressData : undefined,
+    };
+
+    console.log('🚀 Chamando função serverless...');
+    console.log('📦 Payload:', payload);
+
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: 'Erro desconhecido' }));
+      console.error('❌ Erro na função serverless:', response.status, errorData);
+      throw new Error(errorData.error || `Erro ${response.status}: ${response.statusText}`);
     }
-    if (customerData.email) {
-      params.append('customer_email', customerData.email);
-    }
-    if (customerData.phone) {
-      params.append('customer_phone', customerData.phone);
-    }
-    if (customerData.cpf) {
-      params.append('customer_document', customerData.cpf.replace(/\D/g, ''));
-    }
+
+    const data = await response.json();
     
-    // Itens do pedido (se disponíveis)
-    if (items.length > 0) {
-      items.forEach((item, index) => {
-        params.append(`item[${index}][name]`, item.name);
-        params.append(`item[${index}][quantity]`, item.quantity.toString());
-        params.append(`item[${index}][price]`, Math.round(item.price * 100).toString());
-      });
+    if (!data.url) {
+      console.error('❌ Resposta sem URL:', data);
+      throw new Error('Resposta inválida da API');
     }
-    
-    return `${baseUrl}?${params.toString()}`;
+
+    console.log('✅ Link gerado com sucesso:', data.url);
+    return data.url;
   }
 
-  function handlePay() {
+  async function handlePay() {
     if (loading) return;
     
     setLoading(true);
     
     try {
-      console.log("🚀 Redirecionando para checkout InfinitePay...");
-      console.log("💰 Valor:", totalPrice);
-      console.log("📝 Descrição:", description);
+      // Gerar link via função serverless
+      const checkoutUrl = await createCheckoutLink();
       
-      // Gerar link de checkout
-      const checkoutUrl = generateCheckoutLink();
-      console.log("🔗 URL de checkout:", checkoutUrl);
-      
-      // Redirecionar para o checkout hospedado da InfinitePay
+      // Redirecionar para checkout hospedado
       window.location.href = checkoutUrl;
       
     } catch (error) {
-      console.error("❌ Erro ao gerar link de checkout:", error);
-      alert("Erro ao processar o pagamento. Tente novamente ou entre em contato com o suporte.");
+      console.error('❌ Erro ao gerar link de checkout:', error);
+      alert(
+        error instanceof Error 
+          ? `Erro: ${error.message}` 
+          : 'Erro ao processar o pagamento. Tente novamente ou entre em contato com o suporte.'
+      );
       setLoading(false);
     }
   }
@@ -126,7 +118,7 @@ export function InfinitePayButton({
           : "bg-purple-600 hover:bg-purple-700 text-white"
         }`}
     >
-      {loading ? "Redirecionando..." : "Finalizar Compra"}
+      {loading ? "Processando..." : "Finalizar Compra"}
     </button>
   );
 }
