@@ -200,6 +200,17 @@ export function CheckoutForm() {
             <InfinitePayButton
               description="Compra na Cassia Corviniy"
               totalPrice={totalPrice}
+              items={items.map(item => ({
+                name: item.name,
+                quantity: item.quantity,
+                price: item.price
+              }))}
+              customerData={{
+                name: form.name,
+                email: form.email,
+                phone: form.phone,
+                cpf: form.cpf
+              }}
             />
           </div>
         </>

@@ -1,232 +1,117 @@
-import React, { useEffect, useState } from "react";
-
-declare global {
-  interface Window {
-    InfiniteCheckout?: {
-      open: (options: {
-        name: string;
-        amount: number; 
-        type: Array<"pix" | "card">;
-      }) => void;
-    };
-  }
-}
+import React, { useState } from "react";
 
 interface InfinitePayButtonProps {
   description: string;
   totalPrice: number;
+  items?: Array<{ name: string; quantity: number; price: number }>;
+  customerData?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    cpf?: string;
+  };
 }
 
-export function InfinitePayButton({ description, totalPrice }: InfinitePayButtonProps) {
-  const [loading, setLoading] = useState(true);
-  const [sdkReady, setSdkReady] = useState(false);
+/**
+ * InfinitePayButton - Implementa checkout via Link Integrado (redirecionamento)
+ * 
+ * A InfinitePay não oferece SDK client-side. Esta implementação usa o Link Integrado,
+ * que redireciona o usuário para o checkout hospedado da InfinitePay.
+ * 
+ * Configuração necessária:
+ * 1. Configure o Link Integrado no painel da InfinitePay
+ * 2. Defina INFINITEPAY_CHECKOUT_URL com a URL base do checkout
+ * 3. Ou configure a URL diretamente na constante abaixo
+ */
+export function InfinitePayButton({ 
+  description, 
+  totalPrice,
+  items = [],
+  customerData = {}
+}: InfinitePayButtonProps) {
+  const [loading, setLoading] = useState(false);
 
-  // Carregar SDK corretamente
-  useEffect(() => {
-    let checkInterval: NodeJS.Timeout | null = null;
-    let retryInterval: NodeJS.Timeout | null = null;
-    let timeoutId: NodeJS.Timeout | null = null;
-
-    const checkSDK = () => {
-      if (window.InfiniteCheckout) {
-        setLoading(false);
-        setSdkReady(true);
-        console.log("✅ InfiniteCheckout disponível e pronto!");
-        console.log("✅ Tipo de InfiniteCheckout:", typeof window.InfiniteCheckout);
-        console.log("✅ Métodos disponíveis:", Object.keys(window.InfiniteCheckout));
-        if (checkInterval) clearInterval(checkInterval);
-        if (retryInterval) clearInterval(retryInterval);
-        if (timeoutId) clearTimeout(timeoutId);
-        return true;
-      }
-      return false;
-    };
-
-    // Verificar imediatamente se já está disponível
-    if (checkSDK()) {
-      return;
-    }
-
-    // Verificar se o script já existe no DOM (agora no <head> do index.html)
-    const existingScript = document.querySelector('script[src*="checkout.infinitepay.io"]');
+  /**
+   * Gera o link de checkout da InfinitePay usando Link Integrado
+   * 
+   * Formato esperado pela InfinitePay (Link Integrado):
+   * https://checkout.infinitepay.io/pay?amount=XXX&description=XXX&...
+   * 
+   * Parâmetros comuns:
+   * - amount: valor em centavos
+   * - description: descrição do pedido
+   * - return_url: URL de retorno após pagamento
+   * - cancel_url: URL de cancelamento
+   * - customer_name, customer_email, customer_phone, customer_document: dados do cliente
+   */
+  function generateCheckoutLink(): string {
+    // URL base do checkout InfinitePay (Link Integrado)
+    // IMPORTANTE: Substitua pela URL configurada no seu painel InfinitePay
+    // Ou configure a variável de ambiente VITE_INFINITEPAY_CHECKOUT_URL no .env
+    const envUrl = (import.meta as any).env?.VITE_INFINITEPAY_CHECKOUT_URL;
+    const baseUrl = envUrl || 'https://checkout.infinitepay.io/pay';
     
-    if (existingScript) {
-      console.log("⏳ Script já existe, aguardando SDK...");
-      // Se o script já existe, apenas aguardar o SDK aparecer
-      checkInterval = setInterval(() => {
-        if (checkSDK()) {
-          return;
-        }
-        console.log("⏳ Aguardando InfiniteCheckout...", window.InfiniteCheckout);
-      }, 100); // Verificar a cada 100ms (mais rápido)
-
-      // Timeout máximo de 15 segundos
-      timeoutId = setTimeout(() => {
-        if (!window.InfiniteCheckout) {
-          console.warn("⚠️ Timeout: InfiniteCheckout não carregou após 15 segundos");
-          console.warn("⚠️ Verifique se o domínio cassiacorviniy.com.br está autorizado na InfinitePay");
-          console.warn("⚠️ Continuando verificação em background...");
-          setLoading(false); // Liberar o botão mesmo assim
-          // Continuar verificando em background (sem bloquear)
-          const backgroundCheck = setInterval(() => {
-            if (window.InfiniteCheckout) {
-              clearInterval(backgroundCheck);
-              setSdkReady(true);
-              console.log("✅ InfiniteCheckout carregou após o timeout! SDK pronto.");
-            }
-          }, 500);
-          // Limpar após 30 segundos totais
-          setTimeout(() => clearInterval(backgroundCheck), 30000);
-        } else {
-          if (checkInterval) clearInterval(checkInterval);
-        }
-      }, 15000);
-    } else {
-      // O script já deve estar no <head> do index.html
-      // Mas se não estiver, criar dinamicamente como fallback
-      console.log("📦 Script não encontrado no DOM, criando dinamicamente...");
-      const script = document.createElement("script");
-      script.src = "https://checkout.infinitepay.io/v1";
-      script.async = true;
-
-      script.onload = () => {
-        console.log("✅ Script InfinitePay carregado com sucesso!");
-        console.log("✅ URL do script:", script.src);
-        console.log("⏳ Verificando window.InfiniteCheckout...");
-        console.log("⏳ window.InfiniteCheckout atual:", window.InfiniteCheckout);
-        // Retry automático até o SDK aparecer (mais agressivo)
-        retryInterval = setInterval(() => {
-          if (checkSDK()) {
-            return;
-          }
-          console.log("⏳ Aguardando InfiniteCheckout após script carregar...", window.InfiniteCheckout);
-        }, 100); // Verificar a cada 100ms
-
-        // Timeout máximo de 15 segundos
-        timeoutId = setTimeout(() => {
-          if (!window.InfiniteCheckout) {
-            console.warn("⚠️ Timeout: InfiniteCheckout não carregou após 15 segundos");
-            console.warn("⚠️ Verifique se o domínio cassiacorviniy.com.br está autorizado na InfinitePay");
-            console.warn("⚠️ Continuando verificação em background...");
-            setLoading(false); // Liberar o botão mesmo assim
-            // Continuar verificando em background (sem bloquear)
-            const backgroundCheck = setInterval(() => {
-              if (window.InfiniteCheckout) {
-                clearInterval(backgroundCheck);
-                setSdkReady(true);
-                console.log("✅ InfiniteCheckout carregou após o timeout! SDK pronto.");
-              }
-            }, 500);
-            // Limpar após 30 segundos totais
-            setTimeout(() => clearInterval(backgroundCheck), 30000);
-          } else {
-            if (retryInterval) clearInterval(retryInterval);
-          }
-        }, 15000);
-      };
-
-      script.onerror = (error) => {
-        console.error("❌ Erro ao carregar script da InfinitePay");
-        console.error("❌ Erro detalhado:", error);
-        console.error("❌ URL tentada: https://checkout.infinitepay.io/v1");
-        if (error instanceof ErrorEvent) {
-          console.error("❌ Tipo de erro:", error.type || "UNKNOWN");
-          console.error("❌ Target:", error.target);
-        }
-        console.error("❌ Possíveis causas:");
-        console.error("   1. URL do SDK incorreta ou descontinuada");
-        console.error("   2. Domínio não autorizado na InfinitePay");
-        console.error("   3. Bloqueadores de script (AdBlock, etc)");
-        console.error("   4. Problema de rede/DNS");
-        console.error("❌ Ação: Verifique a documentação oficial da InfinitePay para a URL correta do SDK");
-        setLoading(false); // Liberar o botão em caso de erro
-      };
-
-      // Adicionar ID para facilitar debug
-      script.id = "infinite-pay-script";
-      document.head.appendChild(script);
-      console.log("📦 Script InfinitePay adicionado ao DOM com ID: infinite-pay-script");
-      
-      // Verificar se o script foi realmente adicionado
-      setTimeout(() => {
-        const addedScript = document.getElementById("infinite-pay-script");
-        if (addedScript) {
-          console.log("✅ Script confirmado no DOM");
-        } else {
-          console.error("❌ Script não foi adicionado ao DOM corretamente");
-        }
-      }, 100);
+    const params = new URLSearchParams();
+    
+    // Valor em centavos (obrigatório)
+    params.append('amount', Math.round(totalPrice * 100).toString());
+    
+    // Descrição do pedido
+    params.append('description', description || 'Compra na Cássia Corviniy');
+    
+    // URLs de retorno (ajuste conforme necessário)
+    const returnUrl = `${window.location.origin}/pagamento/sucesso`;
+    const cancelUrl = `${window.location.origin}/pagamento/cancelado`;
+    params.append('return_url', returnUrl);
+    params.append('cancel_url', cancelUrl);
+    
+    // Dados do cliente (se disponíveis)
+    if (customerData.name) {
+      params.append('customer_name', customerData.name);
     }
-
-    // Cleanup
-    return () => {
-      if (checkInterval) clearInterval(checkInterval);
-      if (retryInterval) clearInterval(retryInterval);
-      if (timeoutId) clearTimeout(timeoutId);
-    };
-  }, []);
+    if (customerData.email) {
+      params.append('customer_email', customerData.email);
+    }
+    if (customerData.phone) {
+      params.append('customer_phone', customerData.phone);
+    }
+    if (customerData.cpf) {
+      params.append('customer_document', customerData.cpf.replace(/\D/g, ''));
+    }
+    
+    // Itens do pedido (se disponíveis)
+    if (items.length > 0) {
+      items.forEach((item, index) => {
+        params.append(`item[${index}][name]`, item.name);
+        params.append(`item[${index}][quantity]`, item.quantity.toString());
+        params.append(`item[${index}][price]`, Math.round(item.price * 100).toString());
+      });
+    }
+    
+    return `${baseUrl}?${params.toString()}`;
+  }
 
   function handlePay() {
-    // Verificar novamente antes de abrir (última tentativa)
-    if (!window.InfiniteCheckout) {
-      console.error("❌ InfiniteCheckout não está disponível no momento do clique");
-      
-      // Tentar uma última vez: verificar se o script existe e aguardar um pouco
-      const existingScript = document.querySelector('script[src*="checkout.infinitepay.io"]');
-      if (existingScript) {
-        console.log("🔄 Script existe, aguardando 1 segundo e tentando novamente...");
-        setTimeout(() => {
-          if (window.InfiniteCheckout) {
-            console.log("✅ InfiniteCheckout apareceu! Abrindo checkout...");
-            try {
-              window.InfiniteCheckout.open({
-                name: description || "Compra na Cássia Corviniy",
-                amount: Math.round(totalPrice * 100),
-                type: ["pix", "card"],
-              });
-              console.log("✅ Checkout aberto com sucesso");
-            } catch (error) {
-              console.error("❌ Erro ao abrir checkout:", error);
-              alert("Erro ao abrir o checkout. Tente novamente.");
-            }
-          } else {
-            console.error("❌ InfiniteCheckout ainda não está disponível após espera");
-            console.error("❌ Verifique se o domínio cassiacorviniy.com.br está autorizado na InfinitePay");
-            alert("O sistema de pagamento não está disponível. Verifique se o domínio está autorizado na InfinitePay ou entre em contato com o suporte.");
-          }
-        }, 1000);
-        return;
-      }
-      
-      console.error("❌ Script não existe no DOM");
-      console.error("❌ Verifique se o domínio cassiacorviniy.com.br está autorizado na InfinitePay");
-      alert("O sistema de pagamento não está disponível. Verifique se o domínio está autorizado na InfinitePay ou entre em contato com o suporte.");
-      return;
-    }
-
-    if (loading) {
-      alert("O sistema de pagamento ainda está carregando. Aguarde alguns segundos e tente novamente.");
-      return;
-    }
-
+    if (loading) return;
+    
+    setLoading(true);
+    
     try {
-      console.log("🚀 Abrindo checkout InfinitePay...");
-      console.log("Payload:", {
-        name: description || "Compra na Cássia Corviniy",
-        amount: Math.round(totalPrice * 100),
-        type: ["pix", "card"],
-      });
+      console.log("🚀 Redirecionando para checkout InfinitePay...");
+      console.log("💰 Valor:", totalPrice);
+      console.log("📝 Descrição:", description);
       
-      window.InfiniteCheckout.open({
-        name: description || "Compra na Cássia Corviniy",
-        amount: Math.round(totalPrice * 100),
-        type: ["pix", "card"],
-      });
+      // Gerar link de checkout
+      const checkoutUrl = generateCheckoutLink();
+      console.log("🔗 URL de checkout:", checkoutUrl);
       
-      console.log("✅ Checkout aberto com sucesso");
+      // Redirecionar para o checkout hospedado da InfinitePay
+      window.location.href = checkoutUrl;
+      
     } catch (error) {
-      console.error("❌ Erro ao abrir checkout:", error);
-      alert("Erro ao abrir o checkout. Verifique o console para mais detalhes.");
+      console.error("❌ Erro ao gerar link de checkout:", error);
+      alert("Erro ao processar o pagamento. Tente novamente ou entre em contato com o suporte.");
+      setLoading(false);
     }
   }
 
@@ -236,9 +121,12 @@ export function InfinitePayButton({ description, totalPrice }: InfinitePayButton
       onClick={handlePay}
       disabled={loading}
       className={`w-full px-4 py-2 rounded-md text-sm font-medium transition-colors 
-        ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700 text-white"}`}
+        ${loading 
+          ? "bg-gray-400 cursor-not-allowed" 
+          : "bg-purple-600 hover:bg-purple-700 text-white"
+        }`}
     >
-      {loading ? "Carregando Pagamento..." : "Finalizar Compra"}
+      {loading ? "Redirecionando..." : "Finalizar Compra"}
     </button>
   );
 }
