@@ -32,6 +32,8 @@ export function InfinitePayButton({ description, totalPrice }: InfinitePayButton
         setLoading(false);
         setSdkReady(true);
         console.log("✅ InfiniteCheckout disponível e pronto!");
+        console.log("✅ Tipo de InfiniteCheckout:", typeof window.InfiniteCheckout);
+        console.log("✅ Métodos disponíveis:", Object.keys(window.InfiniteCheckout));
         if (checkInterval) clearInterval(checkInterval);
         if (retryInterval) clearInterval(retryInterval);
         if (timeoutId) clearTimeout(timeoutId);
@@ -46,7 +48,7 @@ export function InfinitePayButton({ description, totalPrice }: InfinitePayButton
     }
 
     // Verificar se o script já existe no DOM (agora no <head> do index.html)
-    const existingScript = document.querySelector('script[src*="checkout-sdk.infinitepay.io"]');
+    const existingScript = document.querySelector('script[src*="checkout.infinitepay.io"]');
     
     if (existingScript) {
       console.log("⏳ Script já existe, aguardando SDK...");
@@ -84,11 +86,14 @@ export function InfinitePayButton({ description, totalPrice }: InfinitePayButton
       // Mas se não estiver, criar dinamicamente como fallback
       console.log("📦 Script não encontrado no DOM, criando dinamicamente...");
       const script = document.createElement("script");
-      script.src = "https://checkout-sdk.infinitepay.io/v2";
+      script.src = "https://checkout.infinitepay.io/v1";
       script.async = true;
 
       script.onload = () => {
-        console.log("✅ Script InfinitePay carregado, aguardando SDK...");
+        console.log("✅ Script InfinitePay carregado com sucesso!");
+        console.log("✅ URL do script:", script.src);
+        console.log("⏳ Verificando window.InfiniteCheckout...");
+        console.log("⏳ window.InfiniteCheckout atual:", window.InfiniteCheckout);
         // Retry automático até o SDK aparecer (mais agressivo)
         retryInterval = setInterval(() => {
           if (checkSDK()) {
@@ -123,10 +128,17 @@ export function InfinitePayButton({ description, totalPrice }: InfinitePayButton
       script.onerror = (error) => {
         console.error("❌ Erro ao carregar script da InfinitePay");
         console.error("❌ Erro detalhado:", error);
-        console.error("❌ URL tentada: https://checkout-sdk.infinitepay.io/v2");
-        console.error("❌ Verifique se o domínio cassiacorviniy.com.br está autorizado na InfinitePay");
-        console.error("❌ Verifique se há bloqueadores de script (AdBlock, etc)");
-        console.error("❌ Verifique o Network tab do DevTools para ver se o script foi bloqueado");
+        console.error("❌ URL tentada: https://checkout.infinitepay.io/v1");
+        if (error instanceof ErrorEvent) {
+          console.error("❌ Tipo de erro:", error.type || "UNKNOWN");
+          console.error("❌ Target:", error.target);
+        }
+        console.error("❌ Possíveis causas:");
+        console.error("   1. URL do SDK incorreta ou descontinuada");
+        console.error("   2. Domínio não autorizado na InfinitePay");
+        console.error("   3. Bloqueadores de script (AdBlock, etc)");
+        console.error("   4. Problema de rede/DNS");
+        console.error("❌ Ação: Verifique a documentação oficial da InfinitePay para a URL correta do SDK");
         setLoading(false); // Liberar o botão em caso de erro
       };
 
@@ -160,7 +172,7 @@ export function InfinitePayButton({ description, totalPrice }: InfinitePayButton
       console.error("❌ InfiniteCheckout não está disponível no momento do clique");
       
       // Tentar uma última vez: verificar se o script existe e aguardar um pouco
-      const existingScript = document.querySelector('script[src*="checkout-sdk.infinitepay.io"]');
+      const existingScript = document.querySelector('script[src*="checkout.infinitepay.io"]');
       if (existingScript) {
         console.log("🔄 Script existe, aguardando 1 segundo e tentando novamente...");
         setTimeout(() => {
