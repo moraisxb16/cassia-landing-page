@@ -182,15 +182,17 @@ export const handler: Handler = async (
     // Gerar order_nsu único (obrigatório pela API)
     const orderNsu = randomUUID();
 
-    // URL de retorno (redirect_url)
+    // URLs de retorno
     const origin = event.headers.origin || event.headers.referer || 'https://cassiacorviniy.com.br';
     const baseUrl = origin.replace(/\/$/, '');
     const redirectUrl = `${baseUrl}/pagamento/sucesso`;
+    const cancelUrl = `${baseUrl}/pagamento/cancelado`;
 
     // Montar payload base conforme documentação
     const payload: any = {
       handle: cleanHandle,
       redirect_url: redirectUrl,
+      cancel_url: cancelUrl, // URL de cancelamento
       order_nsu: orderNsu,
     };
 

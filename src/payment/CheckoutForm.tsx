@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { useCart } from '../cart/useCart';
 import { InfinitePayButton } from '../components/InfinitePayButton';
-import type { CheckoutFormData, PaymentMethod } from '../types';
+import type { CheckoutFormData } from '../types';
 
 const defaultForm: CheckoutFormData = {
   name: '',
@@ -16,7 +16,7 @@ const defaultForm: CheckoutFormData = {
   city: '',
   state: '',
   zip: '',
-  paymentMethod: 'pix',
+  paymentMethod: 'pix', // Mantido para compatibilidade, mas não usado
 };
 
 export function CheckoutForm() {
@@ -27,7 +27,6 @@ export function CheckoutForm() {
   } = useCart();
 
   const [form, setForm] = useState<CheckoutFormData>(defaultForm);
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('pix');
 
   const handleClose = () => {
     setForm(defaultForm);
@@ -169,32 +168,10 @@ export function CheckoutForm() {
               </div>
             </div>
 
-            <div className="space-y-3">
-              <h3 className="text-purple-900">Forma de Pagamento</h3>
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('pix')}
-                  className={`flex-1 rounded-md border px-4 py-2 text-sm font-medium transition-colors ${
-                    paymentMethod === 'pix'
-                      ? 'bg-purple-600 text-white border-purple-600'
-                      : 'bg-white text-gray-700 border-gray-200 hover:border-purple-300'
-                  }`}
-                >
-                  PIX
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('card')}
-                  className={`flex-1 rounded-md border px-4 py-2 text-sm font-medium transition-colors ${
-                    paymentMethod === 'card'
-                      ? 'bg-purple-600 text-white border-purple-600'
-                      : 'bg-white text-gray-700 border-gray-200 hover:border-purple-300'
-                  }`}
-                >
-                  Cartão de Crédito
-                </button>
-              </div>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+              <p className="text-sm text-blue-800">
+                💳 Você escolherá o método de pagamento (PIX, Cartão, Apple Pay, etc.) no checkout seguro da InfinitePay.
+              </p>
             </div>
 
             <InfinitePayButton

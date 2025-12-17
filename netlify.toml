@@ -6,3 +6,9 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+# Redirecionar todas as rotas para index.html (SPA routing)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+

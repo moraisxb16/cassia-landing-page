@@ -90,6 +90,16 @@ export function InfinitePayButton({
     setLoading(true);
     
     try {
+      // Salvar dados do pedido no localStorage para usar na página de sucesso
+      const orderData = {
+        customer: customerData,
+        address: addressData,
+        items: items,
+        totalPrice: totalPrice,
+        description: description,
+      };
+      localStorage.setItem('pendingOrder', JSON.stringify(orderData));
+      
       // Gerar link via função serverless
       const checkoutUrl = await createCheckoutLink();
       
@@ -118,7 +128,7 @@ export function InfinitePayButton({
           : "bg-purple-600 hover:bg-purple-700 text-white"
         }`}
     >
-      {loading ? "Processando..." : "Finalizar Compra"}
+      {loading ? "Processando..." : "Ir para pagamento"}
     </button>
   );
 }
