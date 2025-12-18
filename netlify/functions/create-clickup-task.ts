@@ -302,11 +302,11 @@ export const handler: Handler = async (
       ? (body.amount / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       : '0.00';
 
-    // Montar lista de produtos (formato: "Produto Teste – R$ 1,00")
+    // Montar lista de produtos (formato: "Nome + Quantidade")
+    // Exemplo: "Produto Teste x 2"
     const productsList = body.items && body.items.length > 0
       ? body.items.map(item => {
-          const itemTotal = (item.price * item.quantity).toFixed(2);
-          return `${item.name} – R$ ${itemTotal}`;
+          return `${item.name} x ${item.quantity}`;
         }).join('\n')
       : 'Não informado';
 

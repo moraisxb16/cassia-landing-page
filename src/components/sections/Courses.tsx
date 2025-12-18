@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardFooter } from '../ui/card';
 import { Badge } from '../ui/badge';
@@ -60,7 +61,7 @@ const courses: Course[] = [
     name: 'Atendimento Individual Mesa Radiônica Dragonlight',
     description: 'Processo profundo de autoconhecimento, limpeza energética e cocriação. Atuação nos níveis físico, mental e espiritual.',
     price: 630.00,
-    image: defaultCourseImage,
+    image: 'https://i.postimg.cc/htYPyBjr/Whats-App-Image-2025-11-27-at-09-03-11.jpg',
     type: 'service',
     category: 'service',
     format: 'Individual',
@@ -71,7 +72,7 @@ const courses: Course[] = [
     name: 'Atendimento Terapêutico Individual',
     description: 'Sessão com Aromaterapia, Reiki e técnicas sistêmicas, para clareza emocional e direcionamento.',
     price: 470.00,
-    image: defaultCourseImage,
+    image: 'https://i.postimg.cc/0j5s5Wj6/Whats-App-Image-2025-12-11-at-12-05-36.jpg',
     type: 'service',
     category: 'service',
     format: 'Individual',

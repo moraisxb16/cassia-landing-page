@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardFooter } from '../ui/card';
 import { Badge } from '../ui/badge';
@@ -10,6 +11,7 @@ import type { Product } from '../../types';
 
 type SimpleProduct = Omit<Product, 'type' | 'category'> & {
   rating: number;
+  isTestProduct?: boolean; // Flag para produto de teste
 };
 
 const products: Record<string, SimpleProduct[]> = {
@@ -20,6 +22,7 @@ const products: Record<string, SimpleProduct[]> = {
       description: 'Produto de teste para validação do sistema de pagamento. Valor: R$ 1,00',
       price: 1,
       rating: 5,
+      isTestProduct: true, // Flag para identificar produto de teste
       image:
         'https://images.unsplash.com/photo-1608571424634-58ae03e6edcf?auto=format&fit=crop&w=1080&q=80',
     },
@@ -299,9 +302,16 @@ export function Products() {
           {(['oils', 'sprays', 'crystals', 'apparel'] as const).map((key) => (
             <TabsContent key={key} value={key}>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {products[key].map((product, i) => (
-                  <ProductCard key={product.id} product={product} index={i} />
-                ))}
+                {products[key]
+                  .filter((product) => {
+                    // Filtrar produto de teste se necessário (pode ser controlado por variável de ambiente)
+                    // Por padrão, exibir todos os produtos incluindo teste
+                    const showTestProducts = true; // Pode ser alterado para false em produção
+                    return showTestProducts || !product.isTestProduct;
+                  })
+                  .map((product, i) => (
+                    <ProductCard key={product.id} product={product} index={i} />
+                  ))}
               </div>
             </TabsContent>
           ))}
