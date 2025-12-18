@@ -15,6 +15,15 @@ type SimpleProduct = Omit<Product, 'type' | 'category'> & {
 const products: Record<string, SimpleProduct[]> = {
   oils: [
     {
+      id: 'produto-teste',
+      name: 'Produto Teste',
+      description: 'Produto de teste para validação do sistema de pagamento. Valor: R$ 1,00',
+      price: 1,
+      rating: 5,
+      image:
+        'https://images.unsplash.com/photo-1608571424634-58ae03e6edcf?auto=format&fit=crop&w=1080&q=80',
+    },
+    {
       id: 'oil-lavanda',
       name: 'Óleo Essencial de Lavanda',
       description:

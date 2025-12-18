@@ -44,6 +44,7 @@ export interface CheckoutFormData {
   email: string;
   phone: string;
   cpf: string;
+  birthDate: string; // Data de nascimento (formato: YYYY-MM-DD)
   street: string;
   number: string;
   city: string;

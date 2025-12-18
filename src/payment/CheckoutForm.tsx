@@ -11,6 +11,7 @@ const defaultForm: CheckoutFormData = {
   email: '',
   phone: '',
   cpf: '',
+  birthDate: '',
   street: '',
   number: '',
   city: '',
@@ -110,6 +111,16 @@ export function CheckoutForm() {
                     onChange={handleChange('cpf')}
                   />
                 </div>
+                <div>
+                  <Label htmlFor="birthDate">Data de Nascimento *</Label>
+                  <Input
+                    id="birthDate"
+                    type="date"
+                    required
+                    value={form.birthDate}
+                    onChange={handleChange('birthDate')}
+                  />
+                </div>
               </div>
             </div>
 
@@ -180,13 +191,15 @@ export function CheckoutForm() {
               items={items.map(item => ({
                 name: item.name,
                 quantity: item.quantity,
-                price: item.price
+                price: item.price,
+                type: item.type // Incluir tipo para separar Cursos/Serviços no ClickUp
               }))}
               customerData={{
                 name: form.name,
                 email: form.email,
                 phone: form.phone,
-                cpf: form.cpf
+                cpf: form.cpf,
+                birthDate: form.birthDate
               }}
               addressData={{
                 street: form.street,

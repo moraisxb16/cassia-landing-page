@@ -3,12 +3,13 @@ import React, { useState } from "react";
 interface InfinitePayButtonProps {
   description: string;
   totalPrice: number;
-  items?: Array<{ name: string; quantity: number; price: number }>;
+  items?: Array<{ name: string; quantity: number; price: number; type?: 'product' | 'course' | 'service' | 'mentoring' }>;
   customerData?: {
     name?: string;
     email?: string;
     phone?: string;
     cpf?: string;
+    birthDate?: string;
   };
   addressData?: {
     street?: string;

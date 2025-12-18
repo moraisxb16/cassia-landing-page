@@ -3,6 +3,10 @@ import type { Handler, HandlerEvent, HandlerContext } from '@netlify/functions';
 /**
  * Netlify Function para criar task no ClickUp após pagamento confirmado
  * 
+ * Segue EXATAMENTE a documentação oficial ClickUp API v2:
+ * https://developer.clickup.com/docs/authentication
+ * https://clickup.com/api/clickupreference/operation/CreateTask
+ * 
  * Endpoint: POST /.netlify/functions/create-clickup-task
  * 
  * Body esperado:
@@ -12,13 +16,16 @@ import type { Handler, HandlerEvent, HandlerContext } from '@netlify/functions';
  *   slug?: string,
  *   capture_method?: string,
  *   amount?: number (em centavos),
- *   receipt_url?: string
+ *   receipt_url?: string,
+ *   customer?: { name, email, phone, cpf, birthDate },
+ *   address?: { street, number, city, state, zip },
+ *   items?: Array<{ name, quantity, price, type? }>
  * }
  * 
  * Variáveis de ambiente necessárias:
  * - CLICKUP_API_TOKEN
- * - CLICKUP_WORKSPACE_ID
- * - CLICKUP_LIST_ID (opcional, pode ser passado no body)
+ * - CLICKUP_WORKSPACE_ID: 90132835502
+ * - CLICKUP_LIST_ID: 6-901323245019-1
  */
 
 interface ClickUpTaskRequest {
@@ -28,12 +35,12 @@ interface ClickUpTaskRequest {
   capture_method?: string;
   amount?: number;
   receipt_url?: string;
-  // Dados do pedido (vindos do localStorage ou sessionStorage do frontend)
   customer?: {
     name?: string;
     email?: string;
     phone?: string;
     cpf?: string;
+    birthDate?: string;
   };
   address?: {
     street?: string;
@@ -46,6 +53,7 @@ interface ClickUpTaskRequest {
     name: string;
     quantity: number;
     price: number;
+    type?: 'product' | 'course' | 'service' | 'mentoring';
   }>;
 }
 
@@ -54,7 +62,119 @@ interface ClickUpResponse {
   name: string;
   status: {
     status: string;
+    color: string;
+    type: string;
+    orderindex: number;
   };
+}
+
+interface ClickUpCustomField {
+  id: string;
+  name: string;
+  type: string;
+}
+
+/**
+ * Busca os custom fields da lista para mapear IDs corretos
+ */
+async function getCustomFields(listId: string, apiToken: string): Promise<Map<string, string>> {
+  const fieldMap = new Map<string, string>();
+  
+  try {
+    const response = await fetch(
+      `https://api.clickup.com/api/v2/list/${listId}/field`,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': apiToken,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data.fields && Array.isArray(data.fields)) {
+        data.fields.forEach((field: ClickUpCustomField) => {
+          const nameLower = field.name.toLowerCase();
+          
+          // Mapear campos conforme imagens fornecidas
+          if (nameLower === 'cpf' || nameLower.includes('cpf')) {
+            fieldMap.set('cpf', field.id);
+          }
+          if (nameLower === 'telefone' || nameLower.includes('telefone')) {
+            fieldMap.set('phone', field.id);
+          }
+          if ((nameLower.includes('data') && nameLower.includes('nascimento')) || nameLower === 'data de nascimento') {
+            fieldMap.set('birthDate', field.id);
+          }
+          if (nameLower === 'endereço completo' || nameLower === 'endereco completo' || (nameLower.includes('endereço') && nameLower.includes('completo'))) {
+            fieldMap.set('address', field.id);
+          }
+          if (nameLower === 'forma de pagamento' || (nameLower.includes('forma') && nameLower.includes('pagamento'))) {
+            fieldMap.set('paymentMethod', field.id);
+          }
+          if (nameLower === 'produtos' || nameLower.includes('produtos')) {
+            fieldMap.set('products', field.id);
+          }
+          if (nameLower === 'valor do atendimento' || nameLower === '$ valor do atendimento' || (nameLower.includes('valor') && nameLower.includes('atendimento'))) {
+            fieldMap.set('amount', field.id);
+          }
+          if (nameLower === 'origem' || nameLower.includes('origem')) {
+            fieldMap.set('origin', field.id);
+          }
+          if (nameLower === 'cursos' || nameLower.includes('cursos')) {
+            fieldMap.set('courses', field.id);
+          }
+          if (nameLower === 'serviços contratados' || nameLower === 'servicos contratados' || (nameLower.includes('serviços') && nameLower.includes('contratados'))) {
+            fieldMap.set('services', field.id);
+          }
+        });
+        console.log('✅ Custom fields mapeados:', Array.from(fieldMap.entries()));
+      }
+    } else {
+      console.warn('⚠️ Não foi possível buscar custom fields, usando IDs padrão');
+    }
+  } catch (error) {
+    console.warn('⚠️ Erro ao buscar custom fields:', error);
+  }
+
+  return fieldMap;
+}
+
+/**
+ * Busca o status "EM PRODUÇÃO" da lista
+ */
+async function getStatusId(listId: string, apiToken: string, statusName: string = 'EM PRODUÇÃO'): Promise<string | null> {
+  try {
+    const response = await fetch(
+      `https://api.clickup.com/api/v2/list/${listId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': apiToken,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data.statuses && Array.isArray(data.statuses)) {
+        const status = data.statuses.find((s: any) => 
+          s.status?.toLowerCase() === statusName.toLowerCase()
+        );
+        if (status) {
+          console.log(`✅ Status "${statusName}" encontrado:`, status.status);
+          return status.status;
+        }
+      }
+    }
+  } catch (error) {
+    console.warn('⚠️ Erro ao buscar status:', error);
+  }
+
+  return null;
 }
 
 export const handler: Handler = async (
@@ -91,8 +211,13 @@ export const handler: Handler = async (
     // VALIDAR VARIÁVEIS DE AMBIENTE
     // ============================================
     const apiToken = process.env.CLICKUP_API_TOKEN;
-    const workspaceId = process.env.CLICKUP_WORKSPACE_ID;
-    const defaultListId = process.env.CLICKUP_LIST_ID;
+    const workspaceId = process.env.CLICKUP_WORKSPACE_ID || '90132835502';
+    const listId = process.env.CLICKUP_LIST_ID || '6-901323245019-1';
+
+    console.log('🔍 Verificando configurações ClickUp...');
+    console.log('🔍 API Token existe?', !!apiToken);
+    console.log('🔍 Workspace ID:', workspaceId);
+    console.log('🔍 List ID:', listId);
 
     if (!apiToken) {
       console.error('❌ CLICKUP_API_TOKEN não configurado');
@@ -106,14 +231,14 @@ export const handler: Handler = async (
       };
     }
 
-    if (!workspaceId) {
-      console.error('❌ CLICKUP_WORKSPACE_ID não configurado');
+    if (!listId) {
+      console.error('❌ CLICKUP_LIST_ID não configurado');
       return {
         statusCode: 500,
         headers,
         body: JSON.stringify({
-          error: 'Configuração do ClickUp não encontrada',
-          details: 'CLICKUP_WORKSPACE_ID não está configurado',
+          error: 'Configuração do ClickUp incompleta',
+          details: 'CLICKUP_LIST_ID não está configurado',
         }),
       };
     }
@@ -142,9 +267,29 @@ export const handler: Handler = async (
       };
     }
 
+    if (!body.customer?.name) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Nome do cliente é obrigatório' }),
+      };
+    }
+
+    // ============================================
+    // BUSCAR STATUS E CUSTOM FIELDS
+    // ============================================
+    console.log('🔍 Buscando status "EM PRODUÇÃO" e custom fields...');
+    const [statusId, customFields] = await Promise.all([
+      getStatusId(listId, apiToken, 'EM PRODUÇÃO'),
+      getCustomFields(listId, apiToken),
+    ]);
+
     // ============================================
     // MONTAR TASK DO CLICKUP
     // ============================================
+    // Nome da tarefa: APENAS nome completo do cliente (sem "Pedido #...")
+    const taskName = body.customer.name.trim();
+
     // Formatar método de pagamento
     const paymentMethodText = body.capture_method === 'credit_card' 
       ? 'Cartão de Crédito' 
@@ -154,91 +299,138 @@ export const handler: Handler = async (
 
     // Formatar valor
     const formattedAmount = body.amount 
-      ? `R$ ${(body.amount / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+      ? (body.amount / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      : '0.00';
+
+    // Montar lista de produtos (formato: "Produto Teste – R$ 1,00")
+    const productsList = body.items && body.items.length > 0
+      ? body.items.map(item => {
+          const itemTotal = (item.price * item.quantity).toFixed(2);
+          return `${item.name} – R$ ${itemTotal}`;
+        }).join('\n')
       : 'Não informado';
 
-    // Montar descrição da task
+    // Montar endereço completo
+    const fullAddress = body.address
+      ? [
+          body.address.street,
+          body.address.number,
+          body.address.city,
+          body.address.state,
+          body.address.zip,
+        ].filter(Boolean).join(', ')
+      : 'Não informado';
+
+    // Separar produtos por tipo (Cursos vs Serviços)
+    const coursesList: string[] = [];
+    const servicesList: string[] = [];
+    
+    if (body.items && body.items.length > 0) {
+      body.items.forEach(item => {
+        const itemText = `${item.name} – R$ ${(item.price * item.quantity).toFixed(2)}`;
+        if (item.type === 'course' || item.type === 'mentoring') {
+          coursesList.push(itemText);
+        } else if (item.type === 'service') {
+          servicesList.push(itemText);
+        } else {
+          // Produtos físicos podem ir para serviços ou produtos
+          servicesList.push(itemText);
+        }
+      });
+    }
+
+    const coursesText = coursesList.length > 0 ? coursesList.join('\n') : '-';
+    const servicesText = servicesList.length > 0 ? servicesList.join('\n') : '-';
+
+    // Descrição da task (opcional, para referência)
     const description = `
 **Pedido Confirmado - InfinitePay**
 
 **Dados do Pagamento:**
-- Valor: ${formattedAmount}
-- Método: ${paymentMethodText}
-- Order NSU: ${body.order_nsu}
+- Valor Total: R$ ${formattedAmount}
+- Forma de Pagamento: ${paymentMethodText}
+- ID do Pedido: ${body.order_nsu}
 - Transaction NSU: ${body.transaction_nsu}
-${body.slug ? `- Slug: ${body.slug}` : ''}
 ${body.receipt_url ? `- Comprovante: ${body.receipt_url}` : ''}
 
 **Dados do Cliente:**
-${body.customer?.name ? `- Nome: ${body.customer.name}` : ''}
-${body.customer?.email ? `- Email: ${body.customer.email}` : ''}
-${body.customer?.phone ? `- Telefone: ${body.customer.phone}` : ''}
-${body.customer?.cpf ? `- CPF: ${body.customer.cpf}` : ''}
+- Nome Completo: ${body.customer.name}
+- Email: ${body.customer.email || 'Não informado'}
+- Telefone: ${body.customer.phone || 'Não informado'}
+- CPF: ${body.customer.cpf || 'Não informado'}
+- Data de Nascimento: ${body.customer.birthDate ? new Date(body.customer.birthDate).toLocaleDateString('pt-BR') : 'Não informado'}
 
 **Endereço:**
-${body.address?.street ? `- Rua: ${body.address.street}` : ''}
-${body.address?.number ? `- Número: ${body.address.number}` : ''}
-${body.address?.city ? `- Cidade: ${body.address.city}` : ''}
-${body.address?.state ? `- Estado: ${body.address.state}` : ''}
-${body.address?.zip ? `- CEP: ${body.address.zip}` : ''}
+${fullAddress}
 
-**Itens do Pedido:**
-${body.items && body.items.length > 0
-  ? body.items.map(item => `- ${item.name} x ${item.quantity} = R$ ${(item.price * item.quantity).toFixed(2)}`).join('\n')
-  : '- Não informado'
-}
+**Produtos:**
+${productsList}
     `.trim();
 
-    // Nome da task
-    const taskName = body.customer?.name 
-      ? `Pedido - ${body.customer.name} - ${formattedAmount}`
-      : `Pedido - ${body.order_nsu} - ${formattedAmount}`;
+    // ============================================
+    // MONTAR CUSTOM FIELDS
+    // ============================================
+    const customFieldsArray: Array<{ id: string; value: string | number }> = [];
 
-    // List ID (obrigatório para criar task)
-    const listId = defaultListId || process.env.CLICKUP_LIST_ID;
+    // Função auxiliar para adicionar custom field
+    const addCustomField = (key: string, value: string | number | null | undefined) => {
+      if (value !== null && value !== undefined && value !== '' && customFields.has(key)) {
+        customFieldsArray.push({
+          id: customFields.get(key)!,
+          value: value,
+        });
+      }
+    };
 
-    if (!listId) {
-      console.error('❌ CLICKUP_LIST_ID não configurado');
-      return {
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({
-          error: 'Configuração do ClickUp incompleta',
-          details: 'CLICKUP_LIST_ID não está configurado',
-        }),
-      };
-    }
+    // Mapear custom fields conforme especificação
+    addCustomField('cpf', body.customer?.cpf);
+    addCustomField('phone', body.customer?.phone);
+    addCustomField('birthDate', body.customer?.birthDate ? new Date(body.customer.birthDate).toLocaleDateString('pt-BR') : null);
+    addCustomField('address', fullAddress);
+    addCustomField('paymentMethod', paymentMethodText);
+    addCustomField('products', productsList);
+    addCustomField('amount', formattedAmount); // $ Valor do Atendimento
+    addCustomField('origin', 'Site'); // Origem = Site
+    addCustomField('courses', coursesText !== '-' ? coursesText : null);
+    addCustomField('services', servicesText !== '-' ? servicesText : null);
 
     // ============================================
     // CRIAR TASK NO CLICKUP
     // ============================================
-    // Estrutura conforme documentação ClickUp API v2
     const clickUpPayload: any = {
-      name: taskName,
+      name: taskName, // Nome completo do cliente
       description: description,
-      status: {
-        status: 'to do', // Status inicial
-      },
+      status: statusId ? { status: statusId } : undefined, // Status "EM PRODUÇÃO"
       priority: {
-        priority: 3, // Normal (1=Urgent, 2=High, 3=Normal, 4=Low)
+        priority: 3, // Normal
       },
-      assignees: [], // Array de user IDs (opcional)
-      tags: ['pedido', 'infinitepay', paymentMethodText.toLowerCase().replace(/\s+/g, '-')],
+      assignees: [],
+      tags: ['pedido', 'infinitepay', 'site'],
       check_required: false,
     };
 
+    // Adicionar custom fields se houver
+    if (customFieldsArray.length > 0) {
+      clickUpPayload.custom_fields = customFieldsArray;
+      console.log('📋 Custom fields a serem preenchidos:', customFieldsArray.length);
+    } else {
+      console.warn('⚠️ Nenhum custom field encontrado para preencher');
+    }
+
     console.log('🚀 Criando task no ClickUp...');
-    console.log('📦 Payload:', JSON.stringify(clickUpPayload, null, 2));
+    console.log('📦 Payload completo:', JSON.stringify(clickUpPayload, null, 2));
     console.log('📋 List ID:', listId);
     console.log('🔑 Workspace ID:', workspaceId);
+    console.log('📊 Status:', statusId || 'Não encontrado, usando padrão');
+    console.log('👤 Nome da tarefa:', taskName);
 
-    // URL da API do ClickUp (endpoint correto: POST /api/v2/list/{list_id}/task)
+    // URL da API do ClickUp
     const clickUpUrl = `https://api.clickup.com/api/v2/list/${listId}/task`;
 
     const response = await fetch(clickUpUrl, {
       method: 'POST',
       headers: {
-        'Authorization': apiToken, // Token completo no header Authorization
+        'Authorization': apiToken,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(clickUpPayload),
@@ -248,6 +440,9 @@ ${body.items && body.items.length > 0
     console.log('📥 Status da resposta ClickUp:', response.status);
     console.log('📥 Body da resposta:', responseText);
 
+    // ============================================
+    // TRATAMENTO DE RESPOSTA
+    // ============================================
     if (!response.ok) {
       let errorDetails: any;
       try {
@@ -259,14 +454,32 @@ ${body.items && body.items.length > 0
       console.error('❌ Erro na API ClickUp:');
       console.error('❌ Status:', response.status);
       console.error('❌ Body completo:', responseText);
+      console.error('❌ Payload enviado:', JSON.stringify(clickUpPayload, null, 2));
+
+      // Mensagens de erro específicas
+      let errorMessage = 'Erro ao criar task no ClickUp';
+      if (response.status === 400) {
+        errorMessage = 'Dados inválidos enviados ao ClickUp';
+      } else if (response.status === 401) {
+        errorMessage = 'Token de autenticação ClickUp inválido ou expirado';
+      } else if (response.status === 422) {
+        errorMessage = 'Dados do pedido não podem ser processados pelo ClickUp';
+      } else if (response.status === 500) {
+        errorMessage = 'Erro interno do ClickUp';
+      }
+
+      // Não quebrar o checkout do usuário - apenas logar o erro
+      console.error('⚠️ Task não criada no ClickUp, mas checkout do usuário não será afetado');
 
       return {
         statusCode: response.status >= 400 && response.status < 500 ? response.status : 500,
         headers,
         body: JSON.stringify({
-          error: 'Erro ao criar task no ClickUp',
+          success: false,
+          error: errorMessage,
           details: errorDetails,
           api_status: response.status,
+          message: 'Checkout confirmado, mas houve problema ao registrar no ClickUp. Entre em contato com o suporte.',
         }),
       };
     }
@@ -277,17 +490,37 @@ ${body.items && body.items.length > 0
       data = JSON.parse(responseText);
     } catch (error) {
       console.error('❌ Erro ao fazer parse da resposta:', error);
+      console.error('❌ Resposta recebida:', responseText);
       return {
         statusCode: 500,
         headers,
         body: JSON.stringify({
+          success: false,
           error: 'Resposta inválida da API ClickUp',
           details: 'Não foi possível fazer parse da resposta JSON',
         }),
       };
     }
 
-    console.log('✅ Task criada no ClickUp com sucesso:', data.id);
+    if (!data.id) {
+      console.error('❌ Resposta da API sem ID de task:', data);
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({
+          success: false,
+          error: 'Resposta inválida da API',
+          details: 'A API não retornou um ID de task válido',
+          response: data,
+        }),
+      };
+    }
+
+    console.log('✅ Task criada no ClickUp com sucesso!');
+    console.log('✅ Task ID:', data.id);
+    console.log('✅ Task Name:', data.name);
+    console.log('✅ Status:', data.status?.status);
+    console.log('✅ Custom fields preenchidos:', customFieldsArray.length);
 
     return {
       statusCode: 200,
@@ -296,6 +529,7 @@ ${body.items && body.items.length > 0
         success: true,
         task_id: data.id,
         task_name: data.name,
+        status: data.status?.status,
         message: 'Task criada com sucesso no ClickUp',
       }),
     };
@@ -303,10 +537,12 @@ ${body.items && body.items.length > 0
     console.error('❌ Erro inesperado na função:', error);
     console.error('❌ Stack trace:', error instanceof Error ? error.stack : 'N/A');
     
+    // Não quebrar o checkout do usuário
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
+        success: false,
         error: 'Erro interno do servidor',
         message: error instanceof Error ? error.message : 'Unknown error',
         type: error instanceof Error ? error.constructor.name : typeof error,
@@ -314,4 +550,3 @@ ${body.items && body.items.length > 0
     };
   }
 };
-
