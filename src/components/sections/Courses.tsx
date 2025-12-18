@@ -61,7 +61,7 @@ const courses: Course[] = [
     name: 'Atendimento Individual Mesa Radiônica Dragonlight',
     description: 'Ferramenta de autoconhecimento que atua em três pilares: limpeza energética em todos os níveis, fortalecimento da verdadeira identidade e cocriação dos desejos do coração. Trabalho sutil e profundo, com reflexos no campo físico, emocional e espiritual.',
     price: 630.00,
-    image: 'https://i.postimg.cc/htYPyBjr/Whats-App-Image-2025-11-27-at-09-03-11.jpg',
+    image: 'https://i.postimg.cc/htYPyBjr/Whats-App-Image-2025-11-27-at-09-03-11.jpg', // Mesma imagem do óleo de alecrim conforme especificado
     type: 'service',
     category: 'service',
     format: 'Individual',
@@ -293,7 +293,7 @@ export function Courses() {
                   onClick={() => {
                     // Abrir WhatsApp ou link de agendamento
                     // ATUALIZAR: Substituir pelo número de WhatsApp correto ou link do ClickUp
-                    const whatsappNumber = '5519999999999'; // ATUALIZAR COM O NÚMERO REAL
+                    const whatsappNumber = '5519996760107'; // ATUALIZAR COM O NÚMERO REAL
                     const message = encodeURIComponent('Olá! Gostaria de agendar um Diagnóstico Terapêutico (20 minutos gratuito).');
                     window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
                   }}

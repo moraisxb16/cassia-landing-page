@@ -214,10 +214,11 @@ export const handler: Handler = async (
     const workspaceId = process.env.CLICKUP_WORKSPACE_ID || '90132835502';
     const listId = process.env.CLICKUP_LIST_ID || '6-901323245019-1';
 
-    console.log('🔍 Verificando configurações ClickUp...');
-    console.log('🔍 API Token existe?', !!apiToken);
-    console.log('🔍 Workspace ID:', workspaceId);
-    console.log('🔍 List ID:', listId);
+    console.log('🔍 [CLICKUP] Verificando configurações ClickUp...');
+    console.log('🔍 [CLICKUP] API Token existe?', !!apiToken);
+    console.log('🔍 [CLICKUP] Workspace ID:', workspaceId);
+    console.log('🔍 [CLICKUP] List ID:', listId);
+    console.log('🔍 [CLICKUP] Timestamp:', new Date().toISOString());
 
     if (!apiToken) {
       console.error('❌ CLICKUP_API_TOKEN não configurado');
@@ -246,11 +247,21 @@ export const handler: Handler = async (
     // ============================================
     // PARSE DO BODY
     // ============================================
+    console.log('📥 [CLICKUP] Recebendo requisição...');
+    console.log('📥 [CLICKUP] Body recebido (primeiros 500 chars):', (event.body || '').substring(0, 500));
+    
     let body: ClickUpTaskRequest;
     try {
       body = JSON.parse(event.body || '{}');
+      console.log('✅ [CLICKUP] Body parseado com sucesso');
+      console.log('📋 [CLICKUP] Dados do pedido:', {
+        order_nsu: body.order_nsu,
+        transaction_nsu: body.transaction_nsu,
+        customer_name: body.customer?.name,
+        items_count: body.items?.length || 0,
+      });
     } catch (error) {
-      console.error('❌ Erro ao fazer parse do body:', error);
+      console.error('❌ [CLICKUP] Erro ao fazer parse do body:', error);
       return {
         statusCode: 400,
         headers,
@@ -260,6 +271,7 @@ export const handler: Handler = async (
 
     // Validações obrigatórias
     if (!body.order_nsu || !body.transaction_nsu) {
+      console.error('❌ [CLICKUP] order_nsu ou transaction_nsu ausentes');
       return {
         statusCode: 400,
         headers,
@@ -268,6 +280,7 @@ export const handler: Handler = async (
     }
 
     if (!body.customer?.name) {
+      console.error('❌ [CLICKUP] Nome do cliente ausente');
       return {
         statusCode: 400,
         headers,
@@ -275,14 +288,18 @@ export const handler: Handler = async (
       };
     }
 
+    console.log('✅ [CLICKUP] Validações básicas passadas');
+
     // ============================================
     // BUSCAR STATUS E CUSTOM FIELDS
     // ============================================
-    console.log('🔍 Buscando status "EM PRODUÇÃO" e custom fields...');
+    console.log('🔍 [CLICKUP] Buscando status "EM PRODUÇÃO" e custom fields...');
     const [statusId, customFields] = await Promise.all([
       getStatusId(listId, apiToken, 'EM PRODUÇÃO'),
       getCustomFields(listId, apiToken),
     ]);
+    console.log('✅ [CLICKUP] Status ID:', statusId || 'Não encontrado');
+    console.log('✅ [CLICKUP] Custom fields encontrados:', customFields.size);
 
     // ============================================
     // MONTAR TASK DO CLICKUP
@@ -417,12 +434,13 @@ ${productsList}
       console.warn('⚠️ Nenhum custom field encontrado para preencher');
     }
 
-    console.log('🚀 Criando task no ClickUp...');
-    console.log('📦 Payload completo:', JSON.stringify(clickUpPayload, null, 2));
-    console.log('📋 List ID:', listId);
-    console.log('🔑 Workspace ID:', workspaceId);
-    console.log('📊 Status:', statusId || 'Não encontrado, usando padrão');
-    console.log('👤 Nome da tarefa:', taskName);
+    console.log('🚀 [CLICKUP] Criando task no ClickUp...');
+    console.log('📦 [CLICKUP] Payload completo:', JSON.stringify(clickUpPayload, null, 2));
+    console.log('📋 [CLICKUP] List ID:', listId);
+    console.log('🔑 [CLICKUP] Workspace ID:', workspaceId);
+    console.log('📊 [CLICKUP] Status:', statusId || 'Não encontrado, usando padrão');
+    console.log('👤 [CLICKUP] Nome da tarefa:', taskName);
+    console.log('📋 [CLICKUP] Custom fields a preencher:', customFieldsArray.length);
 
     // URL da API do ClickUp
     const clickUpUrl = `https://api.clickup.com/api/v2/list/${listId}/task`;
@@ -437,8 +455,9 @@ ${productsList}
     });
 
     const responseText = await response.text();
-    console.log('📥 Status da resposta ClickUp:', response.status);
-    console.log('📥 Body da resposta:', responseText);
+    console.log('📥 [CLICKUP] Status da resposta:', response.status);
+    console.log('📥 [CLICKUP] Status text:', response.statusText);
+    console.log('📥 [CLICKUP] Body da resposta (primeiros 1000 chars):', responseText.substring(0, 1000));
 
     // ============================================
     // TRATAMENTO DE RESPOSTA
@@ -451,10 +470,12 @@ ${productsList}
         errorDetails = { raw: responseText };
       }
 
-      console.error('❌ Erro na API ClickUp:');
-      console.error('❌ Status:', response.status);
-      console.error('❌ Body completo:', responseText);
-      console.error('❌ Payload enviado:', JSON.stringify(clickUpPayload, null, 2));
+      console.error('❌ [CLICKUP] Erro na API ClickUp:');
+      console.error('❌ [CLICKUP] Status:', response.status);
+      console.error('❌ [CLICKUP] Status text:', response.statusText);
+      console.error('❌ [CLICKUP] Body completo:', responseText);
+      console.error('❌ [CLICKUP] Payload enviado:', JSON.stringify(clickUpPayload, null, 2));
+      console.error('❌ [CLICKUP] Headers da resposta:', Object.fromEntries(response.headers.entries()));
 
       // Mensagens de erro específicas
       let errorMessage = 'Erro ao criar task no ClickUp';
@@ -516,11 +537,12 @@ ${productsList}
       };
     }
 
-    console.log('✅ Task criada no ClickUp com sucesso!');
-    console.log('✅ Task ID:', data.id);
-    console.log('✅ Task Name:', data.name);
-    console.log('✅ Status:', data.status?.status);
-    console.log('✅ Custom fields preenchidos:', customFieldsArray.length);
+    console.log('✅ [CLICKUP] Task criada no ClickUp com sucesso!');
+    console.log('✅ [CLICKUP] Task ID:', data.id);
+    console.log('✅ [CLICKUP] Task Name:', data.name);
+    console.log('✅ [CLICKUP] Status:', data.status?.status);
+    console.log('✅ [CLICKUP] Custom fields preenchidos:', customFieldsArray.length);
+    console.log('✅ [CLICKUP] Timestamp de conclusão:', new Date().toISOString());
 
     return {
       statusCode: 200,

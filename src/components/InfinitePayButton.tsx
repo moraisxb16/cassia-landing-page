@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+
 interface InfinitePayButtonProps {
   description: string;
   totalPrice: number;
@@ -88,6 +89,45 @@ export function InfinitePayButton({
   async function handlePay() {
     if (loading) return;
     
+    // Validar campos obrigatórios
+    if (!customerData?.name || !customerData?.email || !customerData?.phone || !customerData?.cpf) {
+      alert('Por favor, preencha todos os campos obrigatórios (Nome, Email, Telefone, CPF).');
+      return;
+    }
+
+    // Validar data de nascimento (obrigatória)
+    if (!customerData?.birthDate) {
+      alert('Por favor, preencha a data de nascimento. Este campo é obrigatório.');
+      return;
+    }
+
+    // Validar data de nascimento (não pode ser futura)
+    const birthDate = new Date(customerData.birthDate);
+    const today = new Date();
+    if (birthDate > today) {
+      alert('A data de nascimento não pode ser uma data futura.');
+      return;
+    }
+
+    // Validar idade mínima (apenas log, não bloqueia)
+    const age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    const actualAge = monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate()) ? age - 1 : age;
+    
+    if (actualAge < 18) {
+      console.warn('⚠️ Cliente menor de 18 anos detectado:', actualAge);
+      // Não bloqueia, apenas registra no log
+    }
+
+    console.log('✅ Validações passadas. Iniciando checkout...');
+    console.log('📋 Dados do cliente:', {
+      name: customerData.name,
+      email: customerData.email,
+      phone: customerData.phone,
+      cpf: customerData.cpf,
+      birthDate: customerData.birthDate,
+    });
+    
     setLoading(true);
     
     try {
@@ -100,11 +140,13 @@ export function InfinitePayButton({
         description: description,
       };
       localStorage.setItem('pendingOrder', JSON.stringify(orderData));
+      console.log('💾 Dados do pedido salvos no localStorage');
       
       // Gerar link via função serverless
       const checkoutUrl = await createCheckoutLink();
       
       // Redirecionar para checkout hospedado
+      console.log('🔄 Redirecionando para checkout:', checkoutUrl);
       window.location.href = checkoutUrl;
       
     } catch (error) {

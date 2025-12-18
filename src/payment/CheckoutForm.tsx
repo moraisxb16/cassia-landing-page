@@ -119,6 +119,7 @@ export function CheckoutForm() {
                     required
                     value={form.birthDate}
                     onChange={handleChange('birthDate')}
+                    max={new Date().toISOString().split('T')[0]} // Não permitir data futura
                   />
                 </div>
               </div>
