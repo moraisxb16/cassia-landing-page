@@ -59,7 +59,7 @@ const courses: Course[] = [
   {
     id: 'atendimento-mesa-radionica',
     name: 'Atendimento Individual Mesa Radiônica Dragonlight',
-    description: 'Processo profundo de autoconhecimento, limpeza energética e cocriação. Atuação nos níveis físico, mental e espiritual.',
+    description: 'Ferramenta de autoconhecimento que atua em três pilares: limpeza energética em todos os níveis, fortalecimento da verdadeira identidade e cocriação dos desejos do coração. Trabalho sutil e profundo, com reflexos no campo físico, emocional e espiritual.',
     price: 630.00,
     image: 'https://i.postimg.cc/htYPyBjr/Whats-App-Image-2025-11-27-at-09-03-11.jpg',
     type: 'service',
@@ -70,7 +70,7 @@ const courses: Course[] = [
   {
     id: 'atendimento-terapeutico-individual',
     name: 'Atendimento Terapêutico Individual',
-    description: 'Sessão com Aromaterapia, Reiki e técnicas sistêmicas, para clareza emocional e direcionamento.',
+    description: 'Atendimento direcionado à necessidade do cliente, com foco em clareza, organização emocional e ações práticas. Utiliza Aromaterapia, Reiki e exercícios sistêmicos.',
     price: 470.00,
     image: 'https://i.postimg.cc/0j5s5Wj6/Whats-App-Image-2025-12-11-at-12-05-36.jpg',
     type: 'service',
@@ -81,7 +81,7 @@ const courses: Course[] = [
   {
     id: 'pacote-5-atendimentos',
     name: 'Pacote 5 Atendimentos Terapêuticos',
-    description: '5 sessões de atendimento terapêutico com economia. Ideal para acompanhamento contínuo.',
+    description: '5 sessões de atendimento terapêutico com economia significativa. Ideal para acompanhamento contínuo e transformação profunda. Economia de R$ 975,00 comparado ao valor avulso.',
     price: 1375.00,
     image: defaultCourseImage,
     type: 'service',
@@ -92,8 +92,8 @@ const courses: Course[] = [
   // MENTORIA
   {
     id: 'mentoria-grupo',
-    name: 'Mentoria em Grupo',
-    description: 'Acompanhamento profundo de autoestima, criança interior, pais, adolescência e evolução emocional. 10 meses com 2 encontros mensais.',
+    name: 'Mentoria em Grupo – Novo Programa',
+    description: 'Encontros online e ao vivo para fortalecimento da autoestima, foco e autoconhecimento. Uma jornada profunda de cura e transformação abordando temas como Criança Interior, Adolescente, Relação com Pais e muito mais.',
     price: 2100.00,
     format: '10 meses / 2 encontros mensais',
     image: defaultCourseImage,
@@ -217,7 +217,7 @@ export function Courses() {
                   name: course.name,
                   price: course.price,
                   image: course.image,
-                  type: 'course',
+                  type: course.type === 'service' ? 'service' : course.type === 'mentoring' ? 'mentoring' : 'course',
                 })
               }
             >
@@ -286,8 +286,7 @@ export function Courses() {
                   Diagnóstico Terapêutico (20 minutos gratuito)
                 </h3>
                 <p className="text-[var(--cassia-purple-dark)]/80 mb-4">
-                  Um momento especial de troca de informações e de sentir o que você necessita dentro das ferramentas terapêuticas que trabalho. 
-                  Juntos definiremos um caminho inicial para sua jornada de transformação.
+                  Momento de troca para entender a necessidade do cliente e definir o melhor caminho terapêutico inicial.
                 </p>
                 <Button
                   className="bg-[var(--cassia-purple)] hover:bg-[var(--cassia-purple-dark)] text-white"

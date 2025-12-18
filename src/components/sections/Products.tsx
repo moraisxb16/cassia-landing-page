@@ -12,7 +12,11 @@ import type { Product } from '../../types';
 type SimpleProduct = Omit<Product, 'type' | 'category'> & {
   rating: number;
   isTestProduct?: boolean; // Flag para produto de teste
+  pixPrice?: number; // Preço diferenciado para PIX (opcional)
 };
+
+// Placeholder elegante para produtos sem imagem
+const placeholderImage = 'https://images.unsplash.com/photo-1608571424634-58ae03e6edcf?auto=format&fit=crop&w=1080&q=80';
 
 const products: Record<string, SimpleProduct[]> = {
   oils: [
@@ -22,125 +26,114 @@ const products: Record<string, SimpleProduct[]> = {
       description: 'Produto de teste para validação do sistema de pagamento. Valor: R$ 1,00',
       price: 1,
       rating: 5,
-      isTestProduct: true, // Flag para identificar produto de teste
-      image:
-        'https://images.unsplash.com/photo-1608571424634-58ae03e6edcf?auto=format&fit=crop&w=1080&q=80',
-    },
-    {
-      id: 'oil-lavanda',
-      name: 'Óleo Essencial de Lavanda',
-      description:
-        'Puro óleo de lavanda para relaxamento profundo e equilíbrio emocional. 10ml.',
-      price: 45,
-      rating: 5,
-      image:
-        'https://images.unsplash.com/photo-1608571424634-58ae03e6edcf?auto=format&fit=crop&w=1080&q=80',
+      isTestProduct: true,
+      image: placeholderImage,
     },
     {
       id: 'oil-alecrim',
-      name: 'Óleo Essencial de Alecrim',
-      description: 'Estimula clareza mental e proteção energética. 10ml.',
-      price: 42,
+      name: 'Óleo Essencial de Alecrim – 10ml (Organics Life)',
+      description: 'Estimula clareza mental e proteção energética.',
+      price: 40.70,
       rating: 5,
-      image:
-        'https://images.unsplash.com/photo-1608571424634-58ae03e6edcf?auto=format&fit=crop&w=1080&q=80',
+      image: 'https://i.postimg.cc/htYPyBjr/Whats-App-Image-2025-11-27-at-09-03-11.jpg',
     },
     {
-      id: 'oil-sandalo',
-      name: 'Óleo Essencial de Sândalo',
-      description: 'Para meditação profunda e conexão espiritual. 5ml.',
-      price: 68,
+      id: 'oil-cipreste',
+      name: 'Óleo Essencial de Cipreste – 10ml',
+      description: 'Aromaterapia para equilíbrio e conexão espiritual.',
+      price: 52.80,
       rating: 5,
-      image:
-        'https://images.unsplash.com/photo-1608571424634-58ae03e6edcf?auto=format&fit=crop&w=1080&q=80',
+      image: placeholderImage,
+    },
+    {
+      id: 'oil-eucalipto',
+      name: 'Óleo Essencial de Eucalipto Globulus – 10ml',
+      description: 'Purificação e clareza respiratória.',
+      price: 33.00,
+      rating: 5,
+      image: placeholderImage,
+    },
+    {
+      id: 'oil-manjericao',
+      name: 'Óleo Essencial de Manjericão – 5ml',
+      description: 'Foco mental e proteção energética.',
+      price: 30.80,
+      rating: 5,
+      image: placeholderImage,
+    },
+    {
+      id: 'oil-tea-tree',
+      name: 'Óleo Essencial de Tea Tree (Melaleuca) – 10ml',
+      description: 'Purificação e proteção natural.',
+      price: 52.80,
+      rating: 5,
+      image: placeholderImage,
+    },
+    {
+      id: 'oil-lavanda',
+      name: 'Óleo Essencial de Lavanda – 10ml',
+      description: 'Relaxamento profundo e equilíbrio emocional.',
+      price: 58.30,
+      rating: 5,
+      image: placeholderImage,
     },
   ],
   sprays: [
     {
-      id: 'spray-limpeza',
-      name: 'Spray de Limpeza Energética',
-      description: 'Blend especial para limpar ambientes e auras. 100ml.',
-      price: 55,
+      id: 'spray-antigosma',
+      name: 'Spray Antigosma – 140ml (Dragon Essências)',
+      description: 'Limpeza energética profunda para ambientes e auras.',
+      price: 108.00,
+      pixPrice: 98.00,
       rating: 5,
-      image:
-        'https://images.unsplash.com/photo-1709813610121-e2a51545e212?auto=format&fit=crop&w=1080&q=80',
+      image: placeholderImage,
     },
     {
-      id: 'spray-protecao',
-      name: 'Spray de Proteção',
-      description: 'Proteção contra energias negativas e olho gordo. 100ml.',
-      price: 58,
+      id: 'spray-guardiao',
+      name: 'Spray Guardião – 140ml (Dragon Essências)',
+      description: 'Proteção contra energias negativas e olho gordo.',
+      price: 108.00,
+      pixPrice: 98.00,
       rating: 5,
-      image:
-        'https://images.unsplash.com/photo-1709813610121-e2a51545e212?auto=format&fit=crop&w=1080&q=80',
+      image: placeholderImage,
     },
     {
-      id: 'spray-abundancia',
-      name: 'Spray da Abundância',
-      description: 'Atrai prosperidade e energias positivas. 100ml.',
-      price: 60,
+      id: 'spray-liberta',
+      name: 'Spray Liberta – 140ml (Dragon Essências)',
+      description: 'Libertação e transmutação energética.',
+      price: 108.00,
+      pixPrice: 98.00,
       rating: 5,
-      image:
-        'https://images.unsplash.com/photo-1709813610121-e2a51545e212?auto=format&fit=crop&w=1080&q=80',
+      image: placeholderImage,
+    },
+    {
+      id: 'kit-sprays',
+      name: 'Kit Sprays: Limpeza, Proteção e Nutrindo o Feminino',
+      description: 'Kit completo com três sprays essenciais para sua jornada.',
+      price: 89.00,
+      pixPrice: 80.00,
+      rating: 5,
+      image: placeholderImage,
     },
   ],
   crystals: [
     {
-      id: 'crystal-ametista',
-      name: 'Ametista Bruta',
-      description: 'Cristal de proteção espiritual e transmutação. Aprox. 100g.',
-      price: 85,
+      id: 'crystal-quartzo-verde',
+      name: 'Cristal Quartzo Verde',
+      description: 'Cristal de cura e equilíbrio energético.',
+      price: 11.00,
       rating: 5,
-      image:
-        'https://images.unsplash.com/photo-1609216970378-ce61cd74a187?auto=format&fit=crop&w=1080&q=80',
-    },
-    {
-      id: 'crystal-quartzo',
-      name: 'Quartzo Rosa Polido',
-      description: 'Pedra do amor próprio e relacionamentos. Aprox. 50g.',
-      price: 65,
-      rating: 5,
-      image:
-        'https://images.unsplash.com/photo-1599767254077-ad621c8a8810?auto=format&fit=crop&w=1080&q=80',
-    },
-    {
-      id: 'crystal-citrino',
-      name: 'Citrino Natural',
-      description: 'Prosperidade e manifestação. Aprox. 80g.',
-      price: 95,
-      rating: 5,
-      image:
-        'https://images.unsplash.com/photo-1599767254077-ad621c8a8810?auto=format&fit=crop&w=1080&q=80',
+      image: placeholderImage,
     },
   ],
-  apparel: [
+  other: [
     {
-      id: 'tshirt-lotus',
-      name: 'Camiseta Flor de Lótus',
-      description:
-        'Algodão orgânico com estampa exclusiva. Tamanhos P ao GG.',
-      price: 89,
+      id: 'luminaria-aromatizador',
+      name: 'Luminária Aromatizador Drift',
+      description: 'Luminária aromatizadora para criar ambientes harmoniosos e energizados.',
+      price: 298.00,
       rating: 5,
-      image:
-        'https://images.unsplash.com/photo-1599767254077-ad621c8a8810?auto=format&fit=crop&w=1080&q=80',
-    },
-    {
-      id: 'tshirt-mandala',
-      name: 'Camiseta Mandala Sagrada',
-      description: 'Design exclusivo mandala. Algodão premium. P ao GG.',
-      price: 92,
-      rating: 5,
-      image:
-        'https://images.unsplash.com/photo-1599767254077-ad621c8a8810?auto=format&fit=crop&w=1080&q=80',
-    },
-    {
-      id: 'tshirt-dragon',
-      name: 'Camiseta Dragonlight',
-      description: 'Exclusiva do sistema Dragonlight. Edição limitada. P ao GG.',
-      price: 95,
-      rating: 5,
-      image:
-        'https://images.unsplash.com/photo-1599767254077-ad621c8a8810?auto=format&fit=crop&w=1080&q=80',
+      image: placeholderImage,
     },
   ],
 };
@@ -200,8 +193,15 @@ function ProductCard({ product, index }: ProductCardProps) {
             {product.description}
           </p>
 
-          <div className="text-xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
-            R$ {product.price.toFixed(2)}
+          <div className="space-y-1">
+            <div className="text-xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
+              R$ {product.price.toFixed(2)}
+              {product.pixPrice && (
+                <span className="text-sm text-[var(--cassia-purple-dark)]/60 ml-2">
+                  (R$ {product.pixPrice.toFixed(2)} PIX)
+                </span>
+              )}
+            </div>
           </div>
         </CardContent>
 
@@ -219,7 +219,7 @@ function ProductCard({ product, index }: ProductCardProps) {
                 addItem({
                   id: product.id,
                   name: product.name,
-                  price: product.price,
+                  price: product.price, // Usar preço padrão (crédito)
                   image: product.image,
                   type: 'product',
                 })
@@ -256,7 +256,7 @@ export function Products() {
           viewport={{ once: true }}
         >
           <motion.div
-            className="inline-block mb  -6"
+            className="inline-block mb-6"
             whileHover={{ scale: 1.05 }}
           >
             <Badge 
@@ -287,7 +287,7 @@ export function Products() {
               { value: 'oils', label: 'Óleos' },
               { value: 'sprays', label: 'Sprays' },
               { value: 'crystals', label: 'Cristais' },
-              { value: 'apparel', label: 'Camisetas' },
+              { value: 'other', label: 'Outros' },
             ].map((tab) => (
               <TabsTrigger 
                 key={tab.value}
@@ -299,13 +299,12 @@ export function Products() {
             ))}
           </TabsList>
 
-          {(['oils', 'sprays', 'crystals', 'apparel'] as const).map((key) => (
+          {(['oils', 'sprays', 'crystals', 'other'] as const).map((key) => (
             <TabsContent key={key} value={key}>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {products[key]
                   .filter((product) => {
-                    // Filtrar produto de teste se necessário (pode ser controlado por variável de ambiente)
-                    // Por padrão, exibir todos os produtos incluindo teste
+                    // Filtrar produto de teste se necessário
                     const showTestProducts = true; // Pode ser alterado para false em produção
                     return showTestProducts || !product.isTestProduct;
                   })
@@ -320,5 +319,3 @@ export function Products() {
     </section>
   );
 }
-
-
