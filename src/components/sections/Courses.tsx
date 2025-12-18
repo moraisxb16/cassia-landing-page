@@ -61,7 +61,7 @@ const courses: Course[] = [
     name: 'Atendimento Individual Mesa Radiônica Dragonlight',
     description: 'Ferramenta de autoconhecimento que atua em três pilares: limpeza energética em todos os níveis, fortalecimento da verdadeira identidade e cocriação dos desejos do coração. Trabalho sutil e profundo, com reflexos no campo físico, emocional e espiritual.',
     price: 630.00,
-    image: 'https://i.postimg.cc/htYPyBjr/Whats-App-Image-2025-11-27-at-09-03-11.jpg', // Mesma imagem do óleo de alecrim conforme especificado
+    image: 'https://i.postimg.cc/0j5s5Wj6/Whats-App-Image-2025-12-11-at-12-05-36.jpg', // Imagem genérica conforme especificado
     type: 'service',
     category: 'service',
     format: 'Individual',
