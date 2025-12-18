@@ -81,12 +81,15 @@ async function getCustomFields(listId: string, apiToken: string): Promise<Map<st
   const fieldMap = new Map<string, string>();
   
   try {
+    // Garantir que o token está no formato correto
+    const authHeader = apiToken.startsWith('Bearer ') ? apiToken : `Bearer ${apiToken}`;
+    
     const response = await fetch(
       `https://api.clickup.com/api/v2/list/${listId}/field`,
       {
         method: 'GET',
         headers: {
-          'Authorization': apiToken,
+          'Authorization': authHeader,
           'Content-Type': 'application/json',
         },
       }
@@ -129,8 +132,11 @@ async function getCustomFields(listId: string, apiToken: string): Promise<Map<st
           if (nameLower === 'serviços contratados' || nameLower === 'servicos contratados' || (nameLower.includes('serviços') && nameLower.includes('contratados'))) {
             fieldMap.set('services', field.id);
           }
+          if (nameLower === 'código do pedido' || nameLower === 'codigo do pedido' || (nameLower.includes('código') && nameLower.includes('pedido')) || (nameLower.includes('codigo') && nameLower.includes('pedido'))) {
+            fieldMap.set('orderCode', field.id);
+          }
         });
-        console.log('✅ Custom fields mapeados:', Array.from(fieldMap.entries()));
+        console.log('✅ [CLICKUP] Custom fields mapeados:', Array.from(fieldMap.entries()));
       }
     } else {
       console.warn('⚠️ Não foi possível buscar custom fields, usando IDs padrão');
@@ -147,12 +153,15 @@ async function getCustomFields(listId: string, apiToken: string): Promise<Map<st
  */
 async function getStatusId(listId: string, apiToken: string, statusName: string = 'EM PRODUÇÃO'): Promise<string | null> {
   try {
+    // Garantir que o token está no formato correto
+    const authHeader = apiToken.startsWith('Bearer ') ? apiToken : `Bearer ${apiToken}`;
+    
     const response = await fetch(
       `https://api.clickup.com/api/v2/list/${listId}`,
       {
         method: 'GET',
         headers: {
-          'Authorization': apiToken,
+          'Authorization': authHeader,
           'Content-Type': 'application/json',
         },
       }
@@ -165,10 +174,17 @@ async function getStatusId(listId: string, apiToken: string, statusName: string 
           s.status?.toLowerCase() === statusName.toLowerCase()
         );
         if (status) {
-          console.log(`✅ Status "${statusName}" encontrado:`, status.status);
-          return status.status;
+          console.log(`✅ [CLICKUP] Status "${statusName}" encontrado:`, status.status);
+          console.log(`✅ [CLICKUP] Status completo:`, JSON.stringify(status));
+          // Retornar o status completo (objeto) ou apenas o status string conforme necessário
+          return status.status; // Retorna a string do status
+        } else {
+          console.warn(`⚠️ [CLICKUP] Status "${statusName}" não encontrado. Status disponíveis:`, data.statuses.map((s: any) => s.status));
         }
       }
+    } else {
+      const errorText = await response.text();
+      console.warn(`⚠️ [CLICKUP] Erro ao buscar status da lista:`, response.status, errorText);
     }
   } catch (error) {
     console.warn('⚠️ Erro ao buscar status:', error);
@@ -319,13 +335,16 @@ export const handler: Handler = async (
       ? (body.amount / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       : '0.00';
 
-    // Montar lista de produtos (formato: "Nome + Quantidade")
+    // Montar lista de produtos (formato: "Nome x Quantidade")
     // Exemplo: "Produto Teste x 2"
     const productsList = body.items && body.items.length > 0
       ? body.items.map(item => {
           return `${item.name} x ${item.quantity}`;
         }).join('\n')
       : 'Não informado';
+
+    // Código do pedido (usar transaction_nsu ou order_nsu)
+    const orderCode = body.transaction_nsu || body.order_nsu || 'Não informado';
 
     // Montar endereço completo
     const fullAddress = body.address
@@ -366,6 +385,7 @@ export const handler: Handler = async (
 **Dados do Pagamento:**
 - Valor Total: R$ ${formattedAmount}
 - Forma de Pagamento: ${paymentMethodText}
+- Código do Pedido: ${orderCode}
 - ID do Pedido: ${body.order_nsu}
 - Transaction NSU: ${body.transaction_nsu}
 ${body.receipt_url ? `- Comprovante: ${body.receipt_url}` : ''}
@@ -382,6 +402,8 @@ ${fullAddress}
 
 **Produtos:**
 ${productsList}
+
+**Origem:** Site
     `.trim();
 
     // ============================================
@@ -410,6 +432,10 @@ ${productsList}
     addCustomField('origin', 'Site'); // Origem = Site
     addCustomField('courses', coursesText !== '-' ? coursesText : null);
     addCustomField('services', servicesText !== '-' ? servicesText : null);
+    
+    // Adicionar campo de código do pedido se existir um campo personalizado para isso
+    // Nota: Se não houver campo personalizado "Código do Pedido", pode ser adicionado na descrição
+    addCustomField('orderCode', orderCode);
 
     // ============================================
     // CRIAR TASK NO CLICKUP
@@ -417,7 +443,8 @@ ${productsList}
     const clickUpPayload: any = {
       name: taskName, // Nome completo do cliente
       description: description,
-      status: statusId ? { status: statusId } : undefined, // Status "EM PRODUÇÃO"
+      // Status: Se encontrado, usar o formato correto. Se não, deixar undefined (usará status padrão da lista)
+      ...(statusId ? { status: { status: statusId } } : {}),
       priority: {
         priority: 3, // Normal
       },
@@ -445,10 +472,16 @@ ${productsList}
     // URL da API do ClickUp
     const clickUpUrl = `https://api.clickup.com/api/v2/list/${listId}/task`;
 
+    // Garantir que o token está no formato correto (Bearer {token})
+    const authHeader = apiToken.startsWith('Bearer ') ? apiToken : `Bearer ${apiToken}`;
+
+    console.log('🔐 [CLICKUP] Token formatado:', authHeader.substring(0, 20) + '...');
+    console.log('🌐 [CLICKUP] URL da API:', clickUpUrl);
+
     const response = await fetch(clickUpUrl, {
       method: 'POST',
       headers: {
-        'Authorization': apiToken,
+        'Authorization': authHeader,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(clickUpPayload),

@@ -30,7 +30,8 @@ export function PaymentSuccess() {
   const amount = searchParams.get('amount');
 
   useEffect(() => {
-    console.log('📋 Parâmetros recebidos da InfinitePay:', {
+    console.log('📋 [SUCCESS] Página de sucesso carregada');
+    console.log('📋 [SUCCESS] Parâmetros recebidos da InfinitePay:', {
       receiptUrl,
       orderNsu,
       slug,
@@ -46,45 +47,66 @@ export function PaymentSuccess() {
     if (pendingOrderStr) {
       try {
         pendingOrder = JSON.parse(pendingOrderStr);
-        console.log('📦 Dados do pedido recuperados:', pendingOrder);
+        console.log('📦 [SUCCESS] Dados do pedido recuperados do localStorage:', pendingOrder);
         setOrderData(pendingOrder);
-        // Limpar localStorage após usar
-        localStorage.removeItem('pendingOrder');
+        // NÃO limpar localStorage imediatamente - manter para caso de reload
       } catch (e) {
-        console.warn('⚠️ Erro ao fazer parse dos dados do pedido:', e);
+        console.warn('⚠️ [SUCCESS] Erro ao fazer parse dos dados do pedido:', e);
       }
+    } else {
+      console.warn('⚠️ [SUCCESS] Nenhum dado encontrado no localStorage');
     }
 
-    // Validar se temos os parâmetros mínimos
+    // Validar se temos os parâmetros mínimos da InfinitePay
     if (!orderNsu || !transactionNsu) {
-      console.warn('⚠️ Parâmetros de pagamento incompletos');
+      console.warn('⚠️ [SUCCESS] Parâmetros de pagamento incompletos - mas ainda exibindo página');
+      // Mesmo sem parâmetros, exibir a página com dados disponíveis
       setLoading(false);
       return;
     }
 
     // Chamar função serverless para criar task no ClickUp
+    // IMPORTANTE: Não bloquear a exibição da página se o ClickUp falhar
     createClickUpTask(pendingOrder);
-  }, []);
+  }, [orderNsu, transactionNsu]);
 
   async function createClickUpTask(pendingOrder: any) {
     try {
-      console.log('🚀 Iniciando criação de task no ClickUp...');
+      console.log('🚀 [SUCCESS] Iniciando criação de task no ClickUp...');
+      
+      // Validar dados mínimos necessários
+      if (!orderNsu || !transactionNsu) {
+        console.warn('⚠️ [SUCCESS] Não é possível criar task no ClickUp: parâmetros ausentes');
+        setLoading(false);
+        return;
+      }
+
+      if (!pendingOrder?.customer?.name) {
+        console.warn('⚠️ [SUCCESS] Não é possível criar task no ClickUp: nome do cliente ausente');
+        setLoading(false);
+        return;
+      }
       
       // Montar dados do pedido para ClickUp
       const clickUpData = {
         order_nsu: orderNsu,
         transaction_nsu: transactionNsu,
-        slug: slug,
-        capture_method: captureMethod,
+        slug: slug || null,
+        capture_method: captureMethod || null,
         amount: amount ? parseInt(amount) : null,
-        receipt_url: receiptUrl,
+        receipt_url: receiptUrl || null,
         // Dados do pedido salvos antes do checkout
-        customer: pendingOrder?.customer,
-        address: pendingOrder?.address,
-        items: pendingOrder?.items,
+        customer: pendingOrder?.customer || null,
+        address: pendingOrder?.address || null,
+        items: pendingOrder?.items || [],
       };
 
-      console.log('📦 Dados enviados para ClickUp:', clickUpData);
+      console.log('📦 [SUCCESS] Dados enviados para ClickUp:', {
+        order_nsu: clickUpData.order_nsu,
+        transaction_nsu: clickUpData.transaction_nsu,
+        customer_name: clickUpData.customer?.name,
+        items_count: clickUpData.items?.length || 0,
+      });
 
       // Chamar função serverless
       const response = await fetch('/.netlify/functions/create-clickup-task', {
@@ -96,10 +118,10 @@ export function PaymentSuccess() {
       });
 
       const responseText = await response.text();
-      console.log('📥 Resposta do ClickUp:', {
+      console.log('📥 [SUCCESS] Resposta do ClickUp:', {
         status: response.status,
         statusText: response.statusText,
-        body: responseText,
+        body_length: responseText.length,
       });
 
       if (!response.ok) {
@@ -109,14 +131,20 @@ export function PaymentSuccess() {
         } catch {
           errorData = { error: responseText };
         }
-        console.error('❌ Erro ao criar task no ClickUp:', errorData);
+        console.error('❌ [SUCCESS] Erro ao criar task no ClickUp:', errorData);
         setClickUpError('Houve um problema ao registrar o pedido no sistema. Entre em contato com o suporte.');
       } else {
         const data = JSON.parse(responseText);
-        console.log('✅ Task criada no ClickUp com sucesso:', data);
+        console.log('✅ [SUCCESS] Task criada no ClickUp com sucesso:', {
+          task_id: data.task_id,
+          task_name: data.task_name,
+          status: data.status,
+        });
+        // Limpar localStorage após sucesso
+        localStorage.removeItem('pendingOrder');
       }
     } catch (error) {
-      console.error('❌ Erro ao criar task no ClickUp:', error);
+      console.error('❌ [SUCCESS] Erro ao criar task no ClickUp:', error);
       setClickUpError('Houve um problema ao registrar o pedido no sistema. Entre em contato com o suporte.');
     } finally {
       setLoading(false);
@@ -150,7 +178,7 @@ export function PaymentSuccess() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
-        className="max-w-2xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden"
+        className="max-w-4xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden"
         style={{ boxShadow: 'var(--shadow-glow)' }}
       >
         {loading ? (
@@ -174,7 +202,7 @@ export function PaymentSuccess() {
               >
                 <CheckCircle2 className="w-20 h-20 mx-auto mb-4" />
               </motion.div>
-              <h1 className="text-3xl font-bold mb-2">Pagamento Confirmado!</h1>
+              <h1 className="text-3xl font-bold mb-2">Compra realizada com sucesso!</h1>
               <p className="text-white/90">Seu pedido foi processado com sucesso</p>
             </div>
 
@@ -188,17 +216,19 @@ export function PaymentSuccess() {
               )}
 
               {/* Informações do Cliente */}
-              {orderData?.customer && (
+              {(orderData?.customer || orderNsu) && (
                 <div className="bg-[var(--cassia-lavender)]/20 rounded-lg p-6">
                   <h3 className="text-lg font-semibold text-[var(--cassia-purple-dark)] mb-4 flex items-center gap-2">
                     <User className="w-5 h-5" />
                     Dados do Cliente
                   </h3>
                   <div className="grid md:grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span className="text-[var(--cassia-purple-dark)]/70">Nome:</span>
-                      <p className="font-semibold text-[var(--cassia-purple-dark)]">{orderData.customer.name}</p>
-                    </div>
+                    {orderData?.customer?.name && (
+                      <div>
+                        <span className="text-[var(--cassia-purple-dark)]/70">Nome:</span>
+                        <p className="font-semibold text-[var(--cassia-purple-dark)]">{orderData.customer.name}</p>
+                      </div>
+                    )}
                     {orderData.customer.email && (
                       <div>
                         <span className="text-[var(--cassia-purple-dark)]/70">Email:</span>
@@ -237,7 +267,7 @@ export function PaymentSuccess() {
               )}
 
               {/* Produtos Comprados */}
-              {orderData?.items && orderData.items.length > 0 && (
+              {(orderData?.items && orderData.items.length > 0) ? (
                 <div className="bg-[var(--cassia-surface)]/50 rounded-lg p-6">
                   <h3 className="text-lg font-semibold text-[var(--cassia-purple-dark)] mb-4 flex items-center gap-2">
                     <Package className="w-5 h-5" />
@@ -256,6 +286,14 @@ export function PaymentSuccess() {
                       </div>
                     ))}
                   </div>
+                </div>
+              ) : (
+                <div className="bg-[var(--cassia-surface)]/50 rounded-lg p-6">
+                  <h3 className="text-lg font-semibold text-[var(--cassia-purple-dark)] mb-4 flex items-center gap-2">
+                    <Package className="w-5 h-5" />
+                    Produtos Comprados
+                  </h3>
+                  <p className="text-[var(--cassia-purple-dark)]/70">Informações do pedido serão enviadas por e-mail.</p>
                 </div>
               )}
 
