@@ -31,6 +31,7 @@ export function PaymentSuccess() {
 
   useEffect(() => {
     console.log('📋 [SUCCESS] Página de sucesso carregada');
+    console.log('📋 [SUCCESS] URL completa:', window.location.href);
     console.log('📋 [SUCCESS] Parâmetros recebidos da InfinitePay:', {
       receiptUrl,
       orderNsu,
@@ -57,33 +58,40 @@ export function PaymentSuccess() {
       console.warn('⚠️ [SUCCESS] Nenhum dado encontrado no localStorage');
     }
 
-    // Validar se temos os parâmetros mínimos da InfinitePay
+    // SEMPRE exibir a página, mesmo sem parâmetros
+    // A página deve funcionar mesmo em caso de reload ou acesso direto
+    setLoading(false);
+
+    // Validar se temos os parâmetros mínimos da InfinitePay para criar task no ClickUp
     if (!orderNsu || !transactionNsu) {
-      console.warn('⚠️ [SUCCESS] Parâmetros de pagamento incompletos - mas ainda exibindo página');
-      // Mesmo sem parâmetros, exibir a página com dados disponíveis
-      setLoading(false);
+      console.warn('⚠️ [SUCCESS] Parâmetros de pagamento incompletos - não será possível criar task no ClickUp');
+      return;
+    }
+
+    // Validar se temos dados do cliente para criar task
+    if (!pendingOrder?.customer?.name) {
+      console.warn('⚠️ [SUCCESS] Dados do cliente ausentes - não será possível criar task no ClickUp');
       return;
     }
 
     // Chamar função serverless para criar task no ClickUp
     // IMPORTANTE: Não bloquear a exibição da página se o ClickUp falhar
+    console.log('🚀 [SUCCESS] Iniciando processo de criação de task no ClickUp...');
     createClickUpTask(pendingOrder);
-  }, [orderNsu, transactionNsu]);
+  }, []); // Executar apenas uma vez ao montar o componente
 
   async function createClickUpTask(pendingOrder: any) {
     try {
-      console.log('🚀 [SUCCESS] Iniciando criação de task no ClickUp...');
+      console.log('🚀 [SUCCESS] ===== INICIANDO CRIAÇÃO DE TASK NO CLICKUP =====');
       
       // Validar dados mínimos necessários
       if (!orderNsu || !transactionNsu) {
         console.warn('⚠️ [SUCCESS] Não é possível criar task no ClickUp: parâmetros ausentes');
-        setLoading(false);
         return;
       }
 
       if (!pendingOrder?.customer?.name) {
         console.warn('⚠️ [SUCCESS] Não é possível criar task no ClickUp: nome do cliente ausente');
-        setLoading(false);
         return;
       }
       
@@ -101,15 +109,13 @@ export function PaymentSuccess() {
         items: pendingOrder?.items || [],
       };
 
-      console.log('📦 [SUCCESS] Dados enviados para ClickUp:', {
-        order_nsu: clickUpData.order_nsu,
-        transaction_nsu: clickUpData.transaction_nsu,
-        customer_name: clickUpData.customer?.name,
-        items_count: clickUpData.items?.length || 0,
-      });
+      console.log('📦 [SUCCESS] Dados completos enviados para ClickUp:', JSON.stringify(clickUpData, null, 2));
 
       // Chamar função serverless
-      const response = await fetch('/.netlify/functions/create-clickup-task', {
+      const functionUrl = '/.netlify/functions/create-clickup-task';
+      console.log('🌐 [SUCCESS] Chamando função serverless:', functionUrl);
+      
+      const response = await fetch(functionUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -122,6 +128,7 @@ export function PaymentSuccess() {
         status: response.status,
         statusText: response.statusText,
         body_length: responseText.length,
+        body_preview: responseText.substring(0, 500),
       });
 
       if (!response.ok) {
@@ -134,7 +141,12 @@ export function PaymentSuccess() {
         console.error('❌ [SUCCESS] Erro ao criar task no ClickUp:', errorData);
         setClickUpError('Houve um problema ao registrar o pedido no sistema. Entre em contato com o suporte.');
       } else {
-        const data = JSON.parse(responseText);
+        let data: any;
+        try {
+          data = JSON.parse(responseText);
+        } catch {
+          data = { raw: responseText };
+        }
         console.log('✅ [SUCCESS] Task criada no ClickUp com sucesso:', {
           task_id: data.task_id,
           task_name: data.task_name,
@@ -142,12 +154,12 @@ export function PaymentSuccess() {
         });
         // Limpar localStorage após sucesso
         localStorage.removeItem('pendingOrder');
+        console.log('✅ [SUCCESS] localStorage limpo após sucesso');
       }
     } catch (error) {
       console.error('❌ [SUCCESS] Erro ao criar task no ClickUp:', error);
+      console.error('❌ [SUCCESS] Stack trace:', error instanceof Error ? error.stack : 'N/A');
       setClickUpError('Houve um problema ao registrar o pedido no sistema. Entre em contato com o suporte.');
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -172,6 +184,8 @@ export function PaymentSuccess() {
     minute: '2-digit',
   });
 
+  // SEMPRE renderizar a página, mesmo sem dados
+  // Isso garante que nunca fique em branco
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--cassia-purple)]/10 via-white to-[var(--cassia-gold)]/10 flex items-center justify-center p-4">
       <motion.div

@@ -320,8 +320,8 @@ export const handler: Handler = async (
     // ============================================
     // MONTAR TASK DO CLICKUP
     // ============================================
-    // Nome da tarefa: APENAS nome completo do cliente (sem "Pedido #...")
-    const taskName = body.customer.name.trim();
+    // Nome da tarefa: "Pedido - {NOME_COMPLETO_DO_CLIENTE}" conforme especificado
+    const taskName = `Pedido - ${body.customer.name.trim()}`;
 
     // Formatar método de pagamento
     const paymentMethodText = body.capture_method === 'credit_card' 
