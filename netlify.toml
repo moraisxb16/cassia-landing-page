@@ -6,9 +6,16 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-# Redirecionar todas as rotas para index.html (SPA routing)
-# IMPORTANTE: Esta regra deve vir ANTES de outras regras mais específicas
-# Garante que todas as rotas do React Router funcionem corretamente
+# IMPORTANTE: Excluir arquivos estáticos do redirect SPA
+# Arquivos JS, CSS, imagens, etc. devem ser servidos diretamente
+[[redirects]]
+  from = "/assets/*"
+  to = "/assets/:splat"
+  status = 200
+  force = true
+
+# Redirecionar todas as outras rotas para index.html (SPA routing)
+# Isso garante que rotas do React Router funcionem corretamente
 [[redirects]]
   from = "/*"
   to = "/index.html"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { CheckCircle2, Loader2, Package, Calendar, CreditCard, FileText, User, MapPin, Mail, Phone } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -20,6 +20,7 @@ export function PaymentSuccess() {
   const [loading, setLoading] = useState(true);
   const [clickUpError, setClickUpError] = useState<string | null>(null);
   const [orderData, setOrderData] = useState<any>(null);
+  const clickUpTaskCreated = useRef(false); // Flag para evitar múltiplas chamadas
 
   // Parâmetros retornados pela InfinitePay
   const receiptUrl = searchParams.get('receipt_url');
@@ -74,18 +75,35 @@ export function PaymentSuccess() {
       return;
     }
 
+    // Evitar múltiplas chamadas - criar task apenas uma vez
+    if (clickUpTaskCreated.current) {
+      console.log('⚠️ [SUCCESS] Task do ClickUp já foi criada, pulando...');
+      return;
+    }
+
+    // Marcar como criada antes de chamar (para evitar chamadas duplicadas)
+    clickUpTaskCreated.current = true;
+
     // Chamar função serverless para criar task no ClickUp
     // IMPORTANTE: Não bloquear a exibição da página se o ClickUp falhar
     console.log('🚀 [SUCCESS] Iniciando processo de criação de task no ClickUp...');
-    createClickUpTask(pendingOrder);
-  }, []); // Executar apenas uma vez ao montar o componente
+    createClickUpTask(pendingOrder, orderNsu, transactionNsu, slug, captureMethod, amount, receiptUrl);
+  }, [orderNsu, transactionNsu, slug, captureMethod, amount, receiptUrl]); // Incluir dependências necessárias
 
-  async function createClickUpTask(pendingOrder: any) {
+  async function createClickUpTask(
+    pendingOrder: any,
+    orderNsuParam: string | null,
+    transactionNsuParam: string | null,
+    slugParam: string | null,
+    captureMethodParam: string | null,
+    amountParam: string | null,
+    receiptUrlParam: string | null
+  ) {
     try {
       console.log('🚀 [SUCCESS] ===== INICIANDO CRIAÇÃO DE TASK NO CLICKUP =====');
       
       // Validar dados mínimos necessários
-      if (!orderNsu || !transactionNsu) {
+      if (!orderNsuParam || !transactionNsuParam) {
         console.warn('⚠️ [SUCCESS] Não é possível criar task no ClickUp: parâmetros ausentes');
         return;
       }
@@ -97,12 +115,12 @@ export function PaymentSuccess() {
       
       // Montar dados do pedido para ClickUp
       const clickUpData = {
-        order_nsu: orderNsu,
-        transaction_nsu: transactionNsu,
-        slug: slug || null,
-        capture_method: captureMethod || null,
-        amount: amount ? parseInt(amount) : null,
-        receipt_url: receiptUrl || null,
+        order_nsu: orderNsuParam,
+        transaction_nsu: transactionNsuParam,
+        slug: slugParam || null,
+        capture_method: captureMethodParam || null,
+        amount: amountParam ? parseInt(amountParam) : null,
+        receipt_url: receiptUrlParam || null,
         // Dados do pedido salvos antes do checkout
         customer: pendingOrder?.customer || null,
         address: pendingOrder?.address || null,
@@ -186,6 +204,40 @@ export function PaymentSuccess() {
 
   // SEMPRE renderizar a página, mesmo sem dados
   // Isso garante que nunca fique em branco
+  // Se não houver dados, mostrar mensagem genérica de sucesso
+  if (!orderNsu && !transactionNsu && !orderData) {
+    // Caso extremo: nenhum dado disponível, mas ainda mostrar confirmação
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[var(--cassia-purple)]/10 via-white to-[var(--cassia-gold)]/10 flex items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+          className="max-w-4xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden"
+          style={{ boxShadow: 'var(--shadow-glow)' }}
+        >
+          <div className="bg-gradient-to-r from-[var(--cassia-purple)] to-[var(--cassia-gold)] p-8 text-center text-white">
+            <CheckCircle2 className="w-20 h-20 mx-auto mb-4" />
+            <h1 className="text-3xl font-bold mb-2">Compra realizada com sucesso!</h1>
+            <p className="text-white/90">Seu pedido foi processado com sucesso</p>
+          </div>
+          <div className="p-8 text-center">
+            <p className="text-[var(--cassia-purple-dark)]/70 mb-6">
+              Você receberá um e-mail de confirmação em breve com todos os detalhes do seu pedido.
+            </p>
+            <button
+              onClick={() => navigate('/')}
+              className="px-8 py-3 bg-gradient-to-r from-[var(--cassia-purple)] to-[var(--cassia-gold)] hover:opacity-90 text-white rounded-lg font-semibold transition-all"
+              style={{ boxShadow: 'var(--shadow-medium)' }}
+            >
+              Voltar ao Início
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--cassia-purple)]/10 via-white to-[var(--cassia-gold)]/10 flex items-center justify-center p-4">
       <motion.div
@@ -243,7 +295,7 @@ export function PaymentSuccess() {
                         <p className="font-semibold text-[var(--cassia-purple-dark)]">{orderData.customer.name}</p>
                       </div>
                     )}
-                    {orderData.customer.email && (
+                    {orderData?.customer?.email && (
                       <div>
                         <span className="text-[var(--cassia-purple-dark)]/70">Email:</span>
                         <p className="font-semibold text-[var(--cassia-purple-dark)] flex items-center gap-1">
@@ -252,7 +304,7 @@ export function PaymentSuccess() {
                         </p>
                       </div>
                     )}
-                    {orderData.customer.phone && (
+                    {orderData?.customer?.phone && (
                       <div>
                         <span className="text-[var(--cassia-purple-dark)]/70">Telefone:</span>
                         <p className="font-semibold text-[var(--cassia-purple-dark)] flex items-center gap-1">
@@ -261,17 +313,17 @@ export function PaymentSuccess() {
                         </p>
                       </div>
                     )}
-                    {orderData.address && (
+                    {orderData?.address && (
                       <div className="md:col-span-2">
                         <span className="text-[var(--cassia-purple-dark)]/70">Endereço:</span>
                         <p className="font-semibold text-[var(--cassia-purple-dark)] flex items-start gap-1">
                           <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
                           {[
-                            orderData.address.street,
-                            orderData.address.number,
-                            orderData.address.city,
-                            orderData.address.state,
-                            orderData.address.zip,
+                            orderData.address?.street,
+                            orderData.address?.number,
+                            orderData.address?.city,
+                            orderData.address?.state,
+                            orderData.address?.zip,
                           ].filter(Boolean).join(', ')}
                         </p>
                       </div>

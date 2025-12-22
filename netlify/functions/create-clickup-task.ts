@@ -81,8 +81,12 @@ async function getCustomFields(listId: string, apiToken: string): Promise<Map<st
   const fieldMap = new Map<string, string>();
   
   try {
-    // Garantir que o token está no formato correto
-    const authHeader = apiToken.startsWith('Bearer ') ? apiToken : `Bearer ${apiToken}`;
+    // Formato correto conforme documentação ClickUp:
+    // Personal tokens (pk_): Authorization: {token} (SEM Bearer)
+    // OAuth tokens: Authorization: Bearer {token}
+    const authHeader = apiToken.startsWith('pk_') 
+      ? apiToken  // Personal token: sem Bearer
+      : (apiToken.startsWith('Bearer ') ? apiToken : `Bearer ${apiToken}`); // OAuth: com Bearer
     
     const response = await fetch(
       `https://api.clickup.com/api/v2/list/${listId}/field`,
@@ -153,8 +157,12 @@ async function getCustomFields(listId: string, apiToken: string): Promise<Map<st
  */
 async function getStatusId(listId: string, apiToken: string, statusName: string = 'EM PRODUÇÃO'): Promise<string | null> {
   try {
-    // Garantir que o token está no formato correto
-    const authHeader = apiToken.startsWith('Bearer ') ? apiToken : `Bearer ${apiToken}`;
+    // Formato correto conforme documentação ClickUp:
+    // Personal tokens (pk_): Authorization: {token} (SEM Bearer)
+    // OAuth tokens: Authorization: Bearer {token}
+    const authHeader = apiToken.startsWith('pk_') 
+      ? apiToken  // Personal token: sem Bearer
+      : (apiToken.startsWith('Bearer ') ? apiToken : `Bearer ${apiToken}`); // OAuth: com Bearer
     
     const response = await fetch(
       `https://api.clickup.com/api/v2/list/${listId}`,
@@ -472,10 +480,15 @@ ${productsList}
     // URL da API do ClickUp
     const clickUpUrl = `https://api.clickup.com/api/v2/list/${listId}/task`;
 
-    // Garantir que o token está no formato correto (Bearer {token})
-    const authHeader = apiToken.startsWith('Bearer ') ? apiToken : `Bearer ${apiToken}`;
+    // Formato correto conforme documentação ClickUp:
+    // Personal tokens (pk_): Authorization: {token} (SEM Bearer)
+    // OAuth tokens: Authorization: Bearer {token}
+    const authHeader = apiToken.startsWith('pk_') 
+      ? apiToken  // Personal token: sem Bearer
+      : (apiToken.startsWith('Bearer ') ? apiToken : `Bearer ${apiToken}`); // OAuth: com Bearer
 
-    console.log('🔐 [CLICKUP] Token formatado:', authHeader.substring(0, 20) + '...');
+    console.log('🔐 [CLICKUP] Tipo de token:', apiToken.startsWith('pk_') ? 'Personal Token' : 'OAuth Token');
+    console.log('🔐 [CLICKUP] Token formatado (primeiros 20 chars):', authHeader.substring(0, 20) + '...');
     console.log('🌐 [CLICKUP] URL da API:', clickUpUrl);
 
     const response = await fetch(clickUpUrl, {
