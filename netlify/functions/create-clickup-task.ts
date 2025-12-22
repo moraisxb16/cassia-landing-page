@@ -184,7 +184,7 @@ async function getStatusId(listId: string, apiToken: string, statusName: string 
         if (status) {
           console.log(`✅ [CLICKUP] Status "${statusName}" encontrado:`, status.status);
           console.log(`✅ [CLICKUP] Status completo:`, JSON.stringify(status));
-          // Retornar o status completo (objeto) ou apenas o status string conforme necessário
+          // Retornar apenas a string do nome do status (a API aceita string)
           return status.status; // Retorna a string do status
         } else {
           console.warn(`⚠️ [CLICKUP] Status "${statusName}" não encontrado. Status disponíveis:`, data.statuses.map((s: any) => s.status));
@@ -328,8 +328,8 @@ export const handler: Handler = async (
     // ============================================
     // MONTAR TASK DO CLICKUP
     // ============================================
-    // Nome da tarefa: "Pedido - {NOME_COMPLETO_DO_CLIENTE}" conforme especificado
-    const taskName = `Pedido - ${body.customer.name.trim()}`;
+    // Nome da tarefa: APENAS o nome completo do cliente (sem "Pedido -")
+    const taskName = body.customer.name.trim();
 
     // Formatar método de pagamento
     const paymentMethodText = body.capture_method === 'credit_card' 
@@ -343,11 +343,12 @@ export const handler: Handler = async (
       ? (body.amount / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       : '0.00';
 
-    // Montar lista de produtos (formato: "Nome x Quantidade")
-    // Exemplo: "Produto Teste x 2"
+    // Montar lista de produtos (formato: "Nome – R$ X,XX" conforme especificado)
+    // Exemplo: "Produto Teste – R$ 1,00"
     const productsList = body.items && body.items.length > 0
       ? body.items.map(item => {
-          return `${item.name} x ${item.quantity}`;
+          const itemPrice = (item.price * item.quantity).toFixed(2).replace('.', ',');
+          return `${item.name} – R$ ${itemPrice}`;
         }).join('\n')
       : 'Não informado';
 
@@ -422,10 +423,14 @@ ${productsList}
     // Função auxiliar para adicionar custom field
     const addCustomField = (key: string, value: string | number | null | undefined) => {
       if (value !== null && value !== undefined && value !== '' && customFields.has(key)) {
+        const fieldId = customFields.get(key)!;
+        console.log(`📝 [CLICKUP] Adicionando custom field: ${key} (ID: ${fieldId}) = ${value}`);
         customFieldsArray.push({
-          id: customFields.get(key)!,
+          id: fieldId,
           value: value,
         });
+      } else if (value !== null && value !== undefined && value !== '') {
+        console.warn(`⚠️ [CLICKUP] Campo "${key}" não encontrado no mapeamento de custom fields`);
       }
     };
 
@@ -436,7 +441,10 @@ ${productsList}
     addCustomField('address', fullAddress);
     addCustomField('paymentMethod', paymentMethodText);
     addCustomField('products', productsList);
-    addCustomField('amount', formattedAmount); // $ Valor do Atendimento
+    // Campo "Valor do Atendimento" pode precisar ser número ou string formatada
+    // Tentar enviar como número primeiro, se não funcionar, usar string
+    const amountValue = body.amount ? (body.amount / 100) : 0;
+    addCustomField('amount', amountValue); // $ Valor do Atendimento (enviar como número)
     addCustomField('origin', 'Site'); // Origem = Site
     addCustomField('courses', coursesText !== '-' ? coursesText : null);
     addCustomField('services', servicesText !== '-' ? servicesText : null);
@@ -451,8 +459,6 @@ ${productsList}
     const clickUpPayload: any = {
       name: taskName, // Nome completo do cliente
       description: description,
-      // Status: Se encontrado, usar o formato correto. Se não, deixar undefined (usará status padrão da lista)
-      ...(statusId ? { status: { status: statusId } } : {}),
       priority: {
         priority: 3, // Normal
       },
@@ -461,12 +467,20 @@ ${productsList}
       check_required: false,
     };
 
+    // Adicionar status se encontrado
+    // A API do ClickUp aceita status como string (nome do status)
+    if (statusId) {
+      clickUpPayload.status = statusId;
+    }
+
     // Adicionar custom fields se houver
     if (customFieldsArray.length > 0) {
       clickUpPayload.custom_fields = customFieldsArray;
-      console.log('📋 Custom fields a serem preenchidos:', customFieldsArray.length);
+      console.log('📋 [CLICKUP] Custom fields a serem preenchidos:', customFieldsArray.length);
+      console.log('📋 [CLICKUP] Custom fields detalhados:', JSON.stringify(customFieldsArray, null, 2));
     } else {
-      console.warn('⚠️ Nenhum custom field encontrado para preencher');
+      console.warn('⚠️ [CLICKUP] Nenhum custom field encontrado para preencher');
+      console.warn('⚠️ [CLICKUP] Custom fields mapeados:', Array.from(customFields.entries()));
     }
 
     console.log('🚀 [CLICKUP] Criando task no ClickUp...');
