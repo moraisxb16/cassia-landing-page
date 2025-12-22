@@ -200,23 +200,39 @@ export const handler: Handler = async (
     // ITEMS (obrigatório conforme documentação)
     // ============================================
     // A documentação exige items com:
-    // - quantity: number
-    // - price: number (em centavos)
-    // - description: string
+    // - quantity: number (inteiro positivo)
+    // - price: number (em centavos, inteiro positivo)
+    // - description: string (não vazio)
     // ============================================
     if (body.items && body.items.length > 0) {
-      payload.items = body.items.map((item) => ({
-        quantity: item.quantity,
-        price: Math.round(item.price * 100), // converter reais para centavos
-        description: item.name || body.description, // usar name como description
-      }));
+      payload.items = body.items.map((item) => {
+        // Validar e garantir valores válidos
+        const quantity = Math.max(1, Math.round(item.quantity || 1));
+        const price = Math.max(1, Math.round((item.price || 0) * 100)); // converter reais para centavos
+        const description = (item.name || body.description || 'Item').trim();
+        
+        if (!description || description.length === 0) {
+          throw new Error('Descrição do item não pode estar vazia');
+        }
+        
+        return {
+          quantity,
+          price,
+          description,
+        };
+      });
     } else {
       // Se não houver items, criar um item único com o total
+      const description = (body.description || 'Compra').trim();
+      if (!description || description.length === 0) {
+        throw new Error('Descrição do pedido não pode estar vazia');
+      }
+      
       payload.items = [
         {
           quantity: 1,
-          price: body.amount, // já está em centavos
-          description: body.description,
+          price: Math.max(1, body.amount), // já está em centavos, garantir mínimo de 1
+          description,
         },
       ];
     }
@@ -243,12 +259,23 @@ export const handler: Handler = async (
       if (body.customer.phone) {
         // Formatar phone_number: remover caracteres não numéricos
         let phoneNumber = body.customer.phone.replace(/\D/g, '');
+        
+        // Validar tamanho mínimo (10 dígitos para telefone brasileiro)
+        if (phoneNumber.length < 10) {
+          console.warn('⚠️ Telefone muito curto, pode causar erro na API');
+        }
+        
         // Adicionar +55 se não começar com código do país
         if (!phoneNumber.startsWith('55')) {
           phoneNumber = '55' + phoneNumber;
         }
         // Adicionar + no início
         customer.phone_number = '+' + phoneNumber;
+        
+        // Validar formato final (deve ter pelo menos +5511... = 13 caracteres)
+        if (customer.phone_number.length < 13) {
+          console.warn('⚠️ Telefone formatado pode estar inválido:', customer.phone_number);
+        }
       }
       
       // Só adicionar customer se tiver pelo menos um campo
@@ -261,7 +288,7 @@ export const handler: Handler = async (
     // ADDRESS (opcional conforme documentação)
     // ============================================
     // A documentação exige address como objeto com:
-    // - cep: string (apenas números)
+    // - cep: string (apenas números, 8 dígitos)
     // - number: string
     // - complement: string (opcional)
     // ============================================
@@ -269,8 +296,17 @@ export const handler: Handler = async (
       const address: any = {};
       
       if (body.address.zip) {
-        // CEP: apenas números
-        address.cep = body.address.zip.replace(/\D/g, '');
+        // CEP: apenas números, garantir 8 dígitos
+        let cep = body.address.zip.replace(/\D/g, '');
+        // Se tiver menos de 8 dígitos, preencher com zeros à esquerda
+        if (cep.length < 8) {
+          cep = cep.padStart(8, '0');
+        }
+        // Se tiver mais de 8 dígitos, pegar apenas os primeiros 8
+        if (cep.length > 8) {
+          cep = cep.substring(0, 8);
+        }
+        address.cep = cep;
       }
       
       if (body.address.number) {
@@ -279,17 +315,19 @@ export const handler: Handler = async (
       
       // Complement: combinar street + city + state se disponível
       const complementParts: string[] = [];
-      if (body.address.street) complementParts.push(body.address.street);
-      if (body.address.city) complementParts.push(body.address.city);
-      if (body.address.state) complementParts.push(body.address.state);
+      if (body.address.street) complementParts.push(body.address.street.trim());
+      if (body.address.city) complementParts.push(body.address.city.trim());
+      if (body.address.state) complementParts.push(body.address.state.trim().toUpperCase());
       
       if (complementParts.length > 0) {
         address.complement = complementParts.join(', ');
       }
       
-      // Só adicionar address se tiver pelo menos cep ou number
-      if (address.cep || address.number) {
+      // Só adicionar address se tiver pelo menos cep (obrigatório para InfinitePay)
+      if (address.cep && address.cep.length === 8) {
         payload.address = address;
+      } else if (body.address.zip) {
+        console.warn('⚠️ CEP inválido ou incompleto, não adicionando address ao payload');
       }
     }
 
@@ -329,15 +367,31 @@ export const handler: Handler = async (
 
       console.error('❌ Erro na API InfinitePay:');
       console.error('❌ Status:', response.status);
+      console.error('❌ Status Text:', response.statusText);
       console.error('❌ Headers:', Object.fromEntries(response.headers.entries()));
       console.error('❌ Body completo:', responseText);
       console.error('❌ Payload enviado:', JSON.stringify(payload, null, 2));
+      console.error('❌ Handle usado:', cleanHandle);
+      console.error('❌ Order NSU:', orderNsu);
+      console.error('❌ Redirect URL:', redirectUrl);
+      console.error('❌ Cancel URL:', cancelUrl);
+
+      // Mensagem de erro mais específica para 422
+      let errorMessage = 'Erro ao gerar link de checkout';
+      if (response.status === 422) {
+        errorMessage = errorDetails.message || errorDetails.error || 'Dados inválidos enviados para a InfinitePay. Verifique os logs para mais detalhes.';
+        console.error('❌ Erro 422 - Possíveis causas:');
+        console.error('   - Handle inválido ou não autorizado');
+        console.error('   - Formato de dados incorreto');
+        console.error('   - Campos obrigatórios faltando');
+        console.error('   - Valores inválidos (ex: CEP, telefone)');
+      }
 
       return {
         statusCode: response.status >= 400 && response.status < 500 ? response.status : 500,
         headers,
         body: JSON.stringify({
-          error: 'Erro ao gerar link de checkout',
+          error: errorMessage,
           details: errorDetails,
           api_status: response.status,
         }),
