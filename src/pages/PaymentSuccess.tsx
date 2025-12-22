@@ -18,7 +18,6 @@ export function PaymentSuccess() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [clickUpError, setClickUpError] = useState<string | null>(null);
   const [orderData, setOrderData] = useState<any>(null);
   const clickUpTaskCreated = useRef(false); // Flag para evitar múltiplas chamadas
 
@@ -156,8 +155,10 @@ export function PaymentSuccess() {
         } catch {
           errorData = { error: responseText };
         }
-        console.error('❌ [SUCCESS] Erro ao criar task no ClickUp:', errorData);
-        setClickUpError('Houve um problema ao registrar o pedido no sistema. Entre em contato com o suporte.');
+        // Log do erro mas NÃO mostrar para o usuário - não quebrar a experiência
+        console.error('❌ [SUCCESS] Erro ao criar task no ClickUp (silencioso):', errorData);
+        // NÃO definir clickUpError - deixar a página funcionar normalmente
+        // setClickUpError('Houve um problema ao registrar o pedido no sistema. Entre em contato com o suporte.');
       } else {
         let data: any;
         try {
@@ -175,9 +176,11 @@ export function PaymentSuccess() {
         console.log('✅ [SUCCESS] localStorage limpo após sucesso');
       }
     } catch (error) {
-      console.error('❌ [SUCCESS] Erro ao criar task no ClickUp:', error);
+      // Log do erro mas NÃO mostrar para o usuário - não quebrar a experiência
+      console.error('❌ [SUCCESS] Erro ao criar task no ClickUp (silencioso):', error);
       console.error('❌ [SUCCESS] Stack trace:', error instanceof Error ? error.stack : 'N/A');
-      setClickUpError('Houve um problema ao registrar o pedido no sistema. Entre em contato com o suporte.');
+      // NÃO definir clickUpError - deixar a página funcionar normalmente
+      // setClickUpError('Houve um problema ao registrar o pedido no sistema. Entre em contato com o suporte.');
     }
   }
 
@@ -274,12 +277,7 @@ export function PaymentSuccess() {
 
             {/* Conteúdo principal */}
             <div className="p-8 space-y-6">
-              {/* Aviso sobre ClickUp (se houver erro) */}
-              {clickUpError && (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <p className="text-sm text-yellow-800">{clickUpError}</p>
-                </div>
-              )}
+              {/* Aviso sobre ClickUp removido - erros são silenciosos para não afetar UX */}
 
               {/* Informações do Cliente */}
               {(orderData?.customer || orderNsu) && (
