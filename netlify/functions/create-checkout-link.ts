@@ -189,10 +189,10 @@ export const handler: Handler = async (
     const cancelUrl = `${baseUrl}/pagamento/cancelado`;
 
     // Montar payload base conforme documentação
-    // NOTA: cancel_url pode não ser aceito pela API, usar apenas redirect_url
     const payload: any = {
       handle: cleanHandle,
       redirect_url: redirectUrl,
+      cancel_url: cancelUrl, // URL de cancelamento
       order_nsu: orderNsu,
     };
 
@@ -298,9 +298,7 @@ export const handler: Handler = async (
     // ============================================
     console.log('🚀 Chamando API InfinitePay...');
     console.log('📦 Payload completo:', JSON.stringify(payload, null, 2));
-    console.log('📦 Items detalhados:', JSON.stringify(payload.items, null, 2));
     console.log('🔗 Endpoint: https://api.infinitepay.io/invoices/public/checkout/links');
-    console.log('🔑 Handle:', cleanHandle);
 
     const response = await fetch(
       'https://api.infinitepay.io/invoices/public/checkout/links',
@@ -318,8 +316,7 @@ export const handler: Handler = async (
     // ============================================
     const responseText = await response.text();
     console.log('📥 Status da resposta:', response.status);
-    console.log('📥 Status text:', response.statusText);
-    console.log('📥 Body da resposta (primeiros 500 chars):', responseText.substring(0, 500));
+    console.log('📥 Body da resposta:', responseText);
 
     if (!response.ok) {
       // Tentar fazer parse do erro
