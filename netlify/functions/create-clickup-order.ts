@@ -91,14 +91,18 @@ Data da compra: ${data_compra || 'Não informado'}`;
     const payload = {
       name: `Pedido #${order_id} - ${nome_cliente}`,
       description,
-      status: 'EM PRODUÇÃO',
+      // NÃO enviar status para usar o padrão da lista
     };
 
-    console.log('🚀 Enviando pedido para ClickUp:', JSON.stringify(payload, null, 2));
+    // Preparar token no formato aceito pelo ClickUp
+    const sanitizedToken = CLICKUP_API_TOKEN.trim();
+    const authHeader = sanitizedToken.startsWith('pk_')
+      ? sanitizedToken
+      : (sanitizedToken.startsWith('Bearer ') ? sanitizedToken : `Bearer ${sanitizedToken}`);
 
-    const authHeader = CLICKUP_API_TOKEN.startsWith('pk_')
-      ? CLICKUP_API_TOKEN
-      : (CLICKUP_API_TOKEN.startsWith('Bearer ') ? CLICKUP_API_TOKEN : `Bearer ${CLICKUP_API_TOKEN}`);
+    console.log('🚀 Enviando pedido para ClickUp:', JSON.stringify(payload, null, 2));
+    console.log('🔐 Token (início/fim):', `${authHeader.substring(0, 4)}...${authHeader.substring(authHeader.length - 4)}`);
+    console.log('📋 List ID:', CLICKUP_LIST_ID);
 
     const response = await fetch(
       `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`,
@@ -120,13 +124,23 @@ Data da compra: ${data_compra || 'Não informado'}`;
       result = { raw: text };
     }
 
-    console.log('📥 Resposta ClickUp:', response.status, response.statusText, result);
+    console.log('📥 Resposta ClickUp:', {
+      status: response.status,
+      statusText: response.statusText,
+      body: result,
+    });
 
     if (!response.ok) {
       return {
         statusCode: 500,
         headers,
-        body: JSON.stringify({ error: 'Erro ao criar task no ClickUp', details: result }),
+        body: JSON.stringify({
+          success: false,
+          error: 'Erro ao criar task no ClickUp',
+          details: result,
+          status: response.status,
+          statusText: response.statusText,
+        }),
       };
     }
 
