@@ -37,6 +37,8 @@ interface CheckoutRequest {
     email?: string;
     phone?: string;
     cpf?: string;
+    birthDate?: string;
+    birth_date?: string;
   };
   address?: {
     street?: string;
@@ -147,6 +149,7 @@ export const handler: Handler = async (
     }
 
     // Validações obrigatórias
+    // amount DEVE ser number em centavos (ex: R$ 1,00 = 100)
     if (!body.amount || typeof body.amount !== 'number' || body.amount <= 0) {
       return {
         statusCode: 400,
@@ -160,6 +163,15 @@ export const handler: Handler = async (
         statusCode: 400,
         headers,
         body: JSON.stringify({ error: 'Descrição obrigatória' }),
+      };
+    }
+
+    // Validar customer obrigatório com campos mínimos
+    if (!body.customer || !body.customer.name || !body.customer.email || !body.customer.phone || !body.customer.cpf) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Customer obrigatório com name, email, phone e cpf' }),
       };
     }
 
@@ -201,13 +213,13 @@ export const handler: Handler = async (
     // ============================================
     // A documentação exige items com:
     // - quantity: number
-    // - price: number (em centavos)
+    // - price: number (em centavos) - JÁ VEM EM CENTAVOS DO FRONTEND
     // - description: string
     // ============================================
     if (body.items && body.items.length > 0) {
       payload.items = body.items.map((item) => ({
         quantity: item.quantity,
-        price: Math.round(item.price * 100), // converter reais para centavos
+        price: Math.round(item.price), // JÁ está em centavos, não multiplicar
         description: item.name || body.description, // usar name como description
       }));
     } else {
@@ -215,47 +227,65 @@ export const handler: Handler = async (
       payload.items = [
         {
           quantity: 1,
-          price: body.amount, // já está em centavos
+          price: Math.round(body.amount), // já está em centavos
           description: body.description,
         },
       ];
     }
 
     // ============================================
-    // CUSTOMER (opcional conforme documentação)
+    // CUSTOMER (obrigatório conforme requisitos)
     // ============================================
-    // A documentação exige customer como objeto com:
+    // Campos obrigatórios:
     // - name: string
     // - email: string
     // - phone_number: string (formato: +5511999887766)
+    // - cpf: string (apenas números)
+    // - birth_date: string (formato YYYY-MM-DD)
     // ============================================
-    if (body.customer) {
-      const customer: any = {};
-      
-      if (body.customer.name) {
-        customer.name = body.customer.name.trim();
-      }
-      
-      if (body.customer.email) {
-        customer.email = body.customer.email.trim();
-      }
-      
-      if (body.customer.phone) {
-        // Formatar phone_number: remover caracteres não numéricos
-        let phoneNumber = body.customer.phone.replace(/\D/g, '');
-        // Adicionar +55 se não começar com código do país
-        if (!phoneNumber.startsWith('55')) {
-          phoneNumber = '55' + phoneNumber;
-        }
-        // Adicionar + no início
-        customer.phone_number = '+' + phoneNumber;
-      }
-      
-      // Só adicionar customer se tiver pelo menos um campo
-      if (Object.keys(customer).length > 0) {
-        payload.customer = customer;
-      }
+    const customer: any = {
+      name: body.customer.name.trim(),
+      email: body.customer.email.trim(),
+    };
+
+    // Formatar phone_number: remover caracteres não numéricos
+    let phoneNumber = body.customer.phone.replace(/\D/g, '');
+    // Adicionar +55 se não começar com código do país
+    if (!phoneNumber.startsWith('55')) {
+      phoneNumber = '55' + phoneNumber;
     }
+    // Adicionar + no início
+    customer.phone_number = '+' + phoneNumber;
+
+    // CPF: remover pontos e traços (apenas números)
+    customer.cpf = body.customer.cpf.replace(/\D/g, '');
+
+    // birth_date: converter para formato YYYY-MM-DD
+    if (body.customer.birthDate) {
+      let birthDateStr = body.customer.birthDate.trim();
+      // Se vier no formato DD/MM/YYYY, converter para YYYY-MM-DD
+      if (birthDateStr.includes('/')) {
+        const parts = birthDateStr.split('/');
+        if (parts.length === 3) {
+          // DD/MM/YYYY → YYYY-MM-DD
+          birthDateStr = `${parts[2]}-${parts[1]}-${parts[0]}`;
+        }
+      }
+      // Se já vier no formato YYYY-MM-DD, usar direto
+      customer.birth_date = birthDateStr;
+    } else if (body.customer.birth_date) {
+      // Se vier como birth_date direto
+      let birthDateStr = body.customer.birth_date.trim();
+      if (birthDateStr.includes('/')) {
+        const parts = birthDateStr.split('/');
+        if (parts.length === 3) {
+          birthDateStr = `${parts[2]}-${parts[1]}-${parts[0]}`;
+        }
+      }
+      customer.birth_date = birthDateStr;
+    }
+
+    payload.customer = customer;
 
     // ============================================
     // ADDRESS (opcional conforme documentação)
@@ -327,18 +357,20 @@ export const handler: Handler = async (
         errorDetails = { raw: responseText };
       }
 
-      console.error('❌ Erro na API InfinitePay:');
-      console.error('❌ Status:', response.status);
-      console.error('❌ Headers:', Object.fromEntries(response.headers.entries()));
-      console.error('❌ Body completo:', responseText);
-      console.error('❌ Payload enviado:', JSON.stringify(payload, null, 2));
+      // Logar erro REAL da InfinitePay (não mascarar)
+      console.error('❌ [INFINITEPAY] Erro na API:');
+      console.error('❌ [INFINITEPAY] Status HTTP:', response.status);
+      console.error('❌ [INFINITEPAY] Status Text:', response.statusText);
+      console.error('❌ [INFINITEPAY] Erro REAL da InfinitePay:', errorDetails);
+      console.error('❌ [INFINITEPAY] Headers da resposta:', Object.fromEntries(response.headers.entries()));
+      console.error('❌ [INFINITEPAY] Payload enviado:', JSON.stringify(payload, null, 2));
 
       return {
         statusCode: response.status >= 400 && response.status < 500 ? response.status : 500,
         headers,
         body: JSON.stringify({
-          error: 'Erro ao gerar link de checkout',
-          details: errorDetails,
+          error: errorDetails.message || errorDetails.error || 'Erro ao gerar link de checkout',
+          infinitepay_error: errorDetails, // Erro real da InfinitePay
           api_status: response.status,
         }),
       };
