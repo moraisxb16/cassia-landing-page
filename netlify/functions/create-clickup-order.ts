@@ -96,9 +96,9 @@ Data da compra: ${data_compra || 'Não informado'}`;
       description,
     };
 
-    // Tentar adicionar status "AGUARDANDO ENVIO" (se não funcionar, remover)
+    // Adicionar status "EM PRODUÇÃO" (conforme status existente na lista)
     // O status será testado e, se retornar erro, será removido
-    payload.status = 'AGUARDANDO ENVIO';
+    payload.status = 'EM PRODUÇÃO';
 
     // Headers da requisição
     const requestHeaders = {
