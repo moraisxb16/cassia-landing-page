@@ -201,10 +201,10 @@ export const handler: Handler = async (
     const cancelUrl = `${baseUrl}/pagamento/cancelado`;
 
     // Montar payload base conforme documentação
-    // NOTA: cancel_url pode não ser aceito pela API de checkout link
     const payload: any = {
       handle: cleanHandle,
       redirect_url: redirectUrl,
+      cancel_url: cancelUrl,
       order_nsu: orderNsu,
     };
 
@@ -213,21 +213,24 @@ export const handler: Handler = async (
     // ============================================
     // A documentação exige items com:
     // - quantity: number
-    // - price: number (em centavos) - JÁ VEM EM CENTAVOS DO FRONTEND
+    // - price: number (em centavos)
     // - description: string
+    // 
+    // NOTA: Frontend envia price em REAIS, backend converte para CENTAVOS
     // ============================================
     if (body.items && body.items.length > 0) {
       payload.items = body.items.map((item) => ({
         quantity: item.quantity,
-        price: Math.round(item.price), // JÁ está em centavos, não multiplicar
+        price: Math.round(item.price * 100), // CONVERTE REAIS PARA CENTAVOS
         description: item.name || body.description, // usar name como description
       }));
     } else {
       // Se não houver items, criar um item único com o total
+      // amount JÁ vem em centavos do frontend
       payload.items = [
         {
           quantity: 1,
-          price: Math.round(body.amount), // já está em centavos
+          price: Math.round(body.amount), // amount já está em centavos
           description: body.description,
         },
       ];
@@ -257,23 +260,33 @@ export const handler: Handler = async (
     // Adicionar + no início
     customer.phone_number = '+' + phoneNumber;
 
-    // CPF e birth_date podem não ser aceitos pela API de checkout link
-    // Apenas enviar se a API aceitar (testar sem primeiro)
-    // CPF: remover pontos e traços (apenas números) - COMENTADO POR ENQUANTO
-    // customer.cpf = body.customer.cpf.replace(/\D/g, '');
+    // CPF: remover pontos e traços (apenas números)
+    if (body.customer.cpf) {
+      customer.cpf = body.customer.cpf.replace(/\D/g, '');
+    }
 
-    // birth_date: converter para formato YYYY-MM-DD - COMENTADO POR ENQUANTO
-    // A API de checkout link pode não aceitar birth_date
-    // if (body.customer.birthDate) {
-    //   let birthDateStr = body.customer.birthDate.trim();
-    //   if (birthDateStr.includes('/')) {
-    //     const parts = birthDateStr.split('/');
-    //     if (parts.length === 3) {
-    //       birthDateStr = `${parts[2]}-${parts[1]}-${parts[0]}`;
-    //     }
-    //   }
-    //   customer.birth_date = birthDateStr;
-    // }
+    // birth_date: converter para formato YYYY-MM-DD e validar
+    if (body.customer.birthDate || body.customer.birth_date) {
+      const rawDate = body.customer.birthDate || body.customer.birth_date;
+      if (rawDate) {
+        let birthDateStr = rawDate.trim();
+        
+        // Se vier no formato DD/MM/YYYY, converter para YYYY-MM-DD
+        if (birthDateStr.includes('/')) {
+          const parts = birthDateStr.split('/');
+          if (parts.length === 3) {
+            // DD/MM/YYYY → YYYY-MM-DD
+            birthDateStr = `${parts[2]}-${parts[1]}-${parts[0]}`;
+          }
+        }
+        
+        // Validar formato YYYY-MM-DD antes de enviar
+        // Se não passar no regex, NÃO envia o campo (evita erro 422)
+        if (birthDateStr && /^\d{4}-\d{2}-\d{2}$/.test(birthDateStr)) {
+          customer.birth_date = birthDateStr;
+        }
+      }
+    }
 
     payload.customer = customer;
 
@@ -307,8 +320,9 @@ export const handler: Handler = async (
         address.complement = complementParts.join(', ');
       }
       
-      // Só adicionar address se tiver pelo menos cep ou number
-      if (address.cep || address.number) {
+      // Só adicionar address se tiver CEP E number juntos (obrigatório)
+      // InfinitePay exige ambos os campos
+      if (address.cep && address.number) {
         payload.address = address;
       }
     }
