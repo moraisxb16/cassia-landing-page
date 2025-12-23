@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { CheckCircle2, Loader2, Package, Calendar, CreditCard, FileText, User, MapPin, Mail, Phone } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 
 /**
  * Página de sucesso do pagamento
@@ -63,7 +63,7 @@ export function PaymentSuccess() {
     setLoading(false);
 
     // Validar se temos os parâmetros mínimos da InfinitePay para criar task no ClickUp
-    if (!orderNsu || !transactionNsu) {
+    if (!orderNsu && !transactionNsu) {
       console.warn('⚠️ [SUCCESS] Parâmetros de pagamento incompletos - não será possível criar task no ClickUp');
       return;
     }
