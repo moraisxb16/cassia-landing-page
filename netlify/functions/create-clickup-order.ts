@@ -89,9 +89,9 @@ Código: ${order_id}
 Data da compra: ${data_compra || 'Não informado'}`;
 
     const payload = {
-      name: `Pedido #${order_id} - ${nome_cliente}`,
+      name: `Pedido - ${nome_cliente}`,
       description,
-      // NÃO enviar status para usar o padrão da lista
+      status: 'EM PRODUÇÃO', // enviar status solicitado
     };
 
     // Preparar token no formato aceito pelo ClickUp
@@ -104,17 +104,16 @@ Data da compra: ${data_compra || 'Não informado'}`;
     console.log('🔐 Token (início/fim):', `${authHeader.substring(0, 4)}...${authHeader.substring(authHeader.length - 4)}`);
     console.log('📋 List ID:', CLICKUP_LIST_ID);
 
-    const response = await fetch(
-      `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: authHeader,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      }
-    );
+    const clickupUrl = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`;
+
+    const response = await fetch(clickupUrl, {
+      method: 'POST',
+      headers: {
+        Authorization: authHeader, // token único, sem workspace_id
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
 
     const text = await response.text();
     let result: any;
