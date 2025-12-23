@@ -88,67 +88,68 @@ Forma de pagamento: ${forma_pagamento || 'Não informado'}
 Código: ${order_id}
 Data da compra: ${data_compra || 'Não informado'}`;
 
+    // Montar payload mínimo e compatível com ClickUp
     const payload = {
-      name: `Pedido - ${nome_cliente}`,
+      name: `Pedido #${order_id} - ${nome_cliente}`,
       description,
-      status: 'EM PRODUÇÃO', // enviar status solicitado
+      status: 'EM PRODUÇÃO',
     };
 
-    // Preparar token no formato aceito pelo ClickUp
-    // Token Personal API (pk_...) deve ser usado diretamente, sem Bearer
-    // Token OAuth deve ter Bearer antes
+    // Preparar token: Personal API Token (pk_...) deve ser usado DIRETAMENTE, SEM Bearer
     const sanitizedToken = CLICKUP_API_TOKEN.trim().replace(/\s+/g, '');
-    // ClickUp Personal API Token (pk_...): usar diretamente
-    // ClickUp OAuth Token: adicionar Bearer
-    const authHeader = sanitizedToken.startsWith('pk_') 
-      ? sanitizedToken  // Personal API Token: usar direto
-      : `Bearer ${sanitizedToken}`; // OAuth Token: adicionar Bearer
+    // NÃO usar Bearer para tokens pk_ - usar token diretamente
+    const authHeader = sanitizedToken;
 
     const clickupUrl = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`;
 
-    console.log('🚀 Enviando pedido para ClickUp');
-    console.log('📦 Payload:', JSON.stringify(payload, null, 2));
-    console.log('🔐 Token (início/fim):', `${authHeader.substring(0, 4)}...${authHeader.substring(authHeader.length - 4)}`);
-    console.log('📋 List ID:', CLICKUP_LIST_ID);
-    console.log('🌐 URL:', clickupUrl);
+    // Logs obrigatórios antes da chamada
+    console.log('🚀 [CLICKUP] Iniciando criação de task');
+    console.log('🌐 [CLICKUP] URL final:', clickupUrl);
+    console.log('📋 [CLICKUP] List ID:', CLICKUP_LIST_ID);
+    console.log('🔐 [CLICKUP] Token (primeiros 10 chars):', authHeader.substring(0, 10) + '...');
+    console.log('📦 [CLICKUP] Payload:', JSON.stringify(payload, null, 2));
 
     const response = await fetch(clickupUrl, {
       method: 'POST',
       headers: {
-        Authorization: authHeader, // token único, sem workspace_id
+        Authorization: authHeader, // Token direto, SEM Bearer
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
     });
 
-    const text = await response.text();
+    // Ler resposta como texto primeiro
+    const responseText = await response.text();
     let result: any;
     try {
-      result = JSON.parse(text);
+      result = JSON.parse(responseText);
     } catch {
-      result = { raw: text };
+      result = { raw: responseText };
     }
 
-    console.log('📥 Resposta ClickUp:', {
-      status: response.status,
-      statusText: response.statusText,
-      body: result,
-    });
+    // Logs obrigatórios da resposta
+    console.log('📥 [CLICKUP] Status HTTP:', response.status);
+    console.log('📥 [CLICKUP] Status Text:', response.statusText);
+    console.log('📥 [CLICKUP] Body completo da resposta:', responseText);
 
     if (!response.ok) {
+      // Retornar erro real do ClickUp
+      console.error('❌ [CLICKUP] Erro ao criar task:', result);
       return {
-        statusCode: 500,
+        statusCode: response.status >= 400 && response.status < 500 ? response.status : 500,
         headers,
         body: JSON.stringify({
           success: false,
           error: 'Erro ao criar task no ClickUp',
-          details: result,
-          status: response.status,
-          statusText: response.statusText,
+          clickup_error: result,
+          http_status: response.status,
+          http_statusText: response.statusText,
         }),
       };
     }
 
+    // Sucesso
+    console.log('✅ [CLICKUP] Task criada com sucesso:', result.id);
     return {
       statusCode: 200,
       headers,
