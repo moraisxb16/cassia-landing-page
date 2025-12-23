@@ -95,16 +95,19 @@ Data da compra: ${data_compra || 'Não informado'}`;
     };
 
     // Preparar token no formato aceito pelo ClickUp
-    const sanitizedToken = CLICKUP_API_TOKEN.trim();
-    const authHeader = sanitizedToken.startsWith('pk_')
-      ? sanitizedToken
-      : (sanitizedToken.startsWith('Bearer ') ? sanitizedToken : `Bearer ${sanitizedToken}`);
-
-    console.log('🚀 Enviando pedido para ClickUp:', JSON.stringify(payload, null, 2));
-    console.log('🔐 Token (início/fim):', `${authHeader.substring(0, 4)}...${authHeader.substring(authHeader.length - 4)}`);
-    console.log('📋 List ID:', CLICKUP_LIST_ID);
+    // Token deve ser usado diretamente, sem espaços, sem Bearer (a menos que comece com pk_)
+    const sanitizedToken = CLICKUP_API_TOKEN.trim().replace(/\s+/g, '');
+    // ClickUp aceita token direto OU com pk_ no início
+    // NÃO adicionar Bearer se o token não começar com pk_
+    const authHeader = sanitizedToken.startsWith('pk_') ? sanitizedToken : sanitizedToken;
 
     const clickupUrl = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`;
+
+    console.log('🚀 Enviando pedido para ClickUp');
+    console.log('📦 Payload:', JSON.stringify(payload, null, 2));
+    console.log('🔐 Token (início/fim):', `${authHeader.substring(0, 4)}...${authHeader.substring(authHeader.length - 4)}`);
+    console.log('📋 List ID:', CLICKUP_LIST_ID);
+    console.log('🌐 URL:', clickupUrl);
 
     const response = await fetch(clickupUrl, {
       method: 'POST',
