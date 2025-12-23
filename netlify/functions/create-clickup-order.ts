@@ -95,11 +95,14 @@ Data da compra: ${data_compra || 'Não informado'}`;
     };
 
     // Preparar token no formato aceito pelo ClickUp
-    // Token deve ser usado diretamente, sem espaços, sem Bearer (a menos que comece com pk_)
+    // Token Personal API (pk_...) deve ser usado diretamente, sem Bearer
+    // Token OAuth deve ter Bearer antes
     const sanitizedToken = CLICKUP_API_TOKEN.trim().replace(/\s+/g, '');
-    // ClickUp aceita token direto OU com pk_ no início
-    // NÃO adicionar Bearer se o token não começar com pk_
-    const authHeader = sanitizedToken.startsWith('pk_') ? sanitizedToken : sanitizedToken;
+    // ClickUp Personal API Token (pk_...): usar diretamente
+    // ClickUp OAuth Token: adicionar Bearer
+    const authHeader = sanitizedToken.startsWith('pk_') 
+      ? sanitizedToken  // Personal API Token: usar direto
+      : `Bearer ${sanitizedToken}`; // OAuth Token: adicionar Bearer
 
     const clickupUrl = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`;
 
