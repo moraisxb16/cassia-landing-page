@@ -20,25 +20,37 @@ export const handler: Handler = async (event: HandlerEvent, _context: HandlerCon
     return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method Not Allowed' }) };
   }
 
+  // SEMPRE retornar 200 para não quebrar o checkout
+  // Mesmo se ClickUp falhar, o pagamento foi bem-sucedido
   try {
     const CLICKUP_API_TOKEN = process.env.CLICKUP_API_TOKEN;
-    const CLICKUP_LIST_ID = process.env.CLICKUP_LIST_ID || '6-901323245019-1';
+    let CLICKUP_LIST_ID_RAW = process.env.CLICKUP_LIST_ID || '6-901323245019-1';
 
-    if (!CLICKUP_API_TOKEN || !CLICKUP_LIST_ID) {
+    if (!CLICKUP_API_TOKEN || !CLICKUP_LIST_ID_RAW) {
       console.error('❌ Variáveis do ClickUp ausentes');
       return {
-        statusCode: 500,
+        statusCode: 200,
         headers,
-        body: JSON.stringify({ error: 'Configuração do ClickUp ausente' }),
+        body: JSON.stringify({ success: true, clickup: 'failed', error: 'Configuração do ClickUp ausente' }),
       };
     }
+
+    // Extrair apenas o ID numérico da lista (remover formato com hífen)
+    // Formato esperado: "6-901323245019-1" → "901323245019"
+    const CLICKUP_LIST_ID = CLICKUP_LIST_ID_RAW.includes('-')
+      ? CLICKUP_LIST_ID_RAW.split('-')[1] // Pega o meio: "6-901323245019-1" → "901323245019"
+      : CLICKUP_LIST_ID_RAW.replace(/\D/g, ''); // Remove tudo que não é número
 
     let data: any;
     try {
       data = JSON.parse(event.body || '{}');
     } catch (error) {
       console.error('❌ Body inválido:', error);
-      return { statusCode: 400, headers, body: JSON.stringify({ error: 'Body inválido' }) };
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ success: true, clickup: 'failed', error: 'Body inválido' }),
+      };
     }
 
     const {
@@ -56,9 +68,9 @@ export const handler: Handler = async (event: HandlerEvent, _context: HandlerCon
 
     if (!order_id || !nome_cliente) {
       return {
-        statusCode: 400,
+        statusCode: 200,
         headers,
-        body: JSON.stringify({ error: 'order_id e nome_cliente são obrigatórios' }),
+        body: JSON.stringify({ success: true, clickup: 'failed', error: 'order_id e nome_cliente são obrigatórios' }),
       };
     }
 
@@ -85,24 +97,40 @@ Forma de pagamento: ${forma_pagamento || 'Não informado'}
 Data da compra: ${data_compra || 'Não informado'}`;
 
     // Preparar token: Personal API Token (pk_...) deve ser usado DIRETAMENTE, SEM Bearer
-    const sanitizedToken = CLICKUP_API_TOKEN.trim().replace(/\s+/g, '');
-    const authHeader = sanitizedToken;
+    // NÃO usar "Bearer " antes do token
+    const authHeader = CLICKUP_API_TOKEN.trim().replace(/\s+/g, '');
 
     const clickupUrl = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`;
 
-    // Montar payload mínimo (sem status por enquanto - pode não existir na lista)
+    // Converter data de nascimento para timestamp em milissegundos (se existir)
+    let birthDateTimestamp: number | undefined;
+    if (data_nascimento) {
+      try {
+        // Aceitar formato YYYY-MM-DD ou DD/MM/YYYY
+        const dateStr = data_nascimento.includes('/')
+          ? data_nascimento.split('/').reverse().join('-') // DD/MM/YYYY → YYYY-MM-DD
+          : data_nascimento;
+        birthDateTimestamp = new Date(dateStr).getTime();
+        if (isNaN(birthDateTimestamp)) {
+          birthDateTimestamp = undefined;
+        }
+      } catch (e) {
+        console.warn('⚠️ [CLICKUP] Erro ao converter data de nascimento:', e);
+      }
+    }
+
+    // Montar payload mínimo conforme documentação ClickUp
     const payload: any = {
       name: `Pedido #${order_id} - ${nome_cliente}`,
       description,
+      status: 'EM PRODUÇÃO', // Status como string simples
+      priority: 3, // Normal priority
     };
 
-    // Adicionar status "EM PRODUÇÃO" (conforme status existente na lista)
-    // O status será testado e, se retornar erro, será removido
-    payload.status = 'EM PRODUÇÃO';
-
     // Headers da requisição
+    // Authorization: token direto, SEM "Bearer "
     const requestHeaders = {
-      Authorization: authHeader,
+      Authorization: authHeader, // Token direto: pk_xxx
       'Content-Type': 'application/json',
     };
 
@@ -137,8 +165,15 @@ Data da compra: ${data_compra || 'Não informado'}`;
     console.log('📥 [CLICKUP] Resposta bruta do ClickUp:', responseText);
 
     if (!response.ok) {
+      // SEMPRE retornar 200 - checkout não pode quebrar
+      console.error('❌ [CLICKUP] Erro ao criar task:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: result,
+      });
+
       // Se erro 400 e for relacionado ao status, tentar sem status
-      if (response.status === 400 && result.err && result.err.includes && result.err.includes('status')) {
+      if (response.status === 400 && result.err && typeof result.err === 'string' && result.err.includes('status')) {
         console.log('⚠️ [CLICKUP] Status não existe na lista, tentando sem status...');
         delete payload.status;
         
@@ -160,11 +195,13 @@ Data da compra: ${data_compra || 'Não informado'}`;
         console.log('📥 [CLICKUP] Retry - Resposta bruta:', retryText);
 
         if (!retryResponse.ok) {
+          // SEMPRE retornar 200 mesmo se retry falhar
           return {
-            statusCode: retryResponse.status >= 400 && retryResponse.status < 500 ? retryResponse.status : 500,
+            statusCode: 200,
             headers,
             body: JSON.stringify({
-              success: false,
+              success: true,
+              clickup: 'failed',
               error: retryResult.err || retryResult.error || 'Erro ao criar task no ClickUp',
               clickup_response: retryResult,
             }),
@@ -182,12 +219,13 @@ Data da compra: ${data_compra || 'Não informado'}`;
         };
       }
 
-      // Retornar erro real do ClickUp
+      // SEMPRE retornar 200 - checkout não pode quebrar
       return {
-        statusCode: response.status >= 400 && response.status < 500 ? response.status : 500,
+        statusCode: 200,
         headers,
         body: JSON.stringify({
-          success: false,
+          success: true,
+          clickup: 'failed',
           error: result.err || result.error || 'Erro ao criar task no ClickUp',
           clickup_response: result,
         }),
@@ -206,11 +244,17 @@ Data da compra: ${data_compra || 'Não informado'}`;
       }),
     };
   } catch (error) {
-    console.error('❌ Erro interno ClickUp:', error);
+    // SEMPRE retornar 200 - checkout não pode quebrar
+    console.error('❌ [CLICKUP] Erro interno:', error);
     return {
-      statusCode: 500,
+      statusCode: 200,
       headers,
-      body: JSON.stringify({ error: 'Erro interno', details: error instanceof Error ? error.message : String(error) }),
+      body: JSON.stringify({
+        success: true,
+        clickup: 'failed',
+        error: 'Erro interno',
+        details: error instanceof Error ? error.message : String(error),
+      }),
     };
   }
 };
