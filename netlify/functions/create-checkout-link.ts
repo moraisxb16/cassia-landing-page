@@ -201,10 +201,10 @@ export const handler: Handler = async (
     const cancelUrl = `${baseUrl}/pagamento/cancelado`;
 
     // Montar payload base conforme documentação
+    // NOTA: cancel_url pode não ser aceito pela API de checkout link
     const payload: any = {
       handle: cleanHandle,
       redirect_url: redirectUrl,
-      cancel_url: cancelUrl, // URL de cancelamento
       order_nsu: orderNsu,
     };
 
@@ -257,33 +257,23 @@ export const handler: Handler = async (
     // Adicionar + no início
     customer.phone_number = '+' + phoneNumber;
 
-    // CPF: remover pontos e traços (apenas números)
-    customer.cpf = body.customer.cpf.replace(/\D/g, '');
+    // CPF e birth_date podem não ser aceitos pela API de checkout link
+    // Apenas enviar se a API aceitar (testar sem primeiro)
+    // CPF: remover pontos e traços (apenas números) - COMENTADO POR ENQUANTO
+    // customer.cpf = body.customer.cpf.replace(/\D/g, '');
 
-    // birth_date: converter para formato YYYY-MM-DD
-    if (body.customer.birthDate) {
-      let birthDateStr = body.customer.birthDate.trim();
-      // Se vier no formato DD/MM/YYYY, converter para YYYY-MM-DD
-      if (birthDateStr.includes('/')) {
-        const parts = birthDateStr.split('/');
-        if (parts.length === 3) {
-          // DD/MM/YYYY → YYYY-MM-DD
-          birthDateStr = `${parts[2]}-${parts[1]}-${parts[0]}`;
-        }
-      }
-      // Se já vier no formato YYYY-MM-DD, usar direto
-      customer.birth_date = birthDateStr;
-    } else if (body.customer.birth_date) {
-      // Se vier como birth_date direto
-      let birthDateStr = body.customer.birth_date.trim();
-      if (birthDateStr.includes('/')) {
-        const parts = birthDateStr.split('/');
-        if (parts.length === 3) {
-          birthDateStr = `${parts[2]}-${parts[1]}-${parts[0]}`;
-        }
-      }
-      customer.birth_date = birthDateStr;
-    }
+    // birth_date: converter para formato YYYY-MM-DD - COMENTADO POR ENQUANTO
+    // A API de checkout link pode não aceitar birth_date
+    // if (body.customer.birthDate) {
+    //   let birthDateStr = body.customer.birthDate.trim();
+    //   if (birthDateStr.includes('/')) {
+    //     const parts = birthDateStr.split('/');
+    //     if (parts.length === 3) {
+    //       birthDateStr = `${parts[2]}-${parts[1]}-${parts[0]}`;
+    //     }
+    //   }
+    //   customer.birth_date = birthDateStr;
+    // }
 
     payload.customer = customer;
 
