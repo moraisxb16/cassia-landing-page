@@ -119,10 +119,25 @@ Data da compra: ${data_compra || 'Não informado'}`;
       }
     }
 
+    // Gerar número sequencial legível para o pedido
+    // Usa timestamp atual para gerar um número único e crescente
+    // Formato: timestamp em segundos desde 2024-01-01 (gera números sequenciais legíveis)
+    const baseTimestamp = new Date('2024-01-01').getTime() / 1000;
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const orderNumber = currentTimestamp - baseTimestamp; // Número crescente desde a data base
+    
+    // Nome da task: "Pedido X - Nome do Cliente" (sem UUID)
+    const taskName = `Pedido ${orderNumber} - ${nome_cliente}`;
+    
+    // Adicionar UUID na descrição (campo técnico, não no nome)
+    const descriptionWithUuid = `${description}
+
+🧾 Código Técnico (UUID): ${order_id}`;
+
     // Montar payload mínimo conforme documentação ClickUp
     const payload: any = {
-      name: `Pedido #${order_id} - ${nome_cliente}`,
-      description,
+      name: taskName,
+      description: descriptionWithUuid,
       status: 'EM PRODUÇÃO', // Status como string simples
       priority: 3, // Normal priority
     };
