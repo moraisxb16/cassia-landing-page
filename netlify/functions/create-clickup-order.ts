@@ -102,6 +102,84 @@ Data da compra: ${data_compra || 'Não informado'}`;
 
     const clickupUrl = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`;
 
+    // ============================================
+    // BUSCAR CUSTOM FIELDS DA LISTA
+    // ============================================
+    console.log('🔍 [CLICKUP] Buscando custom fields da lista...');
+    const customFieldsMap = new Map<string, { id: string; type: string }>();
+    try {
+      const fieldsResponse = await fetch(
+        `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/field`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: authHeader,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (fieldsResponse.ok) {
+        const fieldsData = await fieldsResponse.json();
+        if (fieldsData.fields && Array.isArray(fieldsData.fields)) {
+          fieldsData.fields.forEach((field: any) => {
+            const fieldName = field.name?.toLowerCase() || '';
+            // Mapear nomes dos campos (case-insensitive)
+            if (fieldName.includes('cpf')) {
+              customFieldsMap.set('cpf', { id: field.id, type: field.type });
+            } else if (fieldName.includes('data') && fieldName.includes('nascimento')) {
+              customFieldsMap.set('data_nascimento', { id: field.id, type: field.type });
+            } else if (fieldName.includes('endereço') || fieldName.includes('endereco')) {
+              customFieldsMap.set('endereco', { id: field.id, type: field.type });
+            } else if (fieldName.includes('forma') && fieldName.includes('pagamento')) {
+              customFieldsMap.set('forma_pagamento', { id: field.id, type: field.type });
+            } else if (fieldName.includes('produto')) {
+              customFieldsMap.set('produtos', { id: field.id, type: field.type });
+            } else if (fieldName.includes('telefone')) {
+              customFieldsMap.set('telefone', { id: field.id, type: field.type });
+            } else if (fieldName.includes('valor')) {
+              customFieldsMap.set('valor', { id: field.id, type: field.type });
+            }
+          });
+        }
+      }
+      console.log('✅ [CLICKUP] Custom fields encontrados:', customFieldsMap.size);
+    } catch (error) {
+      console.warn('⚠️ [CLICKUP] Erro ao buscar custom fields:', error);
+    }
+
+    // ============================================
+    // BUSCAR ÚLTIMA TASK PARA EXTRAIR NÚMERO SEQUENCIAL
+    // ============================================
+    let orderNumber = 1; // Default: começar em 1
+    try {
+      console.log('🔍 [CLICKUP] Buscando última task para número sequencial...');
+      const tasksResponse = await fetch(
+        `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task?order_by=created&reverse=true&page=0&limit=1`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: authHeader,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (tasksResponse.ok) {
+        const tasksData = await tasksResponse.json();
+        if (tasksData.tasks && tasksData.tasks.length > 0) {
+          const lastTaskName = tasksData.tasks[0].name || '';
+          const match = lastTaskName.match(/Pedido (\d+)/);
+          if (match && match[1]) {
+            orderNumber = parseInt(match[1], 10) + 1;
+            console.log('✅ [CLICKUP] Último pedido encontrado:', match[1], '→ Novo:', orderNumber);
+          }
+        }
+      }
+    } catch (error) {
+      console.warn('⚠️ [CLICKUP] Erro ao buscar última task, usando número 1:', error);
+    }
+
     // Converter data de nascimento para timestamp em milissegundos (se existir)
     let birthDateTimestamp: number | undefined;
     if (data_nascimento) {
@@ -119,13 +197,6 @@ Data da compra: ${data_compra || 'Não informado'}`;
       }
     }
 
-    // Gerar número sequencial legível para o pedido
-    // Usa timestamp atual para gerar um número único e crescente
-    // Formato: timestamp em segundos desde 2024-01-01 (gera números sequenciais legíveis)
-    const baseTimestamp = new Date('2024-01-01').getTime() / 1000;
-    const currentTimestamp = Math.floor(Date.now() / 1000);
-    const orderNumber = currentTimestamp - baseTimestamp; // Número crescente desde a data base
-    
     // Nome da task: "Pedido X - Nome do Cliente" (sem UUID)
     const taskName = `Pedido ${orderNumber} - ${nome_cliente}`;
     
@@ -247,8 +318,106 @@ Data da compra: ${data_compra || 'Não informado'}`;
       };
     }
 
-    // Sucesso
+    // Sucesso - Task criada
     console.log('✅ [CLICKUP] Task criada com sucesso:', result.id);
+
+    // ============================================
+    // PREENCHER CUSTOM FIELDS
+    // ============================================
+    if (customFieldsMap.size > 0 && result.id) {
+      console.log('🔧 [CLICKUP] Preenchendo custom fields...');
+      const taskId = result.id;
+
+      // Função auxiliar para preencher um custom field
+      const setCustomField = async (fieldKey: string, value: any) => {
+        const field = customFieldsMap.get(fieldKey);
+        if (!field) return;
+
+        try {
+          const fieldValue = typeof value === 'object' ? value : { value };
+          const fieldResponse = await fetch(
+            `https://api.clickup.com/api/v2/task/${taskId}/field/${field.id}`,
+            {
+              method: 'POST',
+              headers: {
+                Authorization: authHeader,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(fieldValue),
+            }
+          );
+
+          if (fieldResponse.ok) {
+            console.log(`✅ [CLICKUP] Campo "${fieldKey}" preenchido`);
+          } else {
+            console.warn(`⚠️ [CLICKUP] Erro ao preencher campo "${fieldKey}":`, await fieldResponse.text());
+          }
+        } catch (error) {
+          console.warn(`⚠️ [CLICKUP] Erro ao preencher campo "${fieldKey}":`, error);
+        }
+      };
+
+      // Preencher cada campo conforme o tipo
+      if (customFieldsMap.has('cpf')) {
+        // CPF: text
+        // Buscar CPF nos dados recebidos (pode vir em vários formatos)
+        // O frontend pode não estar enviando CPF ainda, então tentamos buscar de várias formas
+        const cpfRaw = data.cpf || data.cpf_cliente || '';
+        if (cpfRaw) {
+          const cpfValue = cpfRaw.replace(/\D/g, ''); // Apenas números
+          if (cpfValue.length >= 11) { // CPF válido tem 11 dígitos
+            await setCustomField('cpf', { value: cpfValue });
+          }
+        } else {
+          console.warn('⚠️ [CLICKUP] CPF não encontrado nos dados recebidos');
+        }
+      }
+
+      if (customFieldsMap.has('data_nascimento') && birthDateTimestamp) {
+        // Data de Nascimento: date (Unix timestamp em ms)
+        await setCustomField('data_nascimento', { value: birthDateTimestamp });
+      }
+
+      if (customFieldsMap.has('endereco') && endereco_completo) {
+        // Endereço Completo: text
+        await setCustomField('endereco', { value: endereco_completo });
+      }
+
+      if (customFieldsMap.has('forma_pagamento') && forma_pagamento) {
+        // Forma de Pagamento: text
+        await setCustomField('forma_pagamento', { value: forma_pagamento });
+      }
+
+      if (customFieldsMap.has('produtos') && listaProdutos) {
+        // Produtos: text
+        await setCustomField('produtos', { value: listaProdutos });
+      }
+
+      if (customFieldsMap.has('telefone') && telefone) {
+        // Telefone: phone
+        let phoneNumber = telefone.replace(/\D/g, '');
+        if (!phoneNumber.startsWith('55')) {
+          phoneNumber = '55' + phoneNumber;
+        }
+        await setCustomField('telefone', { value: '+' + phoneNumber });
+      }
+
+      if (customFieldsMap.has('valor') && valor_total) {
+        // Valor: currency (número em centavos)
+        // valor_total já vem formatado como "1,00" ou número
+        let valorCentavos: number;
+        if (typeof valor_total === 'string') {
+          // Se for string "1,00", converter para centavos
+          const valorLimpo = valor_total.replace(/[^\d,]/g, '').replace(',', '.');
+          valorCentavos = Math.round(parseFloat(valorLimpo) * 100);
+        } else {
+          // Se já for número, assumir que está em centavos ou converter
+          valorCentavos = Math.round(parseFloat(String(valor_total)));
+        }
+        await setCustomField('valor', { value: valorCentavos });
+      }
+    }
+
     return {
       statusCode: 200,
       headers,
@@ -256,6 +425,7 @@ Data da compra: ${data_compra || 'Não informado'}`;
         success: true,
         task_id: result.id,
         task_name: result.name,
+        order_number: orderNumber,
       }),
     };
   } catch (error) {
