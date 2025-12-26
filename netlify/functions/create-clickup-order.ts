@@ -373,9 +373,27 @@ Data da compra: ${data_compra || 'Não informado'}`;
         }
       }
 
-      if (customFieldsMap.has('data_nascimento') && birthDateTimestamp) {
-        // Data de Nascimento: date (Unix timestamp em ms)
-        await setCustomField('data_nascimento', { value: birthDateTimestamp });
+      if (customFieldsMap.has('data_nascimento')) {
+        // Data de Nascimento: date (Unix timestamp em MILISSEGUNDOS)
+        // Garantir que birthDateTimestamp está calculado corretamente
+        if (!birthDateTimestamp && data_nascimento) {
+          try {
+            // Aceitar formato YYYY-MM-DD ou DD/MM/YYYY
+            const dateStr = data_nascimento.includes('/')
+              ? data_nascimento.split('/').reverse().join('-') // DD/MM/YYYY → YYYY-MM-DD
+              : data_nascimento;
+            birthDateTimestamp = new Date(dateStr).getTime();
+            if (isNaN(birthDateTimestamp)) {
+              birthDateTimestamp = undefined;
+            }
+          } catch (e) {
+            console.warn('⚠️ [CLICKUP] Erro ao converter data de nascimento:', e);
+          }
+        }
+        if (birthDateTimestamp) {
+          // Enviar timestamp em milissegundos como NUMBER
+          await setCustomField('data_nascimento', { value: birthDateTimestamp });
+        }
       }
 
       if (customFieldsMap.has('endereco') && endereco_completo) {
@@ -383,14 +401,20 @@ Data da compra: ${data_compra || 'Não informado'}`;
         await setCustomField('endereco', { value: endereco_completo });
       }
 
-      if (customFieldsMap.has('forma_pagamento') && forma_pagamento) {
+      if (customFieldsMap.has('forma_pagamento')) {
         // Forma de Pagamento: text
-        await setCustomField('forma_pagamento', { value: forma_pagamento });
+        // Enviar valor simples: "PIX", "Cartão de Crédito", etc
+        if (forma_pagamento) {
+          await setCustomField('forma_pagamento', { value: forma_pagamento });
+        }
       }
 
-      if (customFieldsMap.has('produtos') && listaProdutos) {
+      if (customFieldsMap.has('produtos')) {
         // Produtos: text
-        await setCustomField('produtos', { value: listaProdutos });
+        // Usar listaProdutos que já está formatada (ex: "Produto Teste - R$ 1,00")
+        if (listaProdutos && listaProdutos !== 'Produto não especificado') {
+          await setCustomField('produtos', { value: listaProdutos });
+        }
       }
 
       if (customFieldsMap.has('telefone') && telefone) {
@@ -403,17 +427,20 @@ Data da compra: ${data_compra || 'Não informado'}`;
       }
 
       if (customFieldsMap.has('valor') && valor_total) {
-        // Valor: currency (número em centavos)
-        // valor_total já vem formatado como "1,00" ou número
+        // Valor: currency (número EM CENTAVOS)
+        // valor_total vem como string "1,00" do frontend (formato brasileiro)
         let valorCentavos: number;
         if (typeof valor_total === 'string') {
-          // Se for string "1,00", converter para centavos
+          // Converter "1,00" → 100 (centavos)
+          // Remove tudo exceto números e vírgula, substitui vírgula por ponto
           const valorLimpo = valor_total.replace(/[^\d,]/g, '').replace(',', '.');
-          valorCentavos = Math.round(parseFloat(valorLimpo) * 100);
+          const valorReais = parseFloat(valorLimpo);
+          valorCentavos = Math.round(valorReais * 100); // R$ 1,00 → 100 centavos
         } else {
-          // Se já for número, assumir que está em centavos ou converter
-          valorCentavos = Math.round(parseFloat(String(valor_total)));
+          // Se já for número, assumir que está em reais e converter para centavos
+          valorCentavos = Math.round(parseFloat(String(valor_total)) * 100);
         }
+        // Enviar como NUMBER, não string
         await setCustomField('valor', { value: valorCentavos });
       }
     }
