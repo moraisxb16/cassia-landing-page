@@ -74,7 +74,12 @@ export const handler: Handler = async (event: HandlerEvent, _context: HandlerCon
       };
     }
 
-    // Formatar lista de produtos para description
+    // Formatar lista de produtos para custom field (formato legível)
+    const listaProdutosFormatada = Array.isArray(produtos) && produtos.length > 0
+      ? produtos.map((p: any) => `${p.nome} (Qtd: ${p.quantidade}) - R$ ${p.valor}`).join('\n')
+      : 'Produto não especificado';
+    
+    // Formatar lista de produtos para description (formato original)
     const listaProdutos = Array.isArray(produtos) && produtos.length > 0
       ? produtos.map((p: any) => `${p.nome} - R$ ${p.valor}`).join('\n')
       : 'Produto não especificado';
@@ -373,26 +378,34 @@ Data da compra: ${data_compra || 'Não informado'}`;
         }
       }
 
-      if (customFieldsMap.has('data_nascimento')) {
+      if (customFieldsMap.has('data_nascimento') && data_nascimento) {
         // Data de Nascimento: date (Unix timestamp em MILISSEGUNDOS)
-        // Garantir que birthDateTimestamp está calculado corretamente
-        if (!birthDateTimestamp && data_nascimento) {
-          try {
-            // Aceitar formato YYYY-MM-DD ou DD/MM/YYYY
-            const dateStr = data_nascimento.includes('/')
-              ? data_nascimento.split('/').reverse().join('-') // DD/MM/YYYY → YYYY-MM-DD
-              : data_nascimento;
-            birthDateTimestamp = new Date(dateStr).getTime();
-            if (isNaN(birthDateTimestamp)) {
-              birthDateTimestamp = undefined;
+        try {
+          // Aceitar formato YYYY-MM-DD ou DD/MM/YYYY
+          let dateStr = data_nascimento.trim();
+          if (dateStr.includes('/')) {
+            // DD/MM/YYYY → YYYY-MM-DD
+            const parts = dateStr.split('/');
+            if (parts.length === 3) {
+              // Se ano tem 2 dígitos, assumir 20XX
+              let year = parts[2];
+              if (year.length === 2) {
+                year = '20' + year;
+              }
+              dateStr = `${year}-${parts[1]}-${parts[0]}`;
             }
-          } catch (e) {
-            console.warn('⚠️ [CLICKUP] Erro ao converter data de nascimento:', e);
           }
-        }
-        if (birthDateTimestamp) {
-          // Enviar timestamp em milissegundos como NUMBER
-          await setCustomField('data_nascimento', { value: birthDateTimestamp });
+          // Converter para timestamp em milissegundos
+          const timestamp = new Date(dateStr).getTime();
+          if (!isNaN(timestamp)) {
+            // Enviar como NUMBER (Unix timestamp em milissegundos)
+            await setCustomField('data_nascimento', { value: timestamp });
+            console.log(`✅ [CLICKUP] Data de nascimento enviada: ${dateStr} → ${timestamp}`);
+          } else {
+            console.warn('⚠️ [CLICKUP] Data de nascimento inválida:', data_nascimento);
+          }
+        } catch (e) {
+          console.warn('⚠️ [CLICKUP] Erro ao converter data de nascimento:', e);
         }
       }
 
@@ -403,17 +416,29 @@ Data da compra: ${data_compra || 'Não informado'}`;
 
       if (customFieldsMap.has('forma_pagamento')) {
         // Forma de Pagamento: text
-        // Enviar valor simples: "PIX", "Cartão de Crédito", etc
+        // Enviar valor simples: "pix", "Cartão de Crédito", etc
         if (forma_pagamento) {
-          await setCustomField('forma_pagamento', { value: forma_pagamento });
+          // Normalizar para minúsculas se necessário
+          const formaPagamentoNormalizada = forma_pagamento.toLowerCase().includes('pix')
+            ? 'pix'
+            : forma_pagamento.toLowerCase().includes('cartão') || forma_pagamento.toLowerCase().includes('cartao')
+            ? 'Cartão de Crédito'
+            : forma_pagamento;
+          await setCustomField('forma_pagamento', { value: formaPagamentoNormalizada });
+          console.log(`✅ [CLICKUP] Forma de pagamento enviada: ${formaPagamentoNormalizada}`);
+        } else {
+          console.warn('⚠️ [CLICKUP] Forma de pagamento não encontrada nos dados');
         }
       }
 
       if (customFieldsMap.has('produtos')) {
         // Produtos: text
-        // Usar listaProdutos que já está formatada (ex: "Produto Teste - R$ 1,00")
-        if (listaProdutos && listaProdutos !== 'Produto não especificado') {
-          await setCustomField('produtos', { value: listaProdutos });
+        // Usar listaProdutosFormatada (ex: "Produto Teste (Qtd: 1) - R$ 1,00")
+        if (listaProdutosFormatada && listaProdutosFormatada !== 'Produto não especificado') {
+          await setCustomField('produtos', { value: listaProdutosFormatada });
+          console.log(`✅ [CLICKUP] Produtos enviados: ${listaProdutosFormatada}`);
+        } else {
+          console.warn('⚠️ [CLICKUP] Lista de produtos vazia ou inválida');
         }
       }
 
@@ -427,21 +452,27 @@ Data da compra: ${data_compra || 'Não informado'}`;
       }
 
       if (customFieldsMap.has('valor') && valor_total) {
-        // Valor: currency (número EM CENTAVOS)
+        // Valor: currency (número decimal, ex: 1.00 para R$ 1,00)
         // valor_total vem como string "1,00" do frontend (formato brasileiro)
-        let valorCentavos: number;
+        let valorDecimal: number;
         if (typeof valor_total === 'string') {
-          // Converter "1,00" → 100 (centavos)
+          // Converter "1,00" → 1.00 (number decimal)
           // Remove tudo exceto números e vírgula, substitui vírgula por ponto
           const valorLimpo = valor_total.replace(/[^\d,]/g, '').replace(',', '.');
-          const valorReais = parseFloat(valorLimpo);
-          valorCentavos = Math.round(valorReais * 100); // R$ 1,00 → 100 centavos
+          valorDecimal = parseFloat(valorLimpo);
+          if (isNaN(valorDecimal)) {
+            valorDecimal = 0;
+          }
         } else {
-          // Se já for número, assumir que está em reais e converter para centavos
-          valorCentavos = Math.round(parseFloat(String(valor_total)) * 100);
+          // Se já for número, usar direto (assumir que está em reais)
+          valorDecimal = parseFloat(String(valor_total));
+          if (isNaN(valorDecimal)) {
+            valorDecimal = 0;
+          }
         }
-        // Enviar como NUMBER, não string
-        await setCustomField('valor', { value: valorCentavos });
+        // Enviar como NUMBER decimal (1.00), NÃO multiplicar por 100
+        await setCustomField('valor', { value: valorDecimal });
+        console.log(`✅ [CLICKUP] Valor enviado: ${valor_total} → ${valorDecimal}`);
       }
     }
 
