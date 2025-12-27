@@ -167,12 +167,11 @@ export const handler: Handler = async (
     }
 
     // Validar customer obrigatório com campos mínimos
-    // NOTA: CPF não é obrigatório aqui pois não é enviado para InfinitePay (pode causar 422)
-    if (!body.customer || !body.customer.name || !body.customer.email || !body.customer.phone) {
+    if (!body.customer || !body.customer.name || !body.customer.email || !body.customer.phone || !body.customer.cpf) {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: 'Customer obrigatório com name, email e phone' }),
+        body: JSON.stringify({ error: 'Customer obrigatório com name, email, phone e cpf' }),
       };
     }
 
@@ -199,9 +198,10 @@ export const handler: Handler = async (
     const origin = event.headers.origin || event.headers.referer || 'https://cassiacorviniy.com.br';
     const baseUrl = origin.replace(/\/$/, '');
     const redirectUrl = `${baseUrl}/pagamento/sucesso`;
+    const cancelUrl = `${baseUrl}/pagamento/cancelado`;
 
     // Montar payload base conforme documentação
-    // NOTA: cancel_url removido para evitar erro 422
+    // NOTA: cancel_url pode causar erro 422 - remover se necessário
     const payload: any = {
       handle: cleanHandle,
       redirect_url: redirectUrl,
