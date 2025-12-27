@@ -167,11 +167,12 @@ export const handler: Handler = async (
     }
 
     // Validar customer obrigatório com campos mínimos
-    if (!body.customer || !body.customer.name || !body.customer.email || !body.customer.phone || !body.customer.cpf) {
+    // NOTA: CPF não é obrigatório aqui pois não é enviado para InfinitePay (pode causar 422)
+    if (!body.customer || !body.customer.name || !body.customer.email || !body.customer.phone) {
       return {
         statusCode: 400,
         headers,
-        body: JSON.stringify({ error: 'Customer obrigatório com name, email, phone e cpf' }),
+        body: JSON.stringify({ error: 'Customer obrigatório com name, email e phone' }),
       };
     }
 
@@ -198,10 +199,9 @@ export const handler: Handler = async (
     const origin = event.headers.origin || event.headers.referer || 'https://cassiacorviniy.com.br';
     const baseUrl = origin.replace(/\/$/, '');
     const redirectUrl = `${baseUrl}/pagamento/sucesso`;
-    const cancelUrl = `${baseUrl}/pagamento/cancelado`;
 
     // Montar payload base conforme documentação
-    // NOTA: cancel_url pode causar erro 422 - remover se necessário
+    // NOTA: cancel_url removido para evitar erro 422
     const payload: any = {
       handle: cleanHandle,
       redirect_url: redirectUrl,
@@ -270,7 +270,7 @@ export const handler: Handler = async (
     // ADDRESS (opcional conforme documentação)
     // ============================================
     // A documentação exige address como objeto com:
-    // - cep: string (apenas números)
+    // - cep: string (apenas números, exatamente 8 dígitos)
     // - number: string
     // - complement: string (opcional)
     // ============================================
@@ -278,8 +278,18 @@ export const handler: Handler = async (
       const address: any = {};
       
       if (body.address.zip) {
-        // CEP: apenas números
-        address.cep = body.address.zip.replace(/\D/g, '');
+        // CEP: apenas números, limitar a 8 dígitos (formato brasileiro)
+        let cep = body.address.zip.replace(/\D/g, '');
+        // Se tiver mais de 8 dígitos, pegar apenas os primeiros 8
+        if (cep.length > 8) {
+          cep = cep.substring(0, 8);
+        }
+        // Só adicionar se tiver exatamente 8 dígitos
+        if (cep.length === 8) {
+          address.cep = cep;
+        } else {
+          console.warn('⚠️ [INFINITEPAY] CEP inválido (deve ter 8 dígitos):', body.address.zip);
+        }
       }
       
       if (body.address.number) {
@@ -296,10 +306,12 @@ export const handler: Handler = async (
         address.complement = complementParts.join(', ');
       }
       
-      // Só adicionar address se tiver CEP E number juntos (obrigatório)
+      // Só adicionar address se tiver CEP válido (8 dígitos) E number juntos (obrigatório)
       // InfinitePay exige ambos os campos
-      if (address.cep && address.number) {
+      if (address.cep && address.cep.length === 8 && address.number) {
         payload.address = address;
+      } else {
+        console.warn('⚠️ [INFINITEPAY] Address não adicionado - CEP ou number inválido');
       }
     }
 
