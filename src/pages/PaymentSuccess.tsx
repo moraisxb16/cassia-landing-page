@@ -134,6 +134,7 @@ export function PaymentSuccess() {
         nome_cliente: pendingOrder.customer.name,
         email: pendingOrder.customer.email || '',
         telefone: pendingOrder.customer.phone || '',
+        cpf: pendingOrder.customer.cpf || '', // Adicionar CPF ao payload
         data_nascimento: pendingOrder.customer.birthDate || '',
         endereco_completo: fullAddress,
         produtos,
