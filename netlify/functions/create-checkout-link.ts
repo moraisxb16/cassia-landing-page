@@ -201,10 +201,10 @@ export const handler: Handler = async (
     const cancelUrl = `${baseUrl}/pagamento/cancelado`;
 
     // Montar payload base conforme documentação
+    // NOTA: cancel_url pode causar erro 422 - remover se necessário
     const payload: any = {
       handle: cleanHandle,
       redirect_url: redirectUrl,
-      cancel_url: cancelUrl,
       order_nsu: orderNsu,
     };
 
@@ -260,34 +260,10 @@ export const handler: Handler = async (
     // Adicionar + no início
     customer.phone_number = '+' + phoneNumber;
 
-    // CPF: remover pontos e traços (apenas números)
-    if (body.customer.cpf) {
-      customer.cpf = body.customer.cpf.replace(/\D/g, '');
-    }
-
-    // birth_date: converter para formato YYYY-MM-DD e validar
-    if (body.customer.birthDate || body.customer.birth_date) {
-      const rawDate = body.customer.birthDate || body.customer.birth_date;
-      if (rawDate) {
-        let birthDateStr = rawDate.trim();
-        
-        // Se vier no formato DD/MM/YYYY, converter para YYYY-MM-DD
-        if (birthDateStr.includes('/')) {
-          const parts = birthDateStr.split('/');
-          if (parts.length === 3) {
-            // DD/MM/YYYY → YYYY-MM-DD
-            birthDateStr = `${parts[2]}-${parts[1]}-${parts[0]}`;
-          }
-        }
-        
-        // Validar formato YYYY-MM-DD antes de enviar
-        // Se não passar no regex, NÃO envia o campo (evita erro 422)
-        if (birthDateStr && /^\d{4}-\d{2}-\d{2}$/.test(birthDateStr)) {
-          customer.birth_date = birthDateStr;
-        }
-      }
-    }
-
+    // CPF e birth_date podem não ser aceitos pela API de checkout link
+    // Remover para evitar erro 422
+    // Esses dados serão enviados apenas para o ClickUp após o pagamento
+    
     payload.customer = customer;
 
     // ============================================
