@@ -130,22 +130,43 @@ Data da compra: ${data_compra || 'Não informado'}`;
         if (fieldsData.fields && Array.isArray(fieldsData.fields)) {
           fieldsData.fields.forEach((field: any) => {
             const fieldName = field.name?.toLowerCase() || '';
+            
+            // Para dropdown, buscar opções em diferentes propriedades possíveis
+            let options: any[] = [];
+            if (field.type === 'drop_down') {
+              options = field.type_config?.options || 
+                       field.dropdown_options || 
+                       field.options || 
+                       [];
+            }
+            
             // Mapear nomes dos campos (case-insensitive)
-            // Para dropdown, também armazenar as opções
             if (fieldName.includes('cpf')) {
-              customFieldsMap.set('cpf', { id: field.id, type: field.type, options: field.options });
+              customFieldsMap.set('cpf', { id: field.id, type: field.type, options });
             } else if (fieldName.includes('data') && fieldName.includes('nascimento')) {
-              customFieldsMap.set('data_nascimento', { id: field.id, type: field.type, options: field.options });
+              customFieldsMap.set('data_nascimento', { id: field.id, type: field.type, options });
             } else if (fieldName.includes('endereço') || fieldName.includes('endereco')) {
-              customFieldsMap.set('endereco', { id: field.id, type: field.type, options: field.options });
+              customFieldsMap.set('endereco', { id: field.id, type: field.type, options });
             } else if (fieldName.includes('forma') && fieldName.includes('pagamento')) {
-              customFieldsMap.set('forma_pagamento', { id: field.id, type: field.type, options: field.options });
+              customFieldsMap.set('forma_pagamento', { id: field.id, type: field.type, options });
+              // Log detalhado para debug do dropdown
+              if (field.type === 'drop_down') {
+                console.log('🔍 [CLICKUP] Campo Forma de Pagamento (dropdown) encontrado:', {
+                  field_id: field.id,
+                  field_name: field.name,
+                  options_count: options.length,
+                  options: options.map((o: any) => ({ 
+                    id: o.id || o.option_id, 
+                    name: o.name || o.label || o.value 
+                  }))
+                });
+              }
             } else if (fieldName.includes('produto')) {
-              customFieldsMap.set('produtos', { id: field.id, type: field.type, options: field.options });
+              customFieldsMap.set('produtos', { id: field.id, type: field.type, options });
             } else if (fieldName.includes('telefone')) {
-              customFieldsMap.set('telefone', { id: field.id, type: field.type, options: field.options });
+              customFieldsMap.set('telefone', { id: field.id, type: field.type, options });
             } else if (fieldName.includes('valor')) {
-              customFieldsMap.set('valor', { id: field.id, type: field.type, options: field.options });
+              customFieldsMap.set('valor', { id: field.id, type: field.type, options });
             }
           });
         }
@@ -384,7 +405,7 @@ Data da compra: ${data_compra || 'Não informado'}`;
 
       if (customFieldsMap.has('data_nascimento') && data_nascimento) {
         // Data de Nascimento: date (Unix timestamp em MILISSEGUNDOS)
-        // IMPORTANTE: usar timezone do Brasil (-03:00) para garantir data correta
+        // IMPORTANTE: usar UTC (Z) para garantir data correta no ClickUp
         try {
           // Aceitar formato YYYY-MM-DD ou DD/MM/YYYY
           let dateStr = data_nascimento.trim();
@@ -396,7 +417,7 @@ Data da compra: ${data_compra || 'Não informado'}`;
               let month = parts[1].padStart(2, '0');
               let year = parts[2];
               
-              // Se ano tem 2 dígitos, assumir 20XX (ex: 04 → 2004)
+              // Se ano tem 2 dígitos, assumir 20XX (ex: 00 → 2000, 04 → 2004)
               if (year.length === 2) {
                 const yearNum = parseInt(year, 10);
                 // Se ano for <= 30, assumir 20XX, senão 19XX
@@ -412,9 +433,10 @@ Data da compra: ${data_compra || 'Não informado'}`;
           if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
             console.warn('⚠️ [CLICKUP] Data de nascimento em formato inválido:', data_nascimento);
           } else {
-            // Converter para timestamp em milissegundos usando timezone do Brasil
-            // Usar T00:00:00-03:00 para garantir que é meia-noite no horário de Brasília
-            const timestamp = new Date(`${dateStr}T00:00:00-03:00`).getTime();
+            // Converter para timestamp em milissegundos usando UTC
+            // Usar T00:00:00.000Z para garantir que é meia-noite em UTC
+            // Exemplo: "2000-10-12" → 971308800000
+            const timestamp = new Date(`${dateStr}T00:00:00.000Z`).getTime();
             if (!isNaN(timestamp) && timestamp > 0) {
               // Enviar como NUMBER (Unix timestamp em milissegundos)
               await setCustomField('data_nascimento', { value: timestamp });
@@ -434,19 +456,37 @@ Data da compra: ${data_compra || 'Não informado'}`;
       }
 
       if (customFieldsMap.has('forma_pagamento')) {
-        // Forma de Pagamento: drop_down (precisa do ID da opção, não texto)
+        // Forma de Pagamento: pode ser drop_down ou short_text
         if (forma_pagamento) {
           const field = customFieldsMap.get('forma_pagamento');
-          if (field && field.options && Array.isArray(field.options)) {
-            // Normalizar forma de pagamento para buscar opção correspondente
+          
+          // Verificar se é dropdown (tem opções)
+          if (field && field.type === 'drop_down' && field.options && Array.isArray(field.options) && field.options.length > 0) {
+            // CENÁRIO B: Campo é drop_down - precisa do ID da opção
             const formaPagamentoLower = forma_pagamento.toLowerCase();
             let optionId: string | undefined;
             
             // Buscar opção que corresponda à forma de pagamento
             for (const option of field.options) {
-              const optionName = (option.name || option.label || '').toLowerCase();
+              // Buscar nome da opção em diferentes propriedades
+              const optionName = (
+                option.name || 
+                option.label || 
+                option.label_text ||
+                String(option.value || '')
+              ).toLowerCase();
+              
+              // Buscar ID da opção em diferentes propriedades
+              const optionIdValue = 
+                option.id || 
+                option.option_id || 
+                option.value ||
+                option.orderindex; // Algumas APIs retornam orderindex como ID
+              
+              // Buscar correspondência exata ou parcial
               if (
                 (formaPagamentoLower.includes('pix') && optionName.includes('pix')) ||
+                (formaPagamentoLower === 'pix' && optionName === 'pix') ||
                 (formaPagamentoLower.includes('cartão') && optionName.includes('cartão')) ||
                 (formaPagamentoLower.includes('cartao') && optionName.includes('cartao')) ||
                 (formaPagamentoLower.includes('crédito') && optionName.includes('crédito')) ||
@@ -454,7 +494,8 @@ Data da compra: ${data_compra || 'Não informado'}`;
                 (formaPagamentoLower.includes('débito') && optionName.includes('débito')) ||
                 (formaPagamentoLower.includes('debito') && optionName.includes('debito'))
               ) {
-                optionId = option.id || option.option_id;
+                optionId = String(optionIdValue); // Garantir que é string
+                console.log(`🔍 [CLICKUP] Opção encontrada: "${optionName}" → ID: ${optionId}`);
                 break;
               }
             }
@@ -462,15 +503,27 @@ Data da compra: ${data_compra || 'Não informado'}`;
             if (optionId) {
               // Enviar ID da opção do dropdown
               await setCustomField('forma_pagamento', { value: optionId });
-              console.log(`✅ [CLICKUP] Forma de pagamento enviada (ID): ${optionId} (${forma_pagamento})`);
+              console.log(`✅ [CLICKUP] Forma de pagamento enviada (dropdown ID): ${optionId} (${forma_pagamento})`);
             } else {
               console.warn('⚠️ [CLICKUP] Opção de pagamento não encontrada no dropdown:', forma_pagamento);
-              console.warn('⚠️ [CLICKUP] Opções disponíveis:', field.options.map((o: any) => o.name || o.label));
+              console.warn('⚠️ [CLICKUP] Opções disponíveis:', field.options.map((o: any) => ({ name: o.name || o.label, id: o.id || o.option_id })));
             }
           } else {
-            // Se não for dropdown, tentar como text (fallback)
-            await setCustomField('forma_pagamento', { value: forma_pagamento });
-            console.log(`✅ [CLICKUP] Forma de pagamento enviada (text): ${forma_pagamento}`);
+            // CENÁRIO A: Campo é short_text ou text - enviar texto diretamente
+            // Normalizar para formato padrão
+            let valorEnviar = forma_pagamento;
+            const formaPagamentoLower = forma_pagamento.toLowerCase();
+            
+            if (formaPagamentoLower.includes('pix')) {
+              valorEnviar = 'PIX';
+            } else if (formaPagamentoLower.includes('cartão') || formaPagamentoLower.includes('cartao') || formaPagamentoLower.includes('crédito') || formaPagamentoLower.includes('credito')) {
+              valorEnviar = 'Cartão de Crédito';
+            } else if (formaPagamentoLower.includes('débito') || formaPagamentoLower.includes('debito')) {
+              valorEnviar = 'Cartão de Débito';
+            }
+            
+            await setCustomField('forma_pagamento', { value: valorEnviar });
+            console.log(`✅ [CLICKUP] Forma de pagamento enviada (text): ${valorEnviar} (tipo: ${field?.type || 'text'})`);
           }
         } else {
           console.warn('⚠️ [CLICKUP] Forma de pagamento não encontrada nos dados');
