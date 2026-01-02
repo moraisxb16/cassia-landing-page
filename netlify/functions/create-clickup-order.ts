@@ -167,6 +167,8 @@ Data da compra: ${data_compra || 'Não informado'}`;
               customFieldsMap.set('telefone', { id: field.id, type: field.type, options });
             } else if (fieldName.includes('valor')) {
               customFieldsMap.set('valor', { id: field.id, type: field.type, options });
+            } else if ((fieldName.includes('número') || fieldName.includes('numero') || fieldName.includes('número do pedido') || fieldName.includes('numero do pedido')) && (fieldName.includes('pedido') || fieldName.includes('order'))) {
+              customFieldsMap.set('numero_pedido', { id: field.id, type: field.type, options });
             }
           });
         }
@@ -177,35 +179,54 @@ Data da compra: ${data_compra || 'Não informado'}`;
     }
 
     // ============================================
-    // BUSCAR ÚLTIMA TASK PARA EXTRAIR NÚMERO SEQUENCIAL
+    // BUSCAR TODAS AS TASKS PARA CALCULAR PRÓXIMO NÚMERO SEQUENCIAL
     // ============================================
     let orderNumber = 1; // Default: começar em 1
     try {
-      console.log('🔍 [CLICKUP] Buscando última task para número sequencial...');
-      const tasksResponse = await fetch(
-        `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task?order_by=created&reverse=true&page=0&limit=1`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: authHeader,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      if (tasksResponse.ok) {
-        const tasksData = await tasksResponse.json();
-        if (tasksData.tasks && tasksData.tasks.length > 0) {
-          const lastTaskName = tasksData.tasks[0].name || '';
-          const match = lastTaskName.match(/Pedido (\d+)/);
-          if (match && match[1]) {
-            orderNumber = parseInt(match[1], 10) + 1;
-            console.log('✅ [CLICKUP] Último pedido encontrado:', match[1], '→ Novo:', orderNumber);
+      console.log('🔍 [CLICKUP] Buscando todas as tasks para calcular número sequencial...');
+      
+      // Buscar todas as tasks da lista (com paginação se necessário)
+      // A API do ClickUp retorna até 100 tasks por página
+      let totalTasks = 0;
+      let page = 0;
+      let hasMore = true;
+      
+      while (hasMore) {
+        const tasksResponse = await fetch(
+          `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task?page=${page}&limit=100`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: authHeader,
+              'Content-Type': 'application/json',
+            },
           }
+        );
+
+        if (tasksResponse.ok) {
+          const tasksData = await tasksResponse.json();
+          if (tasksData.tasks && Array.isArray(tasksData.tasks)) {
+            totalTasks += tasksData.tasks.length;
+            
+            // Se retornou menos de 100, não há mais páginas
+            if (tasksData.tasks.length < 100) {
+              hasMore = false;
+            } else {
+              page++;
+            }
+          } else {
+            hasMore = false;
+          }
+        } else {
+          hasMore = false;
         }
       }
+      
+      // Próximo número = total de tasks existentes + 1
+      orderNumber = totalTasks + 1;
+      console.log(`✅ [CLICKUP] Total de tasks encontradas: ${totalTasks} → Próximo número: ${orderNumber}`);
     } catch (error) {
-      console.warn('⚠️ [CLICKUP] Erro ao buscar última task, usando número 1:', error);
+      console.warn('⚠️ [CLICKUP] Erro ao buscar tasks, usando número 1:', error);
     }
 
     // Nome da task: "Pedido X - Nome do Cliente" (sem UUID)
@@ -580,6 +601,19 @@ Data da compra: ${data_compra || 'Não informado'}`;
         // Enviar como NUMBER decimal (1.00), NÃO multiplicar por 100
         await setCustomField('valor', { value: valorDecimal });
         console.log(`✅ [CLICKUP] Valor enviado: ${valor_total} → ${valorDecimal}`);
+      }
+
+      // Preencher Número do Pedido (opcional, mas recomendado para auditoria)
+      if (customFieldsMap.has('numero_pedido')) {
+        // O tipo pode ser number ou text, dependendo da configuração no ClickUp
+        const field = customFieldsMap.get('numero_pedido');
+        if (field && field.type === 'number') {
+          await setCustomField('numero_pedido', { value: orderNumber });
+        } else {
+          // Se for text, enviar como string
+          await setCustomField('numero_pedido', { value: String(orderNumber) });
+        }
+        console.log(`✅ [CLICKUP] Número do pedido salvo: ${orderNumber}`);
       }
     }
 
