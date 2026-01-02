@@ -57,37 +57,48 @@ const courses: Course[] = [
   },
   // ATENDIMENTOS
   {
-    id: 'atendimento-mesa-radionica',
-    name: 'Atendimento Individual Mesa Radiônica Dragonlight',
+    id: 'mesa-radionica-dragonlight',
+    name: 'Mesa Radiônica Dragonlight',
     description: 'Ferramenta de autoconhecimento que atua em três pilares: limpeza energética em todos os níveis, fortalecimento da verdadeira identidade e cocriação dos desejos do coração. Trabalho sutil e profundo, com reflexos no campo físico, emocional e espiritual.',
     price: 630.00,
-    image: 'https://i.postimg.cc/0j5s5Wj6/Whats-App-Image-2025-12-11-at-12-05-36.jpg', // Imagem genérica conforme especificado
+    image: 'https://i.ibb.co/yc6CSBbC/Whats-App-Image-2025-12-26-at-11-03-29.jpg',
     type: 'service',
     category: 'service',
     format: 'Individual',
     gradient: 'from-[var(--cassia-gold)] to-[var(--cassia-gold-light)]',
   },
   {
-    id: 'atendimento-terapeutico-individual',
-    name: 'Atendimento Terapêutico Individual',
-    description: 'Atendimento direcionado à necessidade do cliente, com foco em clareza, organização emocional e ações práticas. Utiliza Aromaterapia, Reiki e exercícios sistêmicos.',
-    price: 470.00,
-    image: 'https://i.postimg.cc/0j5s5Wj6/Whats-App-Image-2025-12-11-at-12-05-36.jpg',
+    id: 'dragon-coaching',
+    name: 'Dragon Coaching',
+    description: 'Atendimento de coaching com ferramentas energéticas Dragonlight para acelerar resultados, trabalhando intenção e clareza energética.',
+    price: 0, // Valor a ser definido
+    image: 'https://i.ibb.co/S4BXv22Y/Whats-App-Image-2025-12-26-at-11-03-29-1.jpg',
     type: 'service',
     category: 'service',
     format: 'Individual',
     gradient: 'from-[var(--cassia-lavender)] to-[var(--cassia-purple)]',
   },
   {
-    id: 'pacote-5-atendimentos',
-    name: 'Pacote 5 Atendimentos Terapêuticos',
-    description: '5 sessões de atendimento terapêutico com economia significativa. Ideal para acompanhamento contínuo e transformação profunda. Economia de R$ 975,00 comparado ao valor avulso.',
-    price: 1375.00,
-    image: defaultCourseImage,
+    id: 'mesa-burgundy-conexoes-familiares',
+    name: 'Mesa Burgundy – Conexões Familiares',
+    description: 'Trabalho profundo de conexão e cura familiar através da Mesa Burgundy, abordando padrões ancestrais e fortalecendo vínculos familiares.',
+    price: 0, // Valor a ser definido
+    image: 'https://i.ibb.co/tT0qgwvz/Whats-App-Image-2025-12-26-at-11-03-29-2.jpg',
     type: 'service',
     category: 'service',
-    format: 'Pacote (R$ 275,00 cada)',
+    format: 'Individual',
     gradient: 'from-[var(--cassia-purple)] to-[var(--cassia-gold)]',
+  },
+  {
+    id: 'mesa-dourada',
+    name: 'Mesa Dourada',
+    description: 'Atendimento com a Mesa Dourada, ferramenta de alta vibração para expansão espiritual e manifestação de desejos do coração.',
+    price: 0, // Valor a ser definido
+    image: 'https://i.ibb.co/b5849Yy3/Whats-App-Image-2025-12-26-at-11-03-29-3.jpg',
+    type: 'service',
+    category: 'service',
+    format: 'Individual',
+    gradient: 'from-[var(--cassia-gold)] to-[var(--cassia-purple-dark)]',
   },
   // MENTORIA
   {

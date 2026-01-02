@@ -20,120 +20,175 @@ const placeholderImage = 'https://images.unsplash.com/photo-1608571424634-58ae03
 
 const products: Record<string, SimpleProduct[]> = {
   oils: [
+    // ÓLEOS ESSENCIAIS - ORGANICS LIFE
     {
-      id: 'produto-teste',
-      name: 'Produto Teste',
-      description: 'Produto de teste para validação do sistema de pagamento. Valor: R$ 1,00',
-      price: 1,
+      id: 'oil-lavanda',
+      name: 'Óleo Essencial de Lavanda',
+      description: 'Óleo essencial de lavanda da marca ORGANICS LIFE. Relaxamento profundo e equilíbrio emocional.',
+      price: 58.30,
       rating: 5,
-      isTestProduct: true,
-      image: placeholderImage,
+      image: 'https://i.ibb.co/QFcYr6Q8/Whats-App-Image-2025-12-26-at-11-03-29-4.jpg',
     },
     {
       id: 'oil-alecrim',
-      name: 'Óleo Essencial de Alecrim – 10ml (Organics Life)',
-      description: 'Estimula clareza mental e proteção energética.',
+      name: 'Óleo Essencial de Alecrim – 10ml',
+      description: 'Óleo essencial de alecrim da marca ORGANICS LIFE. Estimula clareza mental e proteção energética.',
       price: 40.70,
       rating: 5,
-      image: 'https://i.postimg.cc/htYPyBjr/Whats-App-Image-2025-11-27-at-09-03-11.jpg',
-    },
-    {
-      id: 'oil-cipreste',
-      name: 'Óleo Essencial de Cipreste – 10ml',
-      description: 'Aromaterapia para equilíbrio e conexão espiritual.',
-      price: 52.80,
-      rating: 5,
-      image: placeholderImage,
-    },
-    {
-      id: 'oil-eucalipto',
-      name: 'Óleo Essencial de Eucalipto Globulus – 10ml',
-      description: 'Purificação e clareza respiratória.',
-      price: 33.00,
-      rating: 5,
-      image: placeholderImage,
+      image: 'https://i.ibb.co/JRS1bdjK/Whats-App-Image-2025-12-26-at-11-03-30-4.jpg',
     },
     {
       id: 'oil-manjericao',
       name: 'Óleo Essencial de Manjericão – 5ml',
-      description: 'Foco mental e proteção energética.',
+      description: 'Óleo essencial de manjericão da marca ORGANICS LIFE. Foco mental e proteção energética.',
       price: 30.80,
       rating: 5,
-      image: placeholderImage,
+      image: 'https://i.ibb.co/JFmyVzqZ/Whats-App-Image-2025-12-26-at-11-03-30-1.jpg',
+    },
+    {
+      id: 'oil-eucalipto',
+      name: 'Óleo Essencial de Eucalipto Globulus – 10ml',
+      description: 'Óleo essencial de eucalipto globulus da marca ORGANICS LIFE. Purificação e clareza respiratória.',
+      price: 33.00,
+      rating: 5,
+      image: 'https://i.ibb.co/QjP0PDHr/Whats-App-Image-2025-12-26-at-11-03-30-3.jpg',
+    },
+    {
+      id: 'oil-cipreste',
+      name: 'Óleo Essencial de Cipreste – 10ml',
+      description: 'Óleo essencial de cipreste da marca ORGANICS LIFE. Aromaterapia para equilíbrio e conexão espiritual.',
+      price: 52.80,
+      rating: 5,
+      image: 'https://i.ibb.co/7ckLQ3n/Whats-App-Image-2025-12-26-at-11-03-30-6.jpg',
     },
     {
       id: 'oil-tea-tree',
       name: 'Óleo Essencial de Tea Tree (Melaleuca) – 10ml',
-      description: 'Purificação e proteção natural.',
+      description: 'Óleo essencial de tea tree da marca ORGANICS LIFE. Purificação e proteção natural.',
       price: 52.80,
       rating: 5,
-      image: placeholderImage,
+      image: 'https://i.ibb.co/qMx92Rz9/Whats-App-Image-2025-12-26-at-11-03-31.jpg',
+    },
+    // ÓLEOS ESSENCIAIS - LASZLO
+    {
+      id: 'oil-limao-siciliano',
+      name: 'OE Limão Siciliano',
+      description: 'Óleo essencial de limão siciliano da marca LASZLO.',
+      price: 50.60,
+      rating: 5,
+      image: 'https://i.ibb.co/wFhQ5pjD/Whats-App-Image-2025-12-26-at-11-03-31-1.jpg',
     },
     {
-      id: 'oil-lavanda',
-      name: 'Óleo Essencial de Lavanda – 10ml',
-      description: 'Relaxamento profundo e equilíbrio emocional.',
-      price: 58.30,
+      id: 'oil-copaiba',
+      name: 'OE Copaíba',
+      description: 'Óleo essencial de copaíba da marca LASZLO.',
+      price: 53.90,
       rating: 5,
-      image: placeholderImage,
+      image: 'https://i.ibb.co/CKTG8pwq/Whats-App-Image-2025-12-26-at-11-03-31-2.jpg',
+    },
+    {
+      id: 'oil-camomila-romana',
+      name: 'OE Camomila Romana',
+      description: 'Óleo essencial de camomila romana da marca LASZLO.',
+      price: 95.70,
+      rating: 5,
+      image: 'https://i.ibb.co/hxkhL0fx/Whats-App-Image-2025-12-26-at-11-03-31-3.jpg',
+    },
+    {
+      id: 'oil-vetiver',
+      name: 'OE Vetiver – 5ml',
+      description: 'Óleo essencial de vetiver da marca LASZLO.',
+      price: 196.90,
+      rating: 5,
+      image: 'https://i.ibb.co/3yPWgK2M/Whats-App-Image-2025-12-26-at-11-03-31-4.jpg',
+    },
+    {
+      id: 'oil-tomilho-branco',
+      name: 'OE Tomilho Branco',
+      description: 'Óleo essencial de tomilho branco da marca LASZLO.',
+      price: 64.90,
+      rating: 5,
+      image: 'https://i.ibb.co/3yPWgK2M/Whats-App-Image-2025-12-26-at-11-03-31-4.jpg',
+    },
+    {
+      id: 'oil-cedro-atlas',
+      name: 'OE Cedro do Atlas',
+      description: 'Óleo essencial de cedro do atlas da marca LASZLO.',
+      price: 71.50,
+      rating: 5,
+      image: 'https://i.ibb.co/G321V15Y/Whats-App-Image-2025-12-26-at-11-03-32.jpg',
     },
   ],
   sprays: [
     {
-      id: 'spray-antigosma',
-      name: 'Spray Antigosma – 140ml (Dragon Essências)',
-      description: 'Limpeza energética profunda para ambientes e auras.',
-      price: 108.00,
-      pixPrice: 98.00,
-      rating: 5,
-      image: placeholderImage,
-    },
-    {
-      id: 'spray-guardiao',
-      name: 'Spray Guardião – 140ml (Dragon Essências)',
-      description: 'Proteção contra energias negativas e olho gordo.',
-      price: 108.00,
-      pixPrice: 98.00,
-      rating: 5,
-      image: placeholderImage,
-    },
-    {
-      id: 'spray-liberta',
-      name: 'Spray Liberta – 140ml (Dragon Essências)',
-      description: 'Libertação e transmutação energética.',
-      price: 108.00,
-      pixPrice: 98.00,
-      rating: 5,
-      image: placeholderImage,
-    },
-    {
       id: 'kit-sprays',
-      name: 'Kit Sprays: Limpeza, Proteção e Nutrindo o Feminino',
-      description: 'Kit completo com três sprays essenciais para sua jornada.',
+      name: 'Kit Sprays – Limpeza, Proteção e Nutrindo o Feminino',
+      description: 'Kit completo com três sprays essenciais para sua jornada: limpeza energética, proteção e nutrição do feminino.',
       price: 89.00,
       pixPrice: 80.00,
       rating: 5,
-      image: placeholderImage,
+      image: 'https://i.ibb.co/JWSzyvRd/Whats-App-Image-2025-12-26-at-11-03-30-5.jpg',
     },
   ],
-  crystals: [
+  crystals: [],
+  books: [
     {
-      id: 'crystal-quartzo-verde',
-      name: 'Cristal Quartzo Verde',
-      description: 'Cristal de cura e equilíbrio energético.',
-      price: 11.00,
+      id: 'livro-aromaterapia-cada-dia',
+      name: 'Aromaterapia para Cada Dia',
+      description: 'Livro da marca LASZLO sobre aromaterapia prática para o dia a dia.',
+      price: 88.00,
       rating: 5,
-      image: placeholderImage,
+      image: 'https://i.ibb.co/xthy4dG6/Whats-App-Image-2025-12-26-at-11-03-32-1.jpg',
+    },
+    {
+      id: 'livro-aromaterapia-medica',
+      name: 'Aromaterapia Médica',
+      description: 'Livro da marca LASZLO sobre aplicações médicas da aromaterapia.',
+      price: 90.20,
+      rating: 5,
+      image: 'https://i.ibb.co/n85Mpwf5/Whats-App-Image-2025-12-26-at-11-03-32-2.jpg',
+    },
+    {
+      id: 'livro-alienigenas-passado',
+      name: 'Alienígenas do Passado',
+      description: 'Livro da marca LASZLO sobre história e mistérios antigos.',
+      price: 88.00,
+      rating: 5,
+      image: 'https://i.ibb.co/Kp7t3dpW/Whats-App-Image-2025-12-26-at-11-03-32-3.jpg',
+    },
+    {
+      id: 'livro-aromaterapia-cura-oleos',
+      name: 'Aromaterapia – A Cura pelos Óleos Essenciais',
+      description: 'Livro da marca LASZLO sobre cura através dos óleos essenciais.',
+      price: 90.20,
+      rating: 5,
+      image: 'https://i.ibb.co/qMXkqzkt/Whats-App-Image-2025-12-26-at-11-03-32-4.jpg',
+    },
+    {
+      id: 'livro-cuidando-filhos-oleos',
+      name: 'Cuidando dos Filhos com Óleos Essenciais',
+      description: 'Livro da marca LASZLO sobre uso seguro de óleos essenciais com crianças.',
+      price: 96.80,
+      rating: 5,
+      image: 'https://i.ibb.co/gLhPTPrZ/Whats-App-Image-2025-12-26-at-11-03-32-5.jpg',
+    },
+    {
+      id: 'livro-cura-vibracional',
+      name: 'Cura Vibracional',
+      description: 'Livro da marca LASZLO sobre cura através de frequências vibracionais.',
+      price: 71.50,
+      rating: 5,
+      image: 'https://i.ibb.co/CK2hCCmZ/Whats-App-Image-2025-12-26-at-11-03-33.jpg',
     },
   ],
   other: [
     {
       id: 'luminaria-aromatizador',
-      name: 'Luminária Aromatizador Drift',
-      description: 'Luminária aromatizadora para criar ambientes harmoniosos e energizados.',
+      name: 'Luminária Aromatizador de Ambiente',
+      description: 'Luminária aromatizadora da marca DRIFT para criar ambientes harmoniosos e energizados.',
       price: 298.00,
       rating: 5,
-      image: placeholderImage,
+      image: 'https://i.ibb.co/NdzrNP95/Whats-App-Image-2025-12-26-at-11-03-30.jpg',
     },
   ],
 };
@@ -280,40 +335,39 @@ export function Products() {
 
         <Tabs defaultValue="oils" className="w-full">
           <TabsList 
-            className="grid w-full max-w-2xl mx-auto grid-cols-4 mb-12 bg-[var(--cassia-surface)]/95 backdrop-blur-sm border border-[var(--cassia-border-soft)] p-1"
+            className="grid w-full max-w-4xl mx-auto grid-cols-5 mb-12 bg-[var(--cassia-surface)]/95 backdrop-blur-sm border border-[var(--cassia-border-soft)] p-1"
             style={{ boxShadow: 'var(--shadow-soft)' }}
           >
             {[
               { value: 'oils', label: 'Óleos' },
               { value: 'sprays', label: 'Sprays' },
+              { value: 'books', label: 'Livros' },
               { value: 'crystals', label: 'Cristais' },
               { value: 'other', label: 'Outros' },
-            ].map((tab) => (
-              <TabsTrigger 
-                key={tab.value}
-                value={tab.value}
-                className="data-[state=active]:bg-[var(--cassia-purple)] data-[state=active]:text-white text-[var(--cassia-purple-dark)]/80 rounded-md"
-              >
-                {tab.label}
-              </TabsTrigger>
-            ))}
+            ]
+              .filter((tab) => products[tab.value] && products[tab.value].length > 0)
+              .map((tab) => (
+                <TabsTrigger 
+                  key={tab.value}
+                  value={tab.value}
+                  className="data-[state=active]:bg-[var(--cassia-purple)] data-[state=active]:text-white text-[var(--cassia-purple-dark)]/80 rounded-md"
+                >
+                  {tab.label}
+                </TabsTrigger>
+              ))}
           </TabsList>
 
-          {(['oils', 'sprays', 'crystals', 'other'] as const).map((key) => (
-            <TabsContent key={key} value={key}>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {products[key]
-                  .filter((product) => {
-                    // Filtrar produto de teste se necessário
-                    const showTestProducts = true; // Pode ser alterado para false em produção
-                    return showTestProducts || !product.isTestProduct;
-                  })
-                  .map((product, i) => (
+          {(['oils', 'sprays', 'books', 'crystals', 'other'] as const)
+            .filter((key) => products[key] && products[key].length > 0)
+            .map((key) => (
+              <TabsContent key={key} value={key}>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {products[key].map((product, i) => (
                     <ProductCard key={product.id} product={product} index={i} />
                   ))}
-              </div>
-            </TabsContent>
-          ))}
+                </div>
+              </TabsContent>
+            ))}
         </Tabs>
       </div>
     </section>
