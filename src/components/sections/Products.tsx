@@ -238,14 +238,14 @@ function ProductCard({ product, index }: ProductCardProps) {
         className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
         style={{ boxShadow: 'var(--shadow-soft)' }}
       >
-        <div className="relative h-72 overflow-hidden bg-[var(--cassia-surface)]/50 flex items-center justify-center">
+        <div className="relative w-full h-[220px] flex items-center justify-center bg-[#f6f1f8] overflow-hidden">
           <ImageWithFallback
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-700"
+            className="max-w-full max-h-full object-contain p-4 group-hover:scale-105 transition-transform duration-700"
           />
-          {/* Gradient overlay místico */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--cassia-purple)]/20 via-transparent to-transparent opacity-50" />
+          {/* Gradient overlay sutil */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--cassia-purple)]/10 via-transparent to-transparent pointer-events-none" />
 
           {/* Rating badge */}
           <motion.div
@@ -368,7 +368,7 @@ export function Products() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              Ferramentas – Óleos Essenciais
+              Óleos Essenciais
             </motion.h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {products.oils.map((product, i) => (
@@ -387,7 +387,7 @@ export function Products() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              Ferramentas – Sprays
+              Sprays
             </motion.h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {products.sprays.map((product, i) => (
@@ -406,7 +406,7 @@ export function Products() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              Ferramentas – Livros
+              Livros
             </motion.h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {products.books.map((product, i) => (
@@ -425,7 +425,7 @@ export function Products() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              Ferramentas – Outros Produtos
+              Outros Produtos
             </motion.h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {products.other.map((product, i) => (

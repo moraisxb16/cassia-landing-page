@@ -145,13 +145,13 @@ export function Courses() {
         className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
         style={{ boxShadow: 'var(--shadow-soft)' }}
       >
-        <div className="relative h-56 overflow-hidden bg-[var(--cassia-surface)]/50 flex items-center justify-center">
+        <div className="relative w-full h-[280px] flex items-center justify-center bg-[#f6f1f8] overflow-hidden">
           <ImageWithFallback
             src={course.image}
             alt={course.name}
-            className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-700"
+            className="max-w-full max-h-full object-contain p-4 group-hover:scale-105 transition-transform duration-700"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--cassia-purple)]/20 via-transparent to-transparent opacity-50" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--cassia-purple)]/10 via-transparent to-transparent pointer-events-none" />
           
           {course.level && (
             <motion.div
