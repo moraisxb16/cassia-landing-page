@@ -208,23 +208,6 @@ Data da compra: ${data_compra || 'Não informado'}`;
       console.warn('⚠️ [CLICKUP] Erro ao buscar última task, usando número 1:', error);
     }
 
-    // Converter data de nascimento para timestamp em milissegundos (se existir)
-    let birthDateTimestamp: number | undefined;
-    if (data_nascimento) {
-      try {
-        // Aceitar formato YYYY-MM-DD ou DD/MM/YYYY
-        const dateStr = data_nascimento.includes('/')
-          ? data_nascimento.split('/').reverse().join('-') // DD/MM/YYYY → YYYY-MM-DD
-          : data_nascimento;
-        birthDateTimestamp = new Date(dateStr).getTime();
-        if (isNaN(birthDateTimestamp)) {
-          birthDateTimestamp = undefined;
-        }
-      } catch (e) {
-        console.warn('⚠️ [CLICKUP] Erro ao converter data de nascimento:', e);
-      }
-    }
-
     // Nome da task: "Pedido X - Nome do Cliente" (sem UUID)
     const taskName = `Pedido ${orderNumber} - ${nome_cliente}`;
     
@@ -404,46 +387,42 @@ Data da compra: ${data_compra || 'Não informado'}`;
       }
 
       if (customFieldsMap.has('data_nascimento') && data_nascimento) {
-        // Data de Nascimento: date (Unix timestamp em MILISSEGUNDOS)
-        // IMPORTANTE: usar UTC (Z) para garantir data correta no ClickUp
+        // Data de Nascimento: converter para DD/MM/YYYY (string com ano completo)
         try {
-          // Aceitar formato YYYY-MM-DD ou DD/MM/YYYY
           let dateStr = data_nascimento.trim();
-          if (dateStr.includes('/')) {
-            // DD/MM/YYYY ou DD/MM/YY → YYYY-MM-DD
+          let formattedDate: string | null = null;
+          
+          // Se já está em formato ISO (YYYY-MM-DD)
+          if (dateStr.includes('-') && !dateStr.includes('/')) {
+            const [year, month, day] = dateStr.split('-');
+            formattedDate = `${day}/${month}/${year}`;
+          } 
+          // Se está em formato DD/MM/YYYY ou DD/MM/YY
+          else if (dateStr.includes('/')) {
             const parts = dateStr.split('/');
             if (parts.length === 3) {
               let day = parts[0].padStart(2, '0');
               let month = parts[1].padStart(2, '0');
               let year = parts[2];
               
-              // Se ano tem 2 dígitos, assumir 20XX (ex: 00 → 2000, 04 → 2004)
+              // Se ano tem 2 dígitos, converter para 4 dígitos
               if (year.length === 2) {
                 const yearNum = parseInt(year, 10);
                 // Se ano for <= 30, assumir 20XX, senão 19XX
                 year = yearNum <= 30 ? '20' + year : '19' + year;
               }
               
-              // Garantir formato YYYY-MM-DD
-              dateStr = `${year}-${month}-${day}`;
+              // Garantir formato DD/MM/YYYY
+              formattedDate = `${day}/${month}/${year}`;
             }
           }
           
-          // Validar formato YYYY-MM-DD
-          if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-            console.warn('⚠️ [CLICKUP] Data de nascimento em formato inválido:', data_nascimento);
+          if (formattedDate && /^\d{2}\/\d{2}\/\d{4}$/.test(formattedDate)) {
+            // Enviar como string DD/MM/YYYY
+            await setCustomField('data_nascimento', { value: formattedDate });
+            console.log(`✅ [CLICKUP] Data de nascimento enviada: ${data_nascimento} → ${formattedDate}`);
           } else {
-            // Converter para timestamp em milissegundos usando UTC
-            // Usar T00:00:00.000Z para garantir que é meia-noite em UTC
-            // Exemplo: "2000-10-12" → 971308800000
-            const timestamp = new Date(`${dateStr}T00:00:00.000Z`).getTime();
-            if (!isNaN(timestamp) && timestamp > 0) {
-              // Enviar como NUMBER (Unix timestamp em milissegundos)
-              await setCustomField('data_nascimento', { value: timestamp });
-              console.log(`✅ [CLICKUP] Data de nascimento enviada: ${data_nascimento} → ${dateStr} → ${timestamp}`);
-            } else {
-              console.warn('⚠️ [CLICKUP] Data de nascimento inválida (timestamp inválido):', data_nascimento);
-            }
+            console.warn('⚠️ [CLICKUP] Data de nascimento em formato inválido:', data_nascimento);
           }
         } catch (e) {
           console.warn('⚠️ [CLICKUP] Erro ao converter data de nascimento:', e);
@@ -505,8 +484,25 @@ Data da compra: ${data_compra || 'Não informado'}`;
               await setCustomField('forma_pagamento', { value: optionId });
               console.log(`✅ [CLICKUP] Forma de pagamento enviada (dropdown ID): ${optionId} (${forma_pagamento})`);
             } else {
+              // Fallback: se não encontrar no dropdown, tentar enviar como texto
               console.warn('⚠️ [CLICKUP] Opção de pagamento não encontrada no dropdown:', forma_pagamento);
               console.warn('⚠️ [CLICKUP] Opções disponíveis:', field.options.map((o: any) => ({ name: o.name || o.label, id: o.id || o.option_id })));
+              console.log('🔄 [CLICKUP] Tentando enviar como texto (fallback)...');
+              
+              // Normalizar para formato padrão
+              let valorEnviar = forma_pagamento;
+              const formaPagamentoLower = forma_pagamento.toLowerCase();
+              
+              if (formaPagamentoLower.includes('pix')) {
+                valorEnviar = 'PIX';
+              } else if (formaPagamentoLower.includes('cartão') || formaPagamentoLower.includes('cartao') || formaPagamentoLower.includes('crédito') || formaPagamentoLower.includes('credito')) {
+                valorEnviar = 'Cartão de Crédito';
+              } else if (formaPagamentoLower.includes('débito') || formaPagamentoLower.includes('debito')) {
+                valorEnviar = 'Cartão de Débito';
+              }
+              
+              await setCustomField('forma_pagamento', { value: valorEnviar });
+              console.log(`✅ [CLICKUP] Forma de pagamento enviada (text fallback): ${valorEnviar}`);
             }
           } else {
             // CENÁRIO A: Campo é short_text ou text - enviar texto diretamente
@@ -534,17 +530,18 @@ Data da compra: ${data_compra || 'Não informado'}`;
         // Produtos: text (deve ser string, não array/objeto)
         if (Array.isArray(produtos) && produtos.length > 0) {
           // Formatar produtos como string legível
-          // Formato: "Produto Teste (Qtd: 1) - R$ 1,00"
+          // Formato: "Produto Teste (1x) - R$ 1,00"
           const produtosTexto = produtos
-            .map((p: any) => `${p.nome} (Qtd: ${p.quantidade}) - R$ ${p.valor}`)
-            .join('\n'); // Quebra de linha para múltiplos produtos
+            .map((p: any) => `${p.nome} (${p.quantidade}x) - R$ ${p.valor}`)
+            .join(', '); // Separar por vírgula para múltiplos produtos
           
           await setCustomField('produtos', { value: produtosTexto });
           console.log(`✅ [CLICKUP] Produtos enviados: ${produtosTexto}`);
         } else if (listaProdutosFormatada && listaProdutosFormatada !== 'Produto não especificado') {
-          // Fallback: usar lista formatada se produtos não for array
-          // Converter formato "Produto Teste (Qtd: 1) - R$ 1,00" se necessário
-          const produtosTexto = listaProdutosFormatada.replace(/\(Qtd:/g, '(Qtd:');
+          // Fallback: converter formato existente para o formato correto
+          const produtosTexto = listaProdutosFormatada
+            .replace(/\(Qtd: (\d+)\)/g, '($1x)') // Converter (Qtd: 1) para (1x)
+            .replace(/\n/g, ', '); // Substituir quebras de linha por vírgula
           await setCustomField('produtos', { value: produtosTexto });
           console.log(`✅ [CLICKUP] Produtos enviados (fallback): ${produtosTexto}`);
         } else {
