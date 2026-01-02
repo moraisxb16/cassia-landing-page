@@ -3,7 +3,6 @@ import { Button } from '../ui/button';
 import { Card, CardContent, CardFooter } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { ShoppingBag, Star, Sparkles } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { motion } from 'motion/react';
 import { ImageWithFallback } from '../shared/ImageWithFallback';
 import { useCart } from '../../cart/useCart';
@@ -23,8 +22,8 @@ const products: Record<string, SimpleProduct[]> = {
     // ÓLEOS ESSENCIAIS - ORGANICS LIFE
     {
       id: 'oil-lavanda',
-      name: 'Óleo Essencial de Lavanda',
-      description: 'Óleo essencial de lavanda da marca ORGANICS LIFE. Relaxamento profundo e equilíbrio emocional.',
+      name: 'Óleo Essencial de Lavanda – 10ml',
+      description: 'ORGANICS LIFE – Relaxamento profundo e equilíbrio emocional.',
       price: 58.30,
       rating: 5,
       image: 'https://i.ibb.co/QFcYr6Q8/Whats-App-Image-2025-12-26-at-11-03-29-4.jpg',
@@ -32,7 +31,7 @@ const products: Record<string, SimpleProduct[]> = {
     {
       id: 'oil-alecrim',
       name: 'Óleo Essencial de Alecrim – 10ml',
-      description: 'Óleo essencial de alecrim da marca ORGANICS LIFE. Estimula clareza mental e proteção energética.',
+      description: 'ORGANICS LIFE – Estimula clareza mental e proteção energética.',
       price: 40.70,
       rating: 5,
       image: 'https://i.ibb.co/JRS1bdjK/Whats-App-Image-2025-12-26-at-11-03-30-4.jpg',
@@ -40,7 +39,7 @@ const products: Record<string, SimpleProduct[]> = {
     {
       id: 'oil-manjericao',
       name: 'Óleo Essencial de Manjericão – 5ml',
-      description: 'Óleo essencial de manjericão da marca ORGANICS LIFE. Foco mental e proteção energética.',
+      description: 'ORGANICS LIFE – Foco mental e proteção energética.',
       price: 30.80,
       rating: 5,
       image: 'https://i.ibb.co/JFmyVzqZ/Whats-App-Image-2025-12-26-at-11-03-30-1.jpg',
@@ -48,7 +47,7 @@ const products: Record<string, SimpleProduct[]> = {
     {
       id: 'oil-eucalipto',
       name: 'Óleo Essencial de Eucalipto Globulus – 10ml',
-      description: 'Óleo essencial de eucalipto globulus da marca ORGANICS LIFE. Purificação e clareza respiratória.',
+      description: 'ORGANICS LIFE – Purificação e clareza respiratória.',
       price: 33.00,
       rating: 5,
       image: 'https://i.ibb.co/QjP0PDHr/Whats-App-Image-2025-12-26-at-11-03-30-3.jpg',
@@ -56,7 +55,7 @@ const products: Record<string, SimpleProduct[]> = {
     {
       id: 'oil-cipreste',
       name: 'Óleo Essencial de Cipreste – 10ml',
-      description: 'Óleo essencial de cipreste da marca ORGANICS LIFE. Aromaterapia para equilíbrio e conexão espiritual.',
+      description: 'ORGANICS LIFE – Aromaterapia para equilíbrio e conexão espiritual.',
       price: 52.80,
       rating: 5,
       image: 'https://i.ibb.co/7ckLQ3n/Whats-App-Image-2025-12-26-at-11-03-30-6.jpg',
@@ -64,7 +63,7 @@ const products: Record<string, SimpleProduct[]> = {
     {
       id: 'oil-tea-tree',
       name: 'Óleo Essencial de Tea Tree (Melaleuca) – 10ml',
-      description: 'Óleo essencial de tea tree da marca ORGANICS LIFE. Purificação e proteção natural.',
+      description: 'ORGANICS LIFE – Purificação e proteção natural.',
       price: 52.80,
       rating: 5,
       image: 'https://i.ibb.co/qMx92Rz9/Whats-App-Image-2025-12-26-at-11-03-31.jpg',
@@ -73,7 +72,7 @@ const products: Record<string, SimpleProduct[]> = {
     {
       id: 'oil-limao-siciliano',
       name: 'OE Limão Siciliano',
-      description: 'Óleo essencial de limão siciliano da marca LASZLO.',
+      description: 'LASZLO',
       price: 50.60,
       rating: 5,
       image: 'https://i.ibb.co/wFhQ5pjD/Whats-App-Image-2025-12-26-at-11-03-31-1.jpg',
@@ -81,7 +80,7 @@ const products: Record<string, SimpleProduct[]> = {
     {
       id: 'oil-copaiba',
       name: 'OE Copaíba',
-      description: 'Óleo essencial de copaíba da marca LASZLO.',
+      description: 'LASZLO',
       price: 53.90,
       rating: 5,
       image: 'https://i.ibb.co/CKTG8pwq/Whats-App-Image-2025-12-26-at-11-03-31-2.jpg',
@@ -89,7 +88,7 @@ const products: Record<string, SimpleProduct[]> = {
     {
       id: 'oil-camomila-romana',
       name: 'OE Camomila Romana',
-      description: 'Óleo essencial de camomila romana da marca LASZLO.',
+      description: 'LASZLO',
       price: 95.70,
       rating: 5,
       image: 'https://i.ibb.co/hxkhL0fx/Whats-App-Image-2025-12-26-at-11-03-31-3.jpg',
@@ -97,7 +96,7 @@ const products: Record<string, SimpleProduct[]> = {
     {
       id: 'oil-vetiver',
       name: 'OE Vetiver – 5ml',
-      description: 'Óleo essencial de vetiver da marca LASZLO.',
+      description: 'LASZLO',
       price: 196.90,
       rating: 5,
       image: 'https://i.ibb.co/3yPWgK2M/Whats-App-Image-2025-12-26-at-11-03-31-4.jpg',
@@ -105,7 +104,7 @@ const products: Record<string, SimpleProduct[]> = {
     {
       id: 'oil-tomilho-branco',
       name: 'OE Tomilho Branco',
-      description: 'Óleo essencial de tomilho branco da marca LASZLO.',
+      description: 'LASZLO',
       price: 64.90,
       rating: 5,
       image: 'https://i.ibb.co/3yPWgK2M/Whats-App-Image-2025-12-26-at-11-03-31-4.jpg',
@@ -113,7 +112,7 @@ const products: Record<string, SimpleProduct[]> = {
     {
       id: 'oil-cedro-atlas',
       name: 'OE Cedro do Atlas',
-      description: 'Óleo essencial de cedro do atlas da marca LASZLO.',
+      description: 'LASZLO',
       price: 71.50,
       rating: 5,
       image: 'https://i.ibb.co/G321V15Y/Whats-App-Image-2025-12-26-at-11-03-32.jpg',
@@ -121,9 +120,36 @@ const products: Record<string, SimpleProduct[]> = {
   ],
   sprays: [
     {
+      id: 'spray-antigosma',
+      name: 'Spray Ambiente Antigosma – 140ml',
+      description: 'DRAGON ESSÊNCIAS – Limpeza energética profunda para ambientes e auras.',
+      price: 108.00,
+      pixPrice: 98.00,
+      rating: 5,
+      image: placeholderImage,
+    },
+    {
+      id: 'spray-guardiao',
+      name: 'Spray Ambiente Guardião – 140ml',
+      description: 'DRAGON ESSÊNCIAS – Proteção contra energias negativas e olho gordo.',
+      price: 108.00,
+      pixPrice: 98.00,
+      rating: 5,
+      image: placeholderImage,
+    },
+    {
+      id: 'spray-liberta',
+      name: 'Spray Ambiente Liberta – 140ml',
+      description: 'DRAGON ESSÊNCIAS – Libertação e transmutação energética.',
+      price: 108.00,
+      pixPrice: 98.00,
+      rating: 5,
+      image: placeholderImage,
+    },
+    {
       id: 'kit-sprays',
       name: 'Kit Sprays – Limpeza, Proteção e Nutrindo o Feminino',
-      description: 'Kit completo com três sprays essenciais para sua jornada: limpeza energética, proteção e nutrição do feminino.',
+      description: 'Kit completo com três sprays essenciais para sua jornada.',
       price: 89.00,
       pixPrice: 80.00,
       rating: 5,
@@ -135,7 +161,7 @@ const products: Record<string, SimpleProduct[]> = {
     {
       id: 'livro-aromaterapia-cada-dia',
       name: 'Aromaterapia para Cada Dia',
-      description: 'Livro da marca LASZLO sobre aromaterapia prática para o dia a dia.',
+      description: 'LASZLO',
       price: 88.00,
       rating: 5,
       image: 'https://i.ibb.co/xthy4dG6/Whats-App-Image-2025-12-26-at-11-03-32-1.jpg',
@@ -143,31 +169,31 @@ const products: Record<string, SimpleProduct[]> = {
     {
       id: 'livro-aromaterapia-medica',
       name: 'Aromaterapia Médica',
-      description: 'Livro da marca LASZLO sobre aplicações médicas da aromaterapia.',
+      description: 'LASZLO',
       price: 90.20,
       rating: 5,
       image: 'https://i.ibb.co/n85Mpwf5/Whats-App-Image-2025-12-26-at-11-03-32-2.jpg',
     },
     {
-      id: 'livro-alienigenas-passado',
-      name: 'Alienígenas do Passado',
-      description: 'Livro da marca LASZLO sobre história e mistérios antigos.',
-      price: 88.00,
-      rating: 5,
-      image: 'https://i.ibb.co/Kp7t3dpW/Whats-App-Image-2025-12-26-at-11-03-32-3.jpg',
-    },
-    {
       id: 'livro-aromaterapia-cura-oleos',
-      name: 'Aromaterapia – A Cura pelos Óleos Essenciais',
-      description: 'Livro da marca LASZLO sobre cura através dos óleos essenciais.',
+      name: 'Aromaterapia: A Cura pelos Óleos Essenciais',
+      description: 'LASZLO',
       price: 90.20,
       rating: 5,
       image: 'https://i.ibb.co/qMXkqzkt/Whats-App-Image-2025-12-26-at-11-03-32-4.jpg',
     },
     {
+      id: 'livro-alienigenas-passado',
+      name: 'Alienígenas do Passado',
+      description: 'LASZLO',
+      price: 88.00,
+      rating: 5,
+      image: 'https://i.ibb.co/Kp7t3dpW/Whats-App-Image-2025-12-26-at-11-03-32-3.jpg',
+    },
+    {
       id: 'livro-cuidando-filhos-oleos',
       name: 'Cuidando dos Filhos com Óleos Essenciais',
-      description: 'Livro da marca LASZLO sobre uso seguro de óleos essenciais com crianças.',
+      description: 'LASZLO',
       price: 96.80,
       rating: 5,
       image: 'https://i.ibb.co/gLhPTPrZ/Whats-App-Image-2025-12-26-at-11-03-32-5.jpg',
@@ -175,7 +201,7 @@ const products: Record<string, SimpleProduct[]> = {
     {
       id: 'livro-cura-vibracional',
       name: 'Cura Vibracional',
-      description: 'Livro da marca LASZLO sobre cura através de frequências vibracionais.',
+      description: 'LASZLO',
       price: 71.50,
       rating: 5,
       image: 'https://i.ibb.co/CK2hCCmZ/Whats-App-Image-2025-12-26-at-11-03-33.jpg',
@@ -185,7 +211,7 @@ const products: Record<string, SimpleProduct[]> = {
     {
       id: 'luminaria-aromatizador',
       name: 'Luminária Aromatizador de Ambiente',
-      description: 'Luminária aromatizadora da marca DRIFT para criar ambientes harmoniosos e energizados.',
+      description: 'DRIFT – Luminária aromatizadora para criar ambientes harmoniosos e energizados.',
       price: 298.00,
       rating: 5,
       image: 'https://i.ibb.co/NdzrNP95/Whats-App-Image-2025-12-26-at-11-03-30.jpg',
@@ -212,14 +238,14 @@ function ProductCard({ product, index }: ProductCardProps) {
         className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
         style={{ boxShadow: 'var(--shadow-soft)' }}
       >
-        <div className="relative h-72 overflow-hidden">
+        <div className="relative h-72 overflow-hidden bg-[var(--cassia-surface)]/50 flex items-center justify-center">
           <ImageWithFallback
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-700"
           />
           {/* Gradient overlay místico */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--cassia-purple)]/35 via-transparent to-transparent opacity-70" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--cassia-purple)]/20 via-transparent to-transparent opacity-50" />
 
           {/* Rating badge */}
           <motion.div
@@ -333,42 +359,81 @@ export function Products() {
           </p>
         </motion.div>
 
-        <Tabs defaultValue="oils" className="w-full">
-          <TabsList 
-            className="grid w-full max-w-4xl mx-auto grid-cols-5 mb-12 bg-[var(--cassia-surface)]/95 backdrop-blur-sm border border-[var(--cassia-border-soft)] p-1"
-            style={{ boxShadow: 'var(--shadow-soft)' }}
-          >
-            {[
-              { value: 'oils', label: 'Óleos' },
-              { value: 'sprays', label: 'Sprays' },
-              { value: 'books', label: 'Livros' },
-              { value: 'crystals', label: 'Cristais' },
-              { value: 'other', label: 'Outros' },
-            ]
-              .filter((tab) => products[tab.value] && products[tab.value].length > 0)
-              .map((tab) => (
-                <TabsTrigger 
-                  key={tab.value}
-                  value={tab.value}
-                  className="data-[state=active]:bg-[var(--cassia-purple)] data-[state=active]:text-white text-[var(--cassia-purple-dark)]/80 rounded-md"
-                >
-                  {tab.label}
-                </TabsTrigger>
+        {/* Seção: Óleos Essenciais */}
+        {products.oils && products.oils.length > 0 && (
+          <div className="mb-16">
+            <motion.h3
+              className="text-3xl md:text-4xl text-[var(--cassia-purple-dark)] mb-8 text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              Ferramentas – Óleos Essenciais
+            </motion.h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.oils.map((product, i) => (
+                <ProductCard key={product.id} product={product} index={i} />
               ))}
-          </TabsList>
+            </div>
+          </div>
+        )}
 
-          {(['oils', 'sprays', 'books', 'crystals', 'other'] as const)
-            .filter((key) => products[key] && products[key].length > 0)
-            .map((key) => (
-              <TabsContent key={key} value={key}>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {products[key].map((product, i) => (
-                    <ProductCard key={product.id} product={product} index={i} />
-                  ))}
-                </div>
-              </TabsContent>
-            ))}
-        </Tabs>
+        {/* Seção: Sprays */}
+        {products.sprays && products.sprays.length > 0 && (
+          <div className="mb-16">
+            <motion.h3
+              className="text-3xl md:text-4xl text-[var(--cassia-purple-dark)] mb-8 text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              Ferramentas – Sprays
+            </motion.h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.sprays.map((product, i) => (
+                <ProductCard key={product.id} product={product} index={i} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Seção: Livros */}
+        {products.books && products.books.length > 0 && (
+          <div className="mb-16">
+            <motion.h3
+              className="text-3xl md:text-4xl text-[var(--cassia-purple-dark)] mb-8 text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              Ferramentas – Livros
+            </motion.h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.books.map((product, i) => (
+                <ProductCard key={product.id} product={product} index={i} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Seção: Outros Produtos */}
+        {products.other && products.other.length > 0 && (
+          <div className="mb-16">
+            <motion.h3
+              className="text-3xl md:text-4xl text-[var(--cassia-purple-dark)] mb-8 text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              Ferramentas – Outros Produtos
+            </motion.h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.other.map((product, i) => (
+                <ProductCard key={product.id} product={product} index={i} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

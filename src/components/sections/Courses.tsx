@@ -100,6 +100,17 @@ const courses: Course[] = [
     format: 'Individual',
     gradient: 'from-[var(--cassia-gold)] to-[var(--cassia-purple-dark)]',
   },
+  {
+    id: 'mesa-violeta',
+    name: 'Mesa Violeta',
+    description: 'Atendimento com a Mesa Violeta, ferramenta de expansão espiritual e limpeza energética profunda.',
+    price: 0, // Valor a ser definido
+    image: defaultCourseImage,
+    type: 'service',
+    category: 'service',
+    format: 'Individual',
+    gradient: 'from-[var(--cassia-purple-dark)] to-[var(--cassia-lavender)]',
+  },
   // MENTORIA
   {
     id: 'mentoria-grupo',
@@ -134,13 +145,13 @@ export function Courses() {
         className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
         style={{ boxShadow: 'var(--shadow-soft)' }}
       >
-        <div className="relative h-56 overflow-hidden">
+        <div className="relative h-56 overflow-hidden bg-[var(--cassia-surface)]/50 flex items-center justify-center">
           <ImageWithFallback
             src={course.image}
             alt={course.name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-700"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--cassia-purple)]/40 via-transparent to-transparent opacity-70" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--cassia-purple)]/20 via-transparent to-transparent opacity-50" />
           
           {course.level && (
             <motion.div
@@ -316,23 +327,6 @@ export function Courses() {
           </motion.div>
         </motion.div>
 
-        {/* CURSOS */}
-        {coursesList.length > 0 && (
-          <div className="mb-16">
-            <motion.h3
-              className="text-3xl md:text-4xl text-[var(--cassia-purple-dark)] mb-8 text-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              Cursos
-            </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {coursesList.map((course, index) => renderCourseCard(course, index))}
-            </div>
-          </div>
-        )}
-
         {/* ATENDIMENTOS */}
         {servicesList.length > 0 && (
           <div className="mb-16">
@@ -346,6 +340,23 @@ export function Courses() {
             </motion.h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {servicesList.map((course, index) => renderCourseCard(course, index))}
+            </div>
+          </div>
+        )}
+
+        {/* CURSOS */}
+        {coursesList.length > 0 && (
+          <div className="mb-16">
+            <motion.h3
+              className="text-3xl md:text-4xl text-[var(--cassia-purple-dark)] mb-8 text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              Cursos
+            </motion.h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {coursesList.map((course, index) => renderCourseCard(course, index))}
             </div>
           </div>
         )}
