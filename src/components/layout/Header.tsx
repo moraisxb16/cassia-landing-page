@@ -60,7 +60,7 @@ export function Header() {
             </div>
           </motion.div>
 
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center justify-center gap-8 flex-1">
             {['Serviços', 'Cursos', 'Produtos'].map((item, i) => (
               <motion.a
                 key={item}

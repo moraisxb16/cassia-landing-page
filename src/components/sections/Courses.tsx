@@ -145,11 +145,14 @@ export function Courses() {
         className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
         style={{ boxShadow: 'var(--shadow-soft)' }}
       >
-        <div className="relative w-full h-[220px] flex items-center justify-center bg-white overflow-hidden">
+        <div className="relative w-full h-[240px] flex items-center justify-center bg-white overflow-hidden">
           <ImageWithFallback
             src={course.image}
             alt={course.name}
-            className="max-w-full max-h-full object-contain object-center p-4"
+            className={course.category === 'service' 
+              ? "w-full h-full object-cover object-center"
+              : "max-w-full max-h-full object-contain object-center p-4"
+            }
             style={{ imageRendering: 'auto' }}
           />
           
@@ -338,7 +341,7 @@ export function Courses() {
             >
               Atendimentos
             </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
               {servicesList.map((course, index) => renderCourseCard(course, index))}
             </div>
           </div>
@@ -355,7 +358,7 @@ export function Courses() {
             >
               Cursos
             </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
               {coursesList.map((course, index) => renderCourseCard(course, index))}
             </div>
           </div>
@@ -372,7 +375,7 @@ export function Courses() {
             >
               Mentoria
             </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
               {mentoringList.map((course, index) => renderCourseCard(course, index))}
             </div>
           </div>

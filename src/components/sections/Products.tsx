@@ -238,11 +238,11 @@ function ProductCard({ product, index }: ProductCardProps) {
         className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
         style={{ boxShadow: 'var(--shadow-soft)' }}
       >
-        <div className="relative w-full h-[220px] flex items-center justify-center bg-white overflow-hidden">
+        <div className="relative w-full h-[200px] flex items-center justify-center bg-white overflow-hidden">
           <ImageWithFallback
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-contain object-center p-4"
+            className="max-w-full max-h-full object-contain object-center p-4"
             style={{ imageRendering: 'auto' }}
           />
 
@@ -275,13 +275,13 @@ function ProductCard({ product, index }: ProductCardProps) {
 
           <div className="space-y-1">
             <div className="text-xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
-              R$ {product.price.toFixed(2)}
-              {product.pixPrice && (
-                <span className="text-sm text-[var(--cassia-purple-dark)]/60 ml-2">
-                  (R$ {product.pixPrice.toFixed(2)} PIX)
-                </span>
-              )}
+              R$ {product.price.toFixed(2).replace('.', ',')}
             </div>
+            {product.pixPrice && (
+              <div className="text-sm text-[var(--cassia-purple-dark)]/70">
+                (R$ {product.pixPrice.toFixed(2).replace('.', ',')} no PIX)
+              </div>
+            )}
           </div>
         </CardContent>
 
@@ -369,7 +369,7 @@ export function Products() {
             >
               Óleos Essenciais
             </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
               {products.oils.map((product, i) => (
                 <ProductCard key={product.id} product={product} index={i} />
               ))}
@@ -388,7 +388,7 @@ export function Products() {
             >
               Sprays
             </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
               {products.sprays.map((product, i) => (
                 <ProductCard key={product.id} product={product} index={i} />
               ))}
@@ -407,7 +407,7 @@ export function Products() {
             >
               Livros
             </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
               {products.books.map((product, i) => (
                 <ProductCard key={product.id} product={product} index={i} />
               ))}
@@ -426,7 +426,7 @@ export function Products() {
             >
               Outros Produtos
             </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
               {products.other.map((product, i) => (
                 <ProductCard key={product.id} product={product} index={i} />
               ))}
