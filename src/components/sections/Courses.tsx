@@ -145,11 +145,11 @@ export function Courses() {
         className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
         style={{ boxShadow: 'var(--shadow-soft)' }}
       >
-        <div className="relative w-full h-[280px] flex items-center justify-center bg-white overflow-hidden">
+        <div className="relative w-full h-[220px] flex items-center justify-center bg-white overflow-hidden">
           <ImageWithFallback
             src={course.image}
             alt={course.name}
-            className="w-full h-full object-contain object-center p-4"
+            className="max-w-full max-h-full object-contain object-center p-4"
             style={{ imageRendering: 'auto' }}
           />
           
