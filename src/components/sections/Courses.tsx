@@ -71,7 +71,7 @@ const courses: Course[] = [
     id: 'dragon-coaching',
     name: 'Dragon Coaching',
     description: 'Atendimento de coaching com ferramentas energéticas Dragonlight para acelerar resultados, trabalhando intenção e clareza energética.',
-    price: 0, // Valor a ser definido
+    price: 630.00,
     image: 'https://i.ibb.co/S4BXv22Y/Whats-App-Image-2025-12-26-at-11-03-29-1.jpg',
     type: 'service',
     category: 'service',
@@ -82,7 +82,7 @@ const courses: Course[] = [
     id: 'mesa-burgundy-conexoes-familiares',
     name: 'Mesa Burgundy – Conexões Familiares',
     description: 'Trabalho profundo de conexão e cura familiar através da Mesa Burgundy, abordando padrões ancestrais e fortalecendo vínculos familiares.',
-    price: 0, // Valor a ser definido
+    price: 630.00,
     image: 'https://i.ibb.co/tT0qgwvz/Whats-App-Image-2025-12-26-at-11-03-29-2.jpg',
     type: 'service',
     category: 'service',
@@ -93,7 +93,7 @@ const courses: Course[] = [
     id: 'mesa-dourada',
     name: 'Mesa Dourada',
     description: 'Atendimento com a Mesa Dourada, ferramenta de alta vibração para expansão espiritual e manifestação de desejos do coração.',
-    price: 0, // Valor a ser definido
+    price: 630.00,
     image: 'https://i.ibb.co/b5849Yy3/Whats-App-Image-2025-12-26-at-11-03-29-3.jpg',
     type: 'service',
     category: 'service',
@@ -104,7 +104,7 @@ const courses: Course[] = [
     id: 'mesa-violeta',
     name: 'Mesa Violeta',
     description: 'Atendimento com a Mesa Violeta, ferramenta de expansão espiritual e limpeza energética profunda.',
-    price: 0, // Valor a ser definido
+    price: 630.00,
     image: defaultCourseImage,
     type: 'service',
     category: 'service',
@@ -145,13 +145,13 @@ export function Courses() {
         className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
         style={{ boxShadow: 'var(--shadow-soft)' }}
       >
-        <div className="relative w-full h-[280px] flex items-center justify-center bg-[#f6f1f8] overflow-hidden">
+        <div className="relative w-full h-[280px] flex items-center justify-center bg-white overflow-hidden">
           <ImageWithFallback
             src={course.image}
             alt={course.name}
-            className="max-w-full max-h-full object-contain p-4 group-hover:scale-105 transition-transform duration-700"
+            className="w-full h-full object-contain object-center p-4"
+            style={{ imageRendering: 'auto' }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--cassia-purple)]/10 via-transparent to-transparent pointer-events-none" />
           
           {course.level && (
             <motion.div

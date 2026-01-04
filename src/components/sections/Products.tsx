@@ -238,14 +238,13 @@ function ProductCard({ product, index }: ProductCardProps) {
         className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
         style={{ boxShadow: 'var(--shadow-soft)' }}
       >
-        <div className="relative w-full h-[220px] flex items-center justify-center bg-[#f6f1f8] overflow-hidden">
+        <div className="relative w-full h-[220px] flex items-center justify-center bg-white overflow-hidden">
           <ImageWithFallback
             src={product.image}
             alt={product.name}
-            className="max-w-full max-h-full object-contain p-4 group-hover:scale-105 transition-transform duration-700"
+            className="w-full h-full object-contain object-center p-4"
+            style={{ imageRendering: 'auto' }}
           />
-          {/* Gradient overlay sutil */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--cassia-purple)]/10 via-transparent to-transparent pointer-events-none" />
 
           {/* Rating badge */}
           <motion.div
