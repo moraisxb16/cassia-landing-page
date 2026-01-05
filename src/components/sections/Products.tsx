@@ -227,18 +227,12 @@ interface ProductCardProps {
 
 function ProductCard({ product, index, category }: ProductCardProps) {
   const { addItem } = useCart();
-  const [selectedPayment, setSelectedPayment] = React.useState<'credit' | 'pix'>('credit');
   
   // Altura do container de imagem: 260px para livros, 220px para óleos/sprays/outros
   const imageHeight = category === 'books' ? 'h-[260px]' : 'h-[220px]';
   
-  // Verificar se produto tem dois preços
+  // Verificar se produto tem dois preços (apenas para exibição informativa)
   const hasPixPrice = !!product.pixPrice;
-  
-  // Calcular preço final baseado na escolha
-  const finalPrice = hasPixPrice && selectedPayment === 'pix' 
-    ? product.pixPrice! 
-    : product.price;
 
   return (
     <motion.div
@@ -289,66 +283,17 @@ function ProductCard({ product, index, category }: ProductCardProps) {
             {product.description}
           </p>
 
-          {/* Preço único ou escolha PIX/Cartão */}
-          {hasPixPrice ? (
-            <div className="space-y-3 mb-2">
-              <div className="text-sm font-semibold text-[var(--cassia-purple-dark)] mb-2">
-                Escolha a forma de pagamento:
-              </div>
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 p-2 rounded-lg border-2 cursor-pointer transition-all hover:bg-[var(--cassia-lavender)]/30"
-                  style={{ 
-                    borderColor: selectedPayment === 'pix' 
-                      ? 'var(--cassia-purple)' 
-                      : 'var(--cassia-border-soft)',
-                    backgroundColor: selectedPayment === 'pix' 
-                      ? 'var(--cassia-lavender)/20' 
-                      : 'transparent'
-                  }}
-                >
-                  <input
-                    type="radio"
-                    name={`payment-${product.id}`}
-                    value="pix"
-                    checked={selectedPayment === 'pix'}
-                    onChange={() => setSelectedPayment('pix')}
-                    className="w-4 h-4 text-[var(--cassia-purple)]"
-                  />
-                  <span className="text-sm text-[var(--cassia-purple-dark)]">
-                    PIX — R$ {product.pixPrice!.toFixed(2).replace('.', ',')}
-                  </span>
-                </label>
-                <label className="flex items-center gap-2 p-2 rounded-lg border-2 cursor-pointer transition-all hover:bg-[var(--cassia-lavender)]/30"
-                  style={{ 
-                    borderColor: selectedPayment === 'credit' 
-                      ? 'var(--cassia-purple)' 
-                      : 'var(--cassia-border-soft)',
-                    backgroundColor: selectedPayment === 'credit' 
-                      ? 'var(--cassia-lavender)/20' 
-                      : 'transparent'
-                  }}
-                >
-                  <input
-                    type="radio"
-                    name={`payment-${product.id}`}
-                    value="credit"
-                    checked={selectedPayment === 'credit'}
-                    onChange={() => setSelectedPayment('credit')}
-                    className="w-4 h-4 text-[var(--cassia-purple)]"
-                  />
-                  <span className="text-sm text-[var(--cassia-purple-dark)]">
-                    Cartão — R$ {product.price.toFixed(2).replace('.', ',')}
-                  </span>
-                </label>
-              </div>
+          {/* Preço - apenas exibição, escolha no checkout */}
+          <div className="space-y-1">
+            <div className="text-xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
+              R$ {product.price.toFixed(2).replace('.', ',')}
             </div>
-          ) : (
-            <div className="space-y-1">
-              <div className="text-xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
-                R$ {product.price.toFixed(2).replace('.', ',')}
+            {hasPixPrice && (
+              <div className="text-xs text-[var(--cassia-purple-dark)]/60">
+                Pix com desconto disponível no checkout
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </CardContent>
 
         <CardFooter className="p-5 pt-0">
@@ -365,7 +310,7 @@ function ProductCard({ product, index, category }: ProductCardProps) {
                 addItem({
                   id: product.id,
                   name: product.name,
-                  price: finalPrice, // Preço final baseado na escolha do usuário
+                  price: product.price, // Preço principal (crédito) - escolha PIX no checkout
                   pricePix: hasPixPrice ? product.pixPrice : undefined,
                   image: product.image,
                   type: 'product',
