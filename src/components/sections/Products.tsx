@@ -279,12 +279,18 @@ function ProductCard({ product, index, category }: ProductCardProps) {
 
           {/* Preço - apenas exibição, escolha no checkout */}
           <div className="space-y-1 mt-auto">
-            <div className="text-xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
-              R$ {product.price.toFixed(2).replace('.', ',')} <span className="text-sm text-[var(--cassia-purple-dark)]/80">Cartão</span>
-            </div>
-            {hasPixPrice && (
-              <div className="text-sm text-[var(--cassia-purple-dark)]/70">
-                PIX: R$ {product.pixPrice!.toFixed(2).replace('.', ',')}
+            {hasPixPrice ? (
+              <>
+                <div className="text-xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
+                  R$ {product.price.toFixed(2).replace('.', ',')} <span className="text-sm text-[var(--cassia-purple-dark)]/80">Cartão</span>
+                </div>
+                <div className="text-sm text-[var(--cassia-purple-dark)]/70">
+                  PIX: R$ {product.pixPrice!.toFixed(2).replace('.', ',')}
+                </div>
+              </>
+            ) : (
+              <div className="text-xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
+                R$ {product.price.toFixed(2).replace('.', ',')}
               </div>
             )}
           </div>
