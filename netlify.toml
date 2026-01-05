@@ -3,7 +3,8 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "18"
+  NPM_FLAGS = "--include=dev"
 
 [functions]
   directory = "netlify/functions"
