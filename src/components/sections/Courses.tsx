@@ -145,7 +145,7 @@ export function Courses() {
         className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
         style={{ boxShadow: 'var(--shadow-soft)' }}
       >
-        <div className="relative w-full h-[260px] overflow-hidden rounded-t-lg">
+        <div className="relative w-full h-[220px] overflow-hidden rounded-t-lg">
           <ImageWithFallback
             src={course.image}
             alt={course.name}
@@ -171,7 +171,7 @@ export function Courses() {
           )}
         </div>
         
-        <CardContent className="p-6 flex-grow">
+        <CardContent className="p-6 flex-grow flex flex-col">
           <h3 className="text-xl text-[var(--cassia-purple-dark)] mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all">
             {course.name}
           </h3>
@@ -215,7 +215,7 @@ export function Courses() {
             </div>
           )}
 
-          <div className="mb-3">
+          <div className="mb-3 mt-auto">
             <div className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
               R$ {course.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
@@ -227,7 +227,7 @@ export function Courses() {
           </div>
         </CardContent>
 
-        <CardFooter className="p-6 pt-0">
+        <CardFooter className="p-6 pt-0 mt-auto">
           <motion.div 
             className="w-full"
             whileHover={{ scale: 1.02 }}

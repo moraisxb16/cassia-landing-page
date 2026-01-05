@@ -228,9 +228,6 @@ interface ProductCardProps {
 function ProductCard({ product, index, category }: ProductCardProps) {
   const { addItem } = useCart();
   
-  // Altura do container de imagem: 260px para livros, 220px para óleos/sprays/outros
-  const imageHeight = category === 'books' ? 'h-[260px]' : 'h-[220px]';
-  
   // Verificar se produto tem dois preços (apenas para exibição informativa)
   const hasPixPrice = !!product.pixPrice;
 
@@ -245,14 +242,11 @@ function ProductCard({ product, index, category }: ProductCardProps) {
         className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
         style={{ boxShadow: 'var(--shadow-soft)' }}
       >
-        <div className={`relative w-full ${imageHeight} flex items-center justify-center bg-white overflow-hidden`}>
+        <div className="relative w-full h-[220px] overflow-hidden">
           <ImageWithFallback
             src={product.image}
             alt={product.name}
-            className={category === 'books' 
-              ? "max-w-full max-h-full object-contain object-center p-4"
-              : "max-w-full max-h-[90%] object-contain object-center p-4"
-            }
+            className="w-full h-full object-cover object-center"
             style={{ imageRendering: 'auto' }}
           />
 
@@ -274,7 +268,7 @@ function ProductCard({ product, index, category }: ProductCardProps) {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
         </div>
 
-        <CardContent className="p-5 flex-grow">
+        <CardContent className="p-5 flex-grow flex flex-col">
           <h3 className="text-lg text-[var(--cassia-purple-dark)] mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all">
             {product.name}
           </h3>
@@ -284,7 +278,7 @@ function ProductCard({ product, index, category }: ProductCardProps) {
           </p>
 
           {/* Preço - apenas exibição, escolha no checkout */}
-          <div className="space-y-1">
+          <div className="space-y-1 mt-auto">
             <div className="text-xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
               R$ {product.price.toFixed(2).replace('.', ',')}
             </div>
