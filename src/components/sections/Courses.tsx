@@ -145,7 +145,7 @@ export function Courses() {
         className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
         style={{ boxShadow: 'var(--shadow-soft)' }}
       >
-        <div className="relative w-full h-[220px] overflow-hidden rounded-t-lg">
+        <div className="relative w-full h-[260px] overflow-hidden rounded-t-lg">
           <ImageWithFallback
             src={course.image}
             alt={course.name}
@@ -306,25 +306,27 @@ export function Courses() {
               <div className="flex-shrink-0">
                 <Sparkles className="w-6 h-6 text-[var(--cassia-gold)]" />
               </div>
-              <div>
+              <div className="flex-1">
                 <h3 className="text-xl font-semibold text-[var(--cassia-purple-dark)] mb-2">
                   Diagnóstico Terapêutico (20 minutos gratuito)
                 </h3>
                 <p className="text-[var(--cassia-purple-dark)]/80 mb-4">
                   Momento de troca para entender a necessidade do cliente e definir o melhor caminho terapêutico inicial.
                 </p>
-                <Button
-                  className="bg-[var(--cassia-purple)] hover:bg-[var(--cassia-purple-dark)] text-white"
-                  onClick={() => {
-                    // Abrir WhatsApp ou link de agendamento
-                    // ATUALIZAR: Substituir pelo número de WhatsApp correto ou link do ClickUp
-                    const whatsappNumber = '5519996760107'; // ATUALIZAR COM O NÚMERO REAL
-                    const message = encodeURIComponent('Olá! Gostaria de agendar um Diagnóstico Terapêutico (20 minutos gratuito).');
-                    window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
-                  }}
-                >
-                  Agendar Diagnóstico Gratuito
-                </Button>
+                <div className="flex justify-center">
+                  <Button
+                    className="bg-[var(--cassia-purple)] hover:bg-[var(--cassia-purple-dark)] text-white"
+                    onClick={() => {
+                      // Abrir WhatsApp ou link de agendamento
+                      // ATUALIZAR: Substituir pelo número de WhatsApp correto ou link do ClickUp
+                      const whatsappNumber = '5519996760107'; // ATUALIZAR COM O NÚMERO REAL
+                      const message = encodeURIComponent('Olá! Gostaria de agendar um Diagnóstico Terapêutico (20 minutos gratuito).');
+                      window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+                    }}
+                  >
+                    Agendar Diagnóstico Gratuito
+                  </Button>
+                </div>
               </div>
             </div>
           </motion.div>

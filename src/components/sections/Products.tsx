@@ -283,8 +283,8 @@ function ProductCard({ product, index, category }: ProductCardProps) {
               R$ {product.price.toFixed(2).replace('.', ',')}
             </div>
             {hasPixPrice && (
-              <div className="text-xs text-[var(--cassia-purple-dark)]/60">
-                Pix com desconto disponível no checkout
+              <div className="text-sm text-[var(--cassia-purple-dark)]/70">
+                PIX: R$ {product.pixPrice!.toFixed(2).replace('.', ',')}
               </div>
             )}
           </div>
