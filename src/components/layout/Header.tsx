@@ -17,6 +17,29 @@ export function Header() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Mapear itens do menu para IDs das seções
+  const menuItems = [
+    { label: 'Serviços', id: 'services' },
+    { label: 'Cursos', id: 'courses' },
+    { label: 'Produtos', id: 'products' },
+  ];
+
+  // Função para scroll suave até a seção
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+    e.preventDefault();
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const headerHeight = 80; // Altura aproximada do header
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <motion.header 
       initial={{ y: -100 }}
@@ -63,17 +86,18 @@ export function Header() {
 
           {/* Menu centralizado horizontal e verticalmente */}
           <nav className="hidden md:flex items-center justify-center gap-8 flex-1" style={{ lineHeight: 1 }}>
-            {['Serviços', 'Cursos', 'Produtos'].map((item, i) => (
+            {menuItems.map((item, i) => (
               <motion.a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="text-[var(--cassia-purple-dark)] hover:text-[var(--cassia-purple)] transition-colors relative group"
+                key={item.id}
+                href={`#${item.id}`}
+                onClick={(e) => handleNavClick(e, item.id)}
+                className="text-[var(--cassia-purple-dark)] hover:text-[var(--cassia-purple)] transition-colors relative group cursor-pointer"
                 style={{ lineHeight: 1 }}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
               >
-                {item}
+                {item.label}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[var(--cassia-purple)] to-[var(--cassia-gold)] group-hover:w-full transition-all duration-300" />
               </motion.a>
             ))}
