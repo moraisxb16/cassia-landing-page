@@ -30,6 +30,7 @@ export function Header() {
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
+          {/* Logo à esquerda */}
           <motion.div 
             className="flex items-center gap-3"
             whileHover={{ scale: 1.02 }}
@@ -60,12 +61,14 @@ export function Header() {
             </div>
           </motion.div>
 
-          <nav className="hidden md:flex items-center justify-center gap-8 flex-1">
+          {/* Menu centralizado horizontal e verticalmente */}
+          <nav className="hidden md:flex items-center justify-center gap-8 flex-1" style={{ lineHeight: 1 }}>
             {['Serviços', 'Cursos', 'Produtos'].map((item, i) => (
               <motion.a
                 key={item}
                 href={`#${item.toLowerCase()}`}
                 className="text-[var(--cassia-purple-dark)] hover:text-[var(--cassia-purple)] transition-colors relative group"
+                style={{ lineHeight: 1 }}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
@@ -76,6 +79,7 @@ export function Header() {
             ))}
           </nav>
 
+          {/* Carrinho à direita */}
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
               variant="outline"

@@ -17,17 +17,21 @@ const defaultForm: CheckoutFormData = {
   city: '',
   state: '',
   zip: '',
-  paymentMethod: 'pix', // Mantido para compatibilidade, mas não usado
+  paymentMethod: 'card', // Padrão: cartão de crédito
 };
 
 export function CheckoutForm() {
   const {
     state: { items, isCheckoutOpen },
     totalPrice,
+    getTotalPrice,
     closeCheckout,
   } = useCart();
 
   const [form, setForm] = useState<CheckoutFormData>(defaultForm);
+  
+  // Calcular total baseado no método de pagamento selecionado
+  const currentTotal = getTotalPrice(form.paymentMethod);
 
   const handleClose = () => {
     setForm(defaultForm);
@@ -52,22 +56,35 @@ export function CheckoutForm() {
             <div className="bg-purple-50 p-4 rounded-lg">
               <h3 className="text-purple-900 mb-3">Resumo do Pedido</h3>
               <div className="space-y-2 mb-3">
-                {items.map((item) => (
-                  <div key={item.id} className="flex justify-between text-sm">
-                    <span className="text-gray-600">
-                      {item.name} x {item.quantity}
-                    </span>
-                    <span className="text-purple-900">
-                      R$ {(item.price * item.quantity).toFixed(2)}
-                    </span>
-                  </div>
-                ))}
+                {items.map((item) => {
+                  const itemPrice = form.paymentMethod === 'pix' && item.pricePix 
+                    ? item.pricePix 
+                    : item.price;
+                  return (
+                    <div key={item.id} className="flex justify-between text-sm">
+                      <span className="text-gray-600">
+                        {item.name} x {item.quantity}
+                      </span>
+                      <span className="text-purple-900">
+                        R$ {(itemPrice * item.quantity).toFixed(2).replace('.', ',')}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
-              <div className="border-t border-purple-200 pt-2 flex justify-between">
-                <span className="text-purple-900">Total</span>
-                <span className="text-purple-900">
-                  R$ {totalPrice.toFixed(2)}
-                </span>
+              <div className="border-t border-purple-200 pt-2 space-y-1">
+                <div className="flex justify-between">
+                  <span className="text-purple-900">Total ({form.paymentMethod === 'pix' ? 'PIX' : 'Cartão'})</span>
+                  <span className="text-purple-900 font-semibold">
+                    R$ {currentTotal.toFixed(2).replace('.', ',')}
+                  </span>
+                </div>
+                {form.paymentMethod === 'pix' && currentTotal < totalPrice && (
+                  <div className="flex justify-between text-sm text-green-600">
+                    <span>Economia com PIX:</span>
+                    <span>R$ {(totalPrice - currentTotal).toFixed(2).replace('.', ',')}</span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -180,19 +197,61 @@ export function CheckoutForm() {
               </div>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-              <p className="text-sm text-blue-800">
-                💳 Você escolherá o método de pagamento (PIX, Cartão, Apple Pay, etc.) no checkout seguro da InfinitePay.
-              </p>
+            {/* Seletor de Método de Pagamento */}
+            <div className="space-y-4">
+              <h3 className="text-purple-900">Método de Pagamento</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <label className={`cursor-pointer border-2 rounded-lg p-4 transition-all ${
+                  form.paymentMethod === 'pix'
+                    ? 'border-purple-600 bg-purple-50'
+                    : 'border-gray-200 hover:border-purple-300'
+                }`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="pix"
+                    checked={form.paymentMethod === 'pix'}
+                    onChange={(e) => setForm(prev => ({ ...prev, paymentMethod: e.target.value as 'pix' | 'card' }))}
+                    className="mr-2"
+                  />
+                  <span className="font-semibold text-purple-900">PIX</span>
+                  {getTotalPrice('pix') < totalPrice && (
+                    <p className="text-sm text-green-600 mt-1">
+                      Economize R$ {(totalPrice - getTotalPrice('pix')).toFixed(2).replace('.', ',')}
+                    </p>
+                  )}
+                </label>
+                <label className={`cursor-pointer border-2 rounded-lg p-4 transition-all ${
+                  form.paymentMethod === 'card'
+                    ? 'border-purple-600 bg-purple-50'
+                    : 'border-gray-200 hover:border-purple-300'
+                }`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="card"
+                    checked={form.paymentMethod === 'card'}
+                    onChange={(e) => setForm(prev => ({ ...prev, paymentMethod: e.target.value as 'pix' | 'card' }))}
+                    className="mr-2"
+                  />
+                  <span className="font-semibold text-purple-900">Cartão de Crédito</span>
+                </label>
+              </div>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-sm text-blue-800">
+                  💳 Você finalizará o pagamento no checkout seguro da InfinitePay. O valor será processado conforme o método escolhido.
+                </p>
+              </div>
             </div>
 
             <InfinitePayButton
               description="Compra na Cassia Corviniy"
-              totalPrice={totalPrice}
+              totalPrice={currentTotal}
+              paymentMethod={form.paymentMethod}
               items={items.map(item => ({
                 name: item.name,
                 quantity: item.quantity,
-                price: item.price,
+                price: form.paymentMethod === 'pix' && item.pricePix ? item.pricePix : item.price,
                 type: item.type // Incluir tipo para separar Cursos/Serviços no ClickUp
               }))}
               customerData={{

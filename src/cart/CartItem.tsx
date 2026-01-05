@@ -25,12 +25,19 @@ export function CartItem({ item, onIncrease, onDecrease, onRemove }: Props) {
         <h4 className="text-sm text-purple-900 mb-1 pr-8">
           {item.name}
         </h4>
-        <p className="text-purple-600 mb-2">
-          R$ {item.price.toFixed(2)}{' '}
-          <span className="text-xs text-purple-500">
-            ({item.type === 'course' ? 'Curso' : 'Produto'})
-          </span>
-        </p>
+        <div className="mb-2">
+          <p className="text-purple-600">
+            R$ {item.price.toFixed(2).replace('.', ',')}{' '}
+            <span className="text-xs text-purple-500">
+              ({item.type === 'course' ? 'Curso' : item.type === 'service' ? 'Atendimento' : 'Produto'})
+            </span>
+          </p>
+          {item.pricePix && (
+            <p className="text-xs text-green-600">
+              ou R$ {item.pricePix.toFixed(2).replace('.', ',')} no PIX
+            </p>
+          )}
+        </div>
 
         <div className="flex items-center gap-2">
           <Button

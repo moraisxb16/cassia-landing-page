@@ -31,7 +31,8 @@ export interface Course {
 export interface CartItem {
   id: string;
   name: string;
-  price: number;
+  price: number; // Preço principal (crédito)
+  pricePix?: number; // Preço com desconto PIX (opcional)
   quantity: number;
   image: string;
   type: ProductType;

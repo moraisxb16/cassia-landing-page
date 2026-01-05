@@ -222,10 +222,14 @@ const products: Record<string, SimpleProduct[]> = {
 interface ProductCardProps {
   product: SimpleProduct;
   index: number;
+  category?: 'oils' | 'sprays' | 'books' | 'other';
 }
 
-function ProductCard({ product, index }: ProductCardProps) {
+function ProductCard({ product, index, category }: ProductCardProps) {
   const { addItem } = useCart();
+  
+  // Altura do container de imagem: 260px para livros, 220px para óleos/sprays/outros
+  const imageHeight = category === 'books' ? 'h-[260px]' : 'h-[220px]';
 
   return (
     <motion.div
@@ -238,11 +242,14 @@ function ProductCard({ product, index }: ProductCardProps) {
         className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
         style={{ boxShadow: 'var(--shadow-soft)' }}
       >
-        <div className="relative w-full h-[200px] flex items-center justify-center bg-white overflow-hidden">
+        <div className={`relative w-full ${imageHeight} flex items-center justify-center bg-white overflow-hidden`}>
           <ImageWithFallback
             src={product.image}
             alt={product.name}
-            className="max-w-full max-h-full object-contain object-center p-4"
+            className={category === 'books' 
+              ? "max-w-full max-h-full object-contain object-center p-4"
+              : "max-w-full max-h-[90%] object-contain object-center p-4"
+            }
             style={{ imageRendering: 'auto' }}
           />
 
@@ -279,7 +286,7 @@ function ProductCard({ product, index }: ProductCardProps) {
             </div>
             {product.pixPrice && (
               <div className="text-sm text-[var(--cassia-purple-dark)]/70">
-                (R$ {product.pixPrice.toFixed(2).replace('.', ',')} no PIX)
+                ou R$ {product.pixPrice.toFixed(2).replace('.', ',')} no PIX
               </div>
             )}
           </div>
@@ -299,7 +306,8 @@ function ProductCard({ product, index }: ProductCardProps) {
                 addItem({
                   id: product.id,
                   name: product.name,
-                  price: product.price, // Usar preço padrão (crédito)
+                  price: product.price, // Preço principal (crédito)
+                  pricePix: product.pixPrice, // Preço PIX quando disponível
                   image: product.image,
                   type: 'product',
                 })
@@ -371,7 +379,7 @@ export function Products() {
             </motion.h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
               {products.oils.map((product, i) => (
-                <ProductCard key={product.id} product={product} index={i} />
+                <ProductCard key={product.id} product={product} index={i} category="oils" />
               ))}
             </div>
           </div>
@@ -390,7 +398,7 @@ export function Products() {
             </motion.h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
               {products.sprays.map((product, i) => (
-                <ProductCard key={product.id} product={product} index={i} />
+                <ProductCard key={product.id} product={product} index={i} category="sprays" />
               ))}
             </div>
           </div>
@@ -409,7 +417,7 @@ export function Products() {
             </motion.h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
               {products.books.map((product, i) => (
-                <ProductCard key={product.id} product={product} index={i} />
+                <ProductCard key={product.id} product={product} index={i} category="books" />
               ))}
             </div>
           </div>
@@ -428,7 +436,7 @@ export function Products() {
             </motion.h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
               {products.other.map((product, i) => (
-                <ProductCard key={product.id} product={product} index={i} />
+                <ProductCard key={product.id} product={product} index={i} category="other" />
               ))}
             </div>
           </div>

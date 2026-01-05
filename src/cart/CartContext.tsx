@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, useReducer, ReactNode } from 'react';
-import type { CartItem } from '../types';
+import type { CartItem, PaymentMethod } from '../types';
 
 interface CartState {
   items: CartItem[];
@@ -29,6 +29,7 @@ interface CartContextValue {
   closeCheckout: () => void;
   totalItems: number;
   totalPrice: number;
+  getTotalPrice: (paymentMethod: PaymentMethod) => number;
 }
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
@@ -109,6 +110,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
       0,
     );
 
+    // Função para calcular o total baseado no método de pagamento
+    const getTotalPrice = (paymentMethod: PaymentMethod): number => {
+      return state.items.reduce((sum, item) => {
+        const itemPrice = paymentMethod === 'pix' && item.pricePix 
+          ? item.pricePix 
+          : item.price;
+        return sum + itemPrice * item.quantity;
+      }, 0);
+    };
+
     return {
       state,
       addItem: (item) => dispatch({ type: 'ADD_ITEM', payload: item }),
@@ -126,6 +137,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       closeCheckout: () => dispatch({ type: 'CLOSE_CHECKOUT' }),
       totalItems,
       totalPrice,
+      getTotalPrice,
     };
   }, [state]);
 

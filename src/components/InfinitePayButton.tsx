@@ -4,6 +4,7 @@ import React, { useState } from "react";
 interface InfinitePayButtonProps {
   description: string;
   totalPrice: number;
+  paymentMethod?: 'pix' | 'card';
   items?: Array<{ name: string; quantity: number; price: number; type?: 'product' | 'course' | 'service' | 'mentoring' }>;
   customerData?: {
     name?: string;
@@ -32,6 +33,7 @@ interface InfinitePayButtonProps {
 export function InfinitePayButton({ 
   description, 
   totalPrice,
+  paymentMethod = 'card',
   items = [],
   customerData = {},
   addressData = {}
