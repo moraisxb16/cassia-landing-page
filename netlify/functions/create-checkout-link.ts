@@ -251,20 +251,20 @@ export const handler: Handler = async (
       email: body.customer.email.trim(),
     };
 
-    // Formatar phone_number: remover caracteres não numéricos
-    let phoneNumber = body.customer.phone.replace(/\D/g, '');
-    // Adicionar +55 se não começar com código do país
-    if (!phoneNumber.startsWith('55')) {
-      phoneNumber = '55' + phoneNumber;
-    }
-    // Adicionar + no início
-    customer.phone_number = '+' + phoneNumber;
+        // Formatar phone_number: remover caracteres não numéricos
+        let phoneNumber = body.customer.phone.replace(/\D/g, '');
+        // Adicionar +55 se não começar com código do país
+        if (!phoneNumber.startsWith('55')) {
+          phoneNumber = '55' + phoneNumber;
+        }
+        // Adicionar + no início
+        customer.phone_number = '+' + phoneNumber;
 
     // CPF e birth_date podem não ser aceitos pela API de checkout link
     // Remover para evitar erro 422
     // Esses dados serão enviados apenas para o ClickUp após o pagamento
-    
-    payload.customer = customer;
+      
+        payload.customer = customer;
 
     // ============================================
     // ADDRESS (opcional conforme documentação)

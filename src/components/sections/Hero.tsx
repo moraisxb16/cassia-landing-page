@@ -93,49 +93,38 @@ export function Hero() {
               Desperte Sua Luz Interior
             </motion.h2>
             
-            {/* Descrição */}
+            {/* Descrição - mais concisa e focada no valor */}
             <motion.p
-              className="text-[1.1rem] md:text-[1.3rem] text-[var(--cassia-night)]/80 max-w-2xl mx-auto mb-10"
+              className="text-lg md:text-xl text-[var(--cassia-night)]/90 max-w-2xl mx-auto mb-8 font-medium"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.8 }}
             >
-              Descubra o poder da cura energética através dos Cursos Dragonlight
-              e produtos holísticos para transformar sua vida espiritual.
+              Transforme sua vida através da cura energética e autoconhecimento profundo.
             </motion.p>
 
-            {/* CTAs */}
+            {/* CTA Principal - Destacado */}
             <motion.div
-              className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
+              className="flex justify-center mb-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
             >
-              <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}>
+              <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.98 }}>
                 <Button 
-                  className="w-full sm:w-auto bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-purple)] hover:opacity-90 text-white border-0 px-10 py-6 text-base"
-                  style={{ boxShadow: 'var(--shadow-glow)' }}
+                  className="w-full sm:w-auto bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-purple)] hover:from-[var(--cassia-purple)] hover:to-[var(--cassia-purple-dark)] text-white border-0 px-12 py-7 text-lg font-semibold min-h-[56px]"
+                  style={{ boxShadow: '0 8px 24px rgba(94, 90, 154, 0.4)' }}
                   onClick={() => document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <Sparkles className="w-5 h-5 mr-2" />
-                  Explorar Cursos
-                </Button>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }}>
-                <Button 
-                  variant="outline"
-                  className="w-full sm:w-auto border-[#CFAF63] bg-white/80 backdrop-blur-md text-[var(--cassia-purple-dark)] hover:bg-[var(--cassia-purple)]/5 hover:border-[#CFAF63] px-10 py-6 text-base transition-all duration-200"
-                  style={{ boxShadow: '0 0 8px rgba(207, 175, 99, 0.4)' }}
-                  onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
-                >
-                  Ver Produtos
+                  Começar Minha Transformação
                 </Button>
               </motion.div>
             </motion.div>
 
-            {/* Pills de benefícios */}
+            {/* Pills de benefícios - Simplificadas */}
             <motion.div
-              className="flex flex-wrap gap-3 justify-center"
+              className="flex flex-wrap gap-3 justify-center mb-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.9 }}
@@ -149,15 +138,15 @@ export function Hero() {
                 return (
                   <motion.div
                     key={i}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/75 backdrop-blur-md border border-white/30"
-                    style={{ boxShadow: '0 4px 12px rgba(94, 90, 154, 0.25)' }}
+                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 backdrop-blur-sm border border-[var(--cassia-purple)]/20"
+                    style={{ boxShadow: '0 2px 8px rgba(94, 90, 154, 0.15)' }}
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 1 + i * 0.1 }}
                     whileHover={{ scale: 1.05 }}
                   >
                     <Icon className="w-4 h-4 text-[var(--cassia-purple)]" />
-                    <span className="text-sm text-[var(--cassia-night)]/80">{item.text}</span>
+                    <span className="text-sm text-[var(--cassia-night)]/80 font-medium">{item.text}</span>
                   </motion.div>
                 );
               })}

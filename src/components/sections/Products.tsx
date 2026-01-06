@@ -273,7 +273,7 @@ function ProductCard({ product, index, category }: ProductCardProps) {
             {product.name}
           </h3>
 
-          <p className="text-[var(--cassia-purple-dark)]/72 text-sm mb-4 leading-relaxed">
+          <p className="text-[var(--cassia-purple-dark)]/72 text-sm mb-6 leading-relaxed flex-grow">
             {product.description}
           </p>
 
@@ -303,9 +303,8 @@ function ProductCard({ product, index, category }: ProductCardProps) {
             whileTap={{ scale: 0.98 }}
           >
             <Button
-              className="w-full bg-[var(--cassia-purple)] hover:bg-[var(--cassia-purple-dark)] text-white border-0"
-              style={{ boxShadow: 'var(--shadow-medium)' }}
-              size="sm"
+              className="w-full bg-gradient-to-r from-[var(--cassia-purple)] to-[var(--cassia-purple-dark)] hover:from-[var(--cassia-purple-dark)] hover:to-[var(--cassia-purple)] text-white border-0 font-semibold min-h-[44px] text-base"
+              style={{ boxShadow: '0 4px 12px rgba(94, 90, 154, 0.3)' }}
               onClick={() =>
                 addItem({
                   id: product.id,
@@ -317,7 +316,7 @@ function ProductCard({ product, index, category }: ProductCardProps) {
                 })
               }
             >
-              <ShoppingBag className="w-4 h-4 mr-2" />
+              <ShoppingBag className="w-5 h-5 mr-2" />
               Adicionar ao Carrinho
             </Button>
           </motion.div>

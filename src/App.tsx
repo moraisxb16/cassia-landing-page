@@ -6,6 +6,7 @@ import { Hero } from './components/sections/Hero';
 import { Services } from './components/sections/Services';
 import { Courses } from './components/sections/Courses';
 import { Products } from './components/sections/Products';
+import { Testimonials } from './components/sections/Testimonials';
 import { Footer } from './components/layout/Footer';
 import { CartDrawer } from './cart/CartDrawer';
 import { CheckoutForm } from './payment/CheckoutForm';
@@ -19,6 +20,7 @@ function HomePage() {
       <Hero />
       <Services />
       <Courses />
+      <Testimonials />
       <Products />
       <Footer />
     </>

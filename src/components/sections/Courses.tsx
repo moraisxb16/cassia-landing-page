@@ -176,11 +176,11 @@ export function Courses() {
             {course.name}
           </h3>
           
-          <p className="text-[var(--cassia-purple-dark)]/72 text-sm mb-5 leading-relaxed">
+          <p className="text-[var(--cassia-purple-dark)]/72 text-sm mb-6 leading-relaxed flex-grow">
             {course.description}
           </p>
           
-          <div className="flex flex-wrap gap-3 text-sm text-[var(--cassia-purple-dark)]/80 mb-4">
+          <div className="flex flex-wrap gap-3 text-sm text-[var(--cassia-purple-dark)]/80 mb-6">
             {course.hours && (
               <div className="flex items-center gap-1.5 bg-[var(--cassia-lavender)]/60 px-3 py-1.5 rounded-full">
                 <Clock className="w-4 h-4" />
@@ -234,8 +234,8 @@ export function Courses() {
             whileTap={{ scale: 0.98 }}
           >
             <Button 
-              className={`w-full bg-gradient-to-r ${course.gradient || 'from-[var(--cassia-purple)] to-[var(--cassia-gold)]'} hover:opacity-90 text-white border-0`}
-              style={{ boxShadow: 'var(--shadow-medium)' }}
+              className={`w-full bg-gradient-to-r ${course.gradient || 'from-[var(--cassia-purple)] to-[var(--cassia-gold)]'} hover:opacity-95 text-white border-0 font-semibold min-h-[44px] text-base`}
+              style={{ boxShadow: '0 4px 12px rgba(94, 90, 154, 0.3)' }}
               onClick={() =>
                 addItem({
                   id: course.id,
@@ -246,7 +246,7 @@ export function Courses() {
                 })
               }
             >
-              <Sparkles className="w-4 h-4 mr-2" />
+              <Sparkles className="w-5 h-5 mr-2" />
               Adicionar ao Carrinho
             </Button>
           </motion.div>
