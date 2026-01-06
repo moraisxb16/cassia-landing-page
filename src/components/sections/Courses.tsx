@@ -136,21 +136,30 @@ export function Courses() {
   const renderCourseCard = (course: Course, index: number) => (
     <motion.div
       key={course.id}
+      className="h-full"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
+      style={{ padding: 0, margin: 0 }}
     >
       <Card 
         className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
         style={{ boxShadow: 'var(--shadow-soft)' }}
       >
-        <div className="relative w-full h-[280px] overflow-hidden rounded-t-lg bg-[var(--cassia-lavender-light)]/20">
+        <div className="relative w-full h-[280px] overflow-hidden rounded-t-lg" style={{ padding: 0, margin: 0 }}>
           <ImageWithFallback
             src={course.image}
             alt={course.name}
-            className="w-full h-full object-cover object-center"
-            style={{ imageRendering: 'auto' }}
+            className="w-full h-full"
+            style={{ 
+              objectFit: 'cover',
+              objectPosition: 'center center',
+              width: '100%',
+              height: '100%',
+              display: 'block',
+              imageRendering: 'auto'
+            }}
           />
           
           {course.level && (
