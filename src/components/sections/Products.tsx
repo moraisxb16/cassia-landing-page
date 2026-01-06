@@ -126,7 +126,7 @@ const products: Record<string, SimpleProduct[]> = {
       price: 108.00,
       pixPrice: 98.00,
       rating: 5,
-      image: placeholderImage,
+      image: 'https://i.ibb.co/60PzjxvY/2ebba694-aff5-4796-914e-23ea7b1605d0.jpg',
     },
     {
       id: 'spray-guardiao',
@@ -135,7 +135,7 @@ const products: Record<string, SimpleProduct[]> = {
       price: 108.00,
       pixPrice: 98.00,
       rating: 5,
-      image: placeholderImage,
+      image: 'https://i.ibb.co/sd0jgkVv/a7f2082d-4d30-47c4-b55a-fb8c363c210d.jpg',
     },
     {
       id: 'spray-liberta',
@@ -144,7 +144,7 @@ const products: Record<string, SimpleProduct[]> = {
       price: 108.00,
       pixPrice: 98.00,
       rating: 5,
-      image: placeholderImage,
+      image: 'https://i.ibb.co/hJr1w81Y/3b2656ed-cab1-4ce0-9486-92cee9472def.jpg',
     },
     {
       id: 'kit-sprays',
