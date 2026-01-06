@@ -105,7 +105,7 @@ const courses: Course[] = [
     name: 'Mesa Violeta',
     description: 'Atendimento com a Mesa Violeta, ferramenta de expansão espiritual e limpeza energética profunda.',
     price: 630.00,
-    image: defaultCourseImage,
+    image: 'https://i.ibb.co/PZK8rYtq/506dc70c-6ea6-4de9-ae18-efddc8fb11b4.jpg',
     type: 'service',
     category: 'service',
     format: 'Individual',
