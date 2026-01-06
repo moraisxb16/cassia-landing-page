@@ -61,7 +61,7 @@ const courses: Course[] = [
     name: 'Mesa Radiônica Dragonlight',
     description: 'Ferramenta de autoconhecimento que atua em três pilares: limpeza energética em todos os níveis, fortalecimento da verdadeira identidade e cocriação dos desejos do coração. Trabalho sutil e profundo, com reflexos no campo físico, emocional e espiritual.',
     price: 630.00,
-    image: 'https://i.ibb.co/yc6CSBbC/Whats-App-Image-2025-12-26-at-11-03-29.jpg',
+    image: 'https://i.ibb.co/1fbKfP7J/Whats-App-Image-2026-01-06-at-08-52-06.jpg',
     type: 'service',
     category: 'service',
     format: 'Individual',
@@ -151,7 +151,7 @@ export function Courses() {
         className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border border-[var(--cassia-purple)]/20 rounded-2xl hover:border-[var(--cassia-purple)]/40 transition-all duration-300 ease-out group h-full flex flex-col"
         style={{ 
           boxShadow: 'var(--shadow-md)',
-          minHeight: course.category === 'service' ? '240px' : 'auto',
+          minHeight: course.category === 'service' ? '320px' : 'auto',
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
@@ -162,7 +162,7 @@ export function Courses() {
           e.currentTarget.style.transform = 'scale(1)';
         }}
       >
-        <div className="relative w-full aspect-video overflow-hidden rounded-t-2xl" style={{ padding: 0, margin: 0 }}>
+        <div className={`relative w-full overflow-hidden rounded-t-2xl ${course.category === 'service' ? 'h-[200px]' : 'aspect-video'}`} style={{ padding: 0, margin: 0 }}>
           <ImageWithFallback
             src={course.image}
             alt={course.name}
@@ -192,12 +192,12 @@ export function Courses() {
           )}
         </div>
         
-        <CardContent className={course.category === 'service' ? 'p-5 px-6 flex-grow flex flex-col gap-3' : 'p-5 flex-grow flex flex-col gap-3'}>
-          <h3 className={course.category === 'service' ? 'text-lg font-semibold text-[var(--cassia-purple-dark)] group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all line-clamp-2' : 'text-lg font-semibold text-[var(--cassia-purple-dark)] group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all line-clamp-2'}>
+        <CardContent className={course.category === 'service' ? 'p-4 px-5 flex-grow flex flex-col gap-2' : 'p-5 flex-grow flex flex-col gap-3'}>
+          <h3 className={course.category === 'service' ? 'text-base font-semibold text-[var(--cassia-purple-dark)] group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all line-clamp-2' : 'text-lg font-semibold text-[var(--cassia-purple-dark)] group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all line-clamp-2'}>
             {course.name}
           </h3>
           
-          <p className={course.category === 'service' ? 'text-sm text-[var(--cassia-purple-dark)]/72 leading-relaxed flex-grow line-clamp-3' : 'text-sm text-[var(--cassia-purple-dark)]/72 leading-relaxed flex-grow line-clamp-2'}>
+          <p className={course.category === 'service' ? 'text-xs text-[var(--cassia-purple-dark)]/72 leading-relaxed flex-grow line-clamp-2' : 'text-sm text-[var(--cassia-purple-dark)]/72 leading-relaxed flex-grow line-clamp-2'}>
             {course.description}
           </p>
           
@@ -241,7 +241,7 @@ export function Courses() {
             whileTap={{ scale: 0.98 }}
           >
             <Button 
-              className={`w-full bg-gradient-to-r ${course.gradient || 'from-[var(--cassia-purple)] to-[var(--cassia-gold)]'} hover:opacity-95 text-white border-0 font-semibold min-h-[44px] text-base rounded-xl transition-all duration-300 ease-out`}
+              className={`w-full bg-gradient-to-r ${course.gradient || 'from-[var(--cassia-purple)] to-[var(--cassia-gold)]'} hover:opacity-95 text-white border-0 font-semibold ${course.category === 'service' ? 'min-h-[40px] text-sm' : 'min-h-[44px] text-base'} rounded-xl transition-all duration-300 ease-out`}
               style={{ 
                 boxShadow: '0 4px 16px rgba(162, 117, 227, 0.4)',
               }}
