@@ -282,7 +282,7 @@ function ProductCard({ product, index, category }: ProductCardProps) {
             {hasPixPrice ? (
               <>
                 <div className="text-xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
-                  R$ {product.price.toFixed(2).replace('.', ',')} <span className="text-sm text-[var(--cassia-purple-dark)]/80">Cartão</span>
+                  R$ {product.price.toFixed(2).replace('.', ',')} <span className="text-sm text-[var(--cassia-purple-dark)]/80 font-semibold">CARTÃO</span>
                 </div>
                 <div className="text-sm text-[var(--cassia-purple-dark)]/70">
                   PIX: R$ {product.pixPrice!.toFixed(2).replace('.', ',')}
