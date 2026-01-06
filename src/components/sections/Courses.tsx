@@ -151,6 +151,7 @@ export function Courses() {
         className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border border-[var(--cassia-purple)]/20 rounded-2xl hover:border-[var(--cassia-purple)]/40 transition-all duration-300 ease-out group h-full flex flex-col"
         style={{ 
           boxShadow: 'var(--shadow-md)',
+          minHeight: course.category === 'service' ? '240px' : 'auto',
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
@@ -161,7 +162,7 @@ export function Courses() {
           e.currentTarget.style.transform = 'scale(1)';
         }}
       >
-        <div className="relative w-full h-[280px] overflow-hidden rounded-t-2xl" style={{ padding: 0, margin: 0 }}>
+        <div className="relative w-full aspect-video overflow-hidden rounded-t-2xl" style={{ padding: 0, margin: 0 }}>
           <ImageWithFallback
             src={course.image}
             alt={course.name}
@@ -178,11 +179,11 @@ export function Courses() {
           
           {course.level && (
             <motion.div
-              className="absolute top-4 right-4"
+              className="absolute top-3 right-3"
               whileHover={{ scale: 1.1, rotate: 5 }}
             >
               <Badge 
-                className={`bg-gradient-to-r ${course.gradient || 'from-[var(--cassia-purple)] to-[var(--cassia-gold)]'} border-0 text-white px-4 py-1`}
+                className={`bg-gradient-to-r ${course.gradient || 'from-[var(--cassia-purple)] to-[var(--cassia-gold)]'} border-0 text-white px-3 py-1 text-xs`}
                 style={{ boxShadow: 'var(--shadow-medium)' }}
               >
                 {course.level}
@@ -191,63 +192,49 @@ export function Courses() {
           )}
         </div>
         
-        <CardContent className="p-8 md:p-8 flex-grow flex flex-col">
-          <h3 className="text-xl text-[var(--cassia-purple-dark)] mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all">
+        <CardContent className={course.category === 'service' ? 'p-5 px-6 flex-grow flex flex-col gap-3' : 'p-5 flex-grow flex flex-col gap-3'}>
+          <h3 className={course.category === 'service' ? 'text-lg font-semibold text-[var(--cassia-purple-dark)] group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all line-clamp-2' : 'text-lg font-semibold text-[var(--cassia-purple-dark)] group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all line-clamp-2'}>
             {course.name}
           </h3>
           
-          <p className="text-[var(--cassia-purple-dark)]/72 text-sm mb-6 leading-relaxed flex-grow">
+          <p className={course.category === 'service' ? 'text-sm text-[var(--cassia-purple-dark)]/72 leading-relaxed flex-grow line-clamp-3' : 'text-sm text-[var(--cassia-purple-dark)]/72 leading-relaxed flex-grow line-clamp-2'}>
             {course.description}
           </p>
           
-          <div className="flex flex-wrap gap-3 text-sm text-[var(--cassia-purple-dark)]/80 mb-6">
+          <div className="flex flex-wrap items-center gap-3 text-xs text-[var(--cassia-purple-dark)]/80">
             {course.hours && (
-              <div className="flex items-center gap-1.5 bg-[var(--cassia-lavender)]/60 px-3 py-1.5 rounded-full">
-                <Clock className="w-4 h-4" />
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5" />
                 <span>{course.hours}</span>
-              </div>
+              </span>
             )}
             {course.format && (
-              <div className="flex items-center gap-1.5 bg-[var(--cassia-lavender)]/60 px-3 py-1.5 rounded-full">
-                <Calendar className="w-4 h-4" />
+              <span className="flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5" />
                 <span>{course.format}</span>
-              </div>
-            )}
-            {course.includes && (
-              <div className="flex items-center gap-1.5 bg-[var(--cassia-lavender)]/60 px-3 py-1.5 rounded-full">
-                <Package className="w-4 h-4" />
-                <span>Material Incluso</span>
-              </div>
+              </span>
             )}
             {(course.type === 'course' || course.type === 'mentoring') && (
-              <div className="flex items-center gap-1.5 bg-[var(--cassia-lavender)]/60 px-3 py-1.5 rounded-full">
-                <Award className="w-4 h-4" />
+              <span className="flex items-center gap-1.5">
+                <Award className="w-3.5 h-3.5" />
                 <span>Certificado</span>
-              </div>
+              </span>
             )}
           </div>
 
-          {course.includes && (
-            <div className="mb-4 p-3 bg-[var(--cassia-lavender)]/30 rounded-lg">
-              <p className="text-xs text-[var(--cassia-purple-dark)]/80 leading-relaxed">
-                <strong className="text-[var(--cassia-purple-dark)]">Inclui:</strong> {course.includes}
-              </p>
-            </div>
-          )}
-
-          <div className="mb-3 mt-auto">
-            <div className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
+          <div className="mt-auto">
+            <div className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
               R$ {course.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
             {course.updatePrice && (
-              <div className="text-sm text-[var(--cassia-purple-dark)]/70 mt-1">
+              <div className="text-xs text-[var(--cassia-purple-dark)]/70 mt-0.5">
                 Atualização: R$ {course.updatePrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
             )}
           </div>
         </CardContent>
 
-        <CardFooter className="p-6 pt-0 mt-auto">
+        <CardFooter className="p-5 pt-0 mt-auto">
           <motion.div 
             className="w-full"
             whileHover={{ scale: 1.02 }}

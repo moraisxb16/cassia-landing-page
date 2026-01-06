@@ -256,7 +256,7 @@ function ProductCard({ product, index, category }: ProductCardProps) {
           e.currentTarget.style.transform = 'scale(1)';
         }}
       >
-        <div className="relative w-full h-[180px] overflow-hidden rounded-t-2xl">
+        <div className="relative w-full aspect-square overflow-hidden rounded-t-2xl">
           <ImageWithFallback
             src={product.image}
             alt={product.name}
@@ -282,12 +282,12 @@ function ProductCard({ product, index, category }: ProductCardProps) {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
         </div>
 
-        <CardContent className="p-5 flex-grow flex flex-col">
-          <h3 className="text-base font-semibold text-[var(--cassia-purple-dark)] mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all line-clamp-2">
+        <CardContent className="p-4 flex-grow flex flex-col gap-2.5">
+          <h3 className="text-base font-semibold text-[var(--cassia-purple-dark)] group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all line-clamp-1">
             {product.name}
           </h3>
 
-          <p className="text-xs text-[var(--cassia-purple-dark)]/70 mb-3 leading-relaxed flex-grow line-clamp-2">
+          <p className="text-xs text-[var(--cassia-purple-dark)]/70 leading-relaxed flex-grow line-clamp-1">
             {product.description}
           </p>
 
@@ -295,22 +295,22 @@ function ProductCard({ product, index, category }: ProductCardProps) {
           <div className="space-y-1 mt-auto">
             {hasPixPrice ? (
               <>
-                <div className="text-xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
-                  R$ {product.price.toFixed(2).replace('.', ',')} <span className="text-sm text-[var(--cassia-purple-dark)]/80 font-semibold">CARTÃO</span>
+                <div className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
+                  R$ {product.price.toFixed(2).replace('.', ',')} <span className="text-xs text-[var(--cassia-purple-dark)]/80 font-semibold">CARTÃO</span>
                 </div>
-                <div className="text-sm text-[var(--cassia-purple-dark)]/70">
+                <div className="text-xs text-[var(--cassia-purple-dark)]/70">
                   PIX: R$ {product.pixPrice!.toFixed(2).replace('.', ',')}
                 </div>
               </>
             ) : (
-              <div className="text-xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
+              <div className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-gold)]">
                 R$ {product.price.toFixed(2).replace('.', ',')}
               </div>
             )}
           </div>
         </CardContent>
 
-        <CardFooter className="p-5 pt-0 pb-5">
+        <CardFooter className="p-4 pt-0 pb-4">
           <motion.div
             className="w-full"
             whileHover={{ scale: 1.02 }}
