@@ -137,17 +137,31 @@ export function Courses() {
     <motion.div
       key={course.id}
       className="h-full"
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ 
+        delay: index * 0.1,
+        duration: 0.6,
+        ease: [0.25, 0.46, 0.45, 0.94]
+      }}
       style={{ padding: 0, margin: 0 }}
     >
       <Card 
-        className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
-        style={{ boxShadow: 'var(--shadow-soft)' }}
+        className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border border-[var(--cassia-purple)]/20 rounded-2xl hover:border-[var(--cassia-purple)]/40 transition-all duration-300 ease-out group h-full flex flex-col"
+        style={{ 
+          boxShadow: 'var(--shadow-md)',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
+          e.currentTarget.style.transform = 'scale(1.03)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.boxShadow = 'var(--shadow-md)';
+          e.currentTarget.style.transform = 'scale(1)';
+        }}
       >
-        <div className="relative w-full h-[280px] overflow-hidden rounded-t-lg" style={{ padding: 0, margin: 0 }}>
+        <div className="relative w-full h-[280px] overflow-hidden rounded-t-2xl" style={{ padding: 0, margin: 0 }}>
           <ImageWithFallback
             src={course.image}
             alt={course.name}
@@ -177,7 +191,7 @@ export function Courses() {
           )}
         </div>
         
-        <CardContent className="p-6 flex-grow flex flex-col">
+        <CardContent className="p-8 md:p-8 flex-grow flex flex-col">
           <h3 className="text-xl text-[var(--cassia-purple-dark)] mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all">
             {course.name}
           </h3>
@@ -240,8 +254,24 @@ export function Courses() {
             whileTap={{ scale: 0.98 }}
           >
             <Button 
-              className={`w-full bg-gradient-to-r ${course.gradient || 'from-[var(--cassia-purple)] to-[var(--cassia-gold)]'} hover:opacity-95 text-white border-0 font-semibold min-h-[44px] text-base`}
-              style={{ boxShadow: '0 4px 12px rgba(94, 90, 154, 0.3)' }}
+              className={`w-full bg-gradient-to-r ${course.gradient || 'from-[var(--cassia-purple)] to-[var(--cassia-gold)]'} hover:opacity-95 text-white border-0 font-semibold min-h-[44px] text-base rounded-xl transition-all duration-300 ease-out`}
+              style={{ 
+                boxShadow: '0 4px 16px rgba(162, 117, 227, 0.4)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 6px 20px rgba(162, 117, 227, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 16px rgba(162, 117, 227, 0.4)';
+              }}
+              onMouseDown={(e) => {
+                e.currentTarget.style.transform = 'scale(0.98)';
+              }}
+              onMouseUp={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
               onClick={() =>
                 addItem({
                   id: course.id,
@@ -262,7 +292,7 @@ export function Courses() {
   );
 
   return (
-    <section id="courses" className="py-20 relative">
+    <section id="courses" className="py-24 md:py-32 relative">
       <motion.div 
         className="absolute top-1/4 left-1/4 w-96 h-96 bg-[var(--cassia-lavender)]/40 rounded-full blur-3xl"
         animate={{
@@ -349,7 +379,7 @@ export function Courses() {
             >
               Atendimentos
             </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8 items-stretch">
               {servicesList.map((course, index) => renderCourseCard(course, index))}
             </div>
           </div>
@@ -366,7 +396,7 @@ export function Courses() {
             >
               Cursos
             </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8 items-stretch">
               {coursesList.map((course, index) => renderCourseCard(course, index))}
             </div>
           </div>
@@ -383,7 +413,7 @@ export function Courses() {
             >
               Mentoria
             </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8 items-stretch">
               {mentoringList.map((course, index) => renderCourseCard(course, index))}
             </div>
           </div>

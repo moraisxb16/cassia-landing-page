@@ -29,11 +29,23 @@
   --gold-light: rgba(233, 138, 70, 0.16);
   --gold-medium: rgba(233, 106, 66, 0.28);
   
-  /* ✨ Sombras suaves e elegantes */
-  --shadow-soft: 0 8px 24px rgba(15, 10, 40, 0.06);
-  --shadow-medium: 0 16px 40px rgba(15, 10, 40, 0.14);
-  --shadow-glow: 0 0 40px rgba(94, 90, 154, 0.45);
-  --shadow-strong: 0 20px 60px rgba(15, 10, 40, 0.22);
+  /* ✨ Sistema de Sombras Premium em Camadas */
+  --shadow-xs: 0 1px 2px rgba(42, 22, 63, 0.05);
+  --shadow-sm: 0 2px 8px rgba(162, 117, 227, 0.08), 0 1px 4px rgba(42, 22, 63, 0.06);
+  --shadow-md: 0 4px 16px rgba(162, 117, 227, 0.12), 0 2px 8px rgba(42, 22, 63, 0.08);
+  --shadow-lg: 0 12px 32px rgba(162, 117, 227, 0.16), 0 4px 16px rgba(42, 22, 63, 0.12);
+  --shadow-xl: 0 20px 48px rgba(162, 117, 227, 0.24), 0 8px 24px rgba(42, 22, 63, 0.16);
+  
+  /* Sombras legadas (mantidas para compatibilidade) */
+  --shadow-soft: var(--shadow-sm);
+  --shadow-medium: var(--shadow-md);
+  --shadow-glow: 0 0 40px rgba(162, 117, 227, 0.45);
+  --shadow-strong: var(--shadow-lg);
+  
+  /* Gradientes Premium */
+  --gradient-primary: linear-gradient(135deg, #A275E3, #8A4FC3);
+  --gradient-gold: linear-gradient(135deg, #CFAF63, #F8E3BB);
+  --gradient-holographic: linear-gradient(135deg, #A275E3, #CFAF63, #D6C0F4);
   
   /* 🌙 Blur / Glow */
   --blur-soft: blur(18px);
@@ -47,6 +59,37 @@
   }
   100% {
     background-position: -200% center;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(162, 117, 227, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(162, 117, 227, 0.6);
   }
 }
 
@@ -93,4 +136,55 @@ body {
   box-shadow: 0 4px 12px rgba(94, 90, 154, 0.25);
   -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
+}
+
+/* Tipografia Premium */
+h1 {
+  font-size: 48px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 36px;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-size: 24px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+body {
+  font-size: 17px;
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+small {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Container Premium */
+.container-premium {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (min-width: 768px) {
+  .container-premium {
+    padding: 0 32px;
+  }
 }

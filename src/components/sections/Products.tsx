@@ -233,14 +233,28 @@ function ProductCard({ product, index, category }: ProductCardProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
+      initial={{ opacity: 0, y: 40, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ 
+        delay: index * 0.1,
+        duration: 0.6,
+        ease: [0.25, 0.46, 0.45, 0.94]
+      }}
     >
       <Card 
-        className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
-        style={{ boxShadow: 'var(--shadow-soft)' }}
+        className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border border-[var(--cassia-purple)]/20 rounded-2xl hover:border-[var(--cassia-purple)]/40 transition-all duration-300 ease-out group h-full flex flex-col"
+        style={{ 
+          boxShadow: 'var(--shadow-md)',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
+          e.currentTarget.style.transform = 'scale(1.03)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.boxShadow = 'var(--shadow-md)';
+          e.currentTarget.style.transform = 'scale(1)';
+        }}
       >
         <div className="relative w-full h-[220px] overflow-hidden">
           <ImageWithFallback
@@ -268,7 +282,7 @@ function ProductCard({ product, index, category }: ProductCardProps) {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
         </div>
 
-        <CardContent className="p-5 flex-grow flex flex-col">
+        <CardContent className="p-6 md:p-8 flex-grow flex flex-col">
           <h3 className="text-lg text-[var(--cassia-purple-dark)] mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all">
             {product.name}
           </h3>
@@ -303,8 +317,24 @@ function ProductCard({ product, index, category }: ProductCardProps) {
             whileTap={{ scale: 0.98 }}
           >
             <Button
-              className="w-full bg-gradient-to-r from-[var(--cassia-purple)] to-[var(--cassia-purple-dark)] hover:from-[var(--cassia-purple-dark)] hover:to-[var(--cassia-purple)] text-white border-0 font-semibold min-h-[44px] text-base"
-              style={{ boxShadow: '0 4px 12px rgba(94, 90, 154, 0.3)' }}
+              className="w-full bg-gradient-to-r from-[var(--cassia-purple)] to-[var(--cassia-purple-dark)] hover:from-[var(--cassia-purple-dark)] hover:to-[var(--cassia-purple)] text-white border-0 font-semibold min-h-[44px] text-base rounded-xl transition-all duration-300 ease-out"
+              style={{ 
+                boxShadow: '0 4px 16px rgba(162, 117, 227, 0.4)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 6px 20px rgba(162, 117, 227, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 16px rgba(162, 117, 227, 0.4)';
+              }}
+              onMouseDown={(e) => {
+                e.currentTarget.style.transform = 'scale(0.98)';
+              }}
+              onMouseUp={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
               onClick={() =>
                 addItem({
                   id: product.id,
@@ -328,7 +358,7 @@ function ProductCard({ product, index, category }: ProductCardProps) {
 
 export function Products() {
   return (
-    <section id="products" className="py-20 relative">
+    <section id="products" className="py-24 md:py-32 relative">
       {/* Animated background místico */}
       <motion.div 
         className="absolute top-1/3 right-1/4 w-96 h-96 bg-[var(--cassia-gold-light)]/40 rounded-full blur-3xl"
@@ -380,7 +410,7 @@ export function Products() {
             >
               Óleos Essenciais
             </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8 items-stretch">
               {products.oils.map((product, i) => (
                 <ProductCard key={product.id} product={product} index={i} category="oils" />
               ))}
@@ -399,7 +429,7 @@ export function Products() {
             >
               Sprays
             </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8 items-stretch">
               {products.sprays.map((product, i) => (
                 <ProductCard key={product.id} product={product} index={i} category="sprays" />
               ))}
@@ -418,7 +448,7 @@ export function Products() {
             >
               Livros
             </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8 items-stretch">
               {products.books.map((product, i) => (
                 <ProductCard key={product.id} product={product} index={i} category="books" />
               ))}
@@ -437,7 +467,7 @@ export function Products() {
             >
               Outros Produtos
             </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8 items-stretch">
               {products.other.map((product, i) => (
                 <ProductCard key={product.id} product={product} index={i} category="other" />
               ))}
