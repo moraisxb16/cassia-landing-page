@@ -336,9 +336,9 @@ export function Courses() {
                 <p className="text-[var(--cassia-purple-dark)]/80 mb-4">
                   Momento de troca para entender a necessidade do cliente e definir o melhor caminho terapêutico inicial.
                 </p>
-                <div className="flex justify-center">
+                <div className="flex justify-center items-center w-full">
                   <Button
-                    className="bg-[var(--cassia-purple)] hover:bg-[var(--cassia-purple-dark)] text-white"
+                    className="bg-[var(--cassia-purple)] hover:bg-[var(--cassia-purple-dark)] text-white mx-auto"
                     onClick={() => {
                       // Abrir WhatsApp ou link de agendamento
                       // ATUALIZAR: Substituir pelo número de WhatsApp correto ou link do ClickUp
