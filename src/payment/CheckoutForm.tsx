@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -34,7 +34,7 @@ export function CheckoutForm() {
   const hasPixProducts = items.some(item => item.pricePix !== undefined && item.pricePix > 0);
   
   // Se não houver produtos com PIX, forçar método de pagamento para 'card'
-  React.useEffect(() => {
+  useEffect(() => {
     if (!hasPixProducts && form.paymentMethod === 'pix') {
       setForm(prev => ({ ...prev, paymentMethod: 'card' }));
     }
@@ -84,12 +84,14 @@ export function CheckoutForm() {
               </div>
               <div className="border-t border-purple-200 pt-2 space-y-1">
                 <div className="flex justify-between">
-                  <span className="text-purple-900">Total ({form.paymentMethod === 'pix' ? 'PIX' : 'Cartão'})</span>
+                  <span className="text-purple-900">
+                    Total{hasPixProducts ? ` (${form.paymentMethod === 'pix' ? 'PIX' : 'Cartão'})` : ''}
+                  </span>
                   <span className="text-purple-900 font-semibold">
                     R$ {currentTotal.toFixed(2).replace('.', ',')}
                   </span>
                 </div>
-                {form.paymentMethod === 'pix' && currentTotal < totalPrice && (
+                {hasPixProducts && form.paymentMethod === 'pix' && currentTotal < totalPrice && (
                   <div className="flex justify-between text-sm text-green-600">
                     <span>Economia com PIX:</span>
                     <span>R$ {(totalPrice - currentTotal).toFixed(2).replace('.', ',')}</span>
