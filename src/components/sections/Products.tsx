@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardFooter } from '../ui/card';
 import { Badge } from '../ui/badge';
@@ -256,7 +256,7 @@ function ProductCard({ product, index, category }: ProductCardProps) {
           e.currentTarget.style.transform = 'scale(1)';
         }}
       >
-        <div className="relative w-full h-[220px] overflow-hidden">
+        <div className="relative w-full h-[180px] overflow-hidden rounded-t-2xl">
           <ImageWithFallback
             src={product.image}
             alt={product.name}
@@ -282,12 +282,12 @@ function ProductCard({ product, index, category }: ProductCardProps) {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
         </div>
 
-        <CardContent className="p-6 md:p-8 flex-grow flex flex-col">
-          <h3 className="text-lg text-[var(--cassia-purple-dark)] mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all">
+        <CardContent className="p-5 flex-grow flex flex-col">
+          <h3 className="text-base font-semibold text-[var(--cassia-purple-dark)] mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[var(--cassia-purple-dark)] group-hover:to-[var(--cassia-gold)] transition-all line-clamp-2">
             {product.name}
           </h3>
 
-          <p className="text-[var(--cassia-purple-dark)]/72 text-sm mb-6 leading-relaxed flex-grow">
+          <p className="text-xs text-[var(--cassia-purple-dark)]/70 mb-3 leading-relaxed flex-grow line-clamp-2">
             {product.description}
           </p>
 
@@ -310,14 +310,14 @@ function ProductCard({ product, index, category }: ProductCardProps) {
           </div>
         </CardContent>
 
-        <CardFooter className="p-5 pt-0">
+        <CardFooter className="p-5 pt-0 pb-5">
           <motion.div
             className="w-full"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
             <Button
-              className="w-full bg-gradient-to-r from-[var(--cassia-purple)] to-[var(--cassia-purple-dark)] hover:from-[var(--cassia-purple-dark)] hover:to-[var(--cassia-purple)] text-white border-0 font-semibold min-h-[44px] text-base rounded-xl transition-all duration-300 ease-out"
+              className="w-full bg-gradient-to-r from-[var(--cassia-purple)] to-[var(--cassia-purple-dark)] hover:from-[var(--cassia-purple-dark)] hover:to-[var(--cassia-purple)] text-white border-0 font-semibold min-h-[40px] text-sm rounded-xl transition-all duration-300 ease-out"
               style={{ 
                 boxShadow: '0 4px 16px rgba(162, 117, 227, 0.4)',
               }}
@@ -346,8 +346,8 @@ function ProductCard({ product, index, category }: ProductCardProps) {
                 })
               }
             >
-              <ShoppingBag className="w-5 h-5 mr-2" />
-              Adicionar ao Carrinho
+              <ShoppingBag className="w-4 h-4 mr-1.5" />
+              Adicionar
             </Button>
           </motion.div>
         </CardFooter>
@@ -357,6 +357,17 @@ function ProductCard({ product, index, category }: ProductCardProps) {
 }
 
 export function Products() {
+  const [activeTab, setActiveTab] = useState<'oils' | 'sprays' | 'books' | 'other'>('oils');
+
+  const tabs = [
+    { id: 'oils' as const, label: 'Óleos Essenciais' },
+    { id: 'sprays' as const, label: 'Sprays' },
+    { id: 'books' as const, label: 'Livros' },
+    { id: 'other' as const, label: 'Outros' },
+  ];
+
+  const activeProducts = products[activeTab] || [];
+
   return (
     <section id="products" className="py-24 md:py-32 relative">
       {/* Animated background místico */}
@@ -399,80 +410,38 @@ export function Products() {
           </p>
         </motion.div>
 
-        {/* Seção: Óleos Essenciais */}
-        {products.oils && products.oils.length > 0 && (
-          <div className="mb-16">
-            <motion.h3
-              className="text-3xl md:text-4xl text-[var(--cassia-purple-dark)] mb-8 text-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              Óleos Essenciais
-            </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8 items-stretch">
-              {products.oils.map((product, i) => (
-                <ProductCard key={product.id} product={product} index={i} category="oils" />
-              ))}
-            </div>
+        {/* Sistema de Tabs */}
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex gap-2 p-1 bg-[var(--cassia-lavender)]/20 rounded-xl border border-[var(--cassia-purple)]/10">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-6 py-3 rounded-lg font-medium text-sm md:text-base transition-all duration-300 ease-out ${
+                  activeTab === tab.id
+                    ? 'bg-[#A275E3] text-white shadow-md'
+                    : 'bg-transparent text-[var(--cassia-purple-dark)]/70 hover:bg-[var(--cassia-lavender)]/40'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
-        )}
+        </div>
 
-        {/* Seção: Sprays */}
-        {products.sprays && products.sprays.length > 0 && (
-          <div className="mb-16">
-            <motion.h3
-              className="text-3xl md:text-4xl text-[var(--cassia-purple-dark)] mb-8 text-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              Sprays
-            </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8 items-stretch">
-              {products.sprays.map((product, i) => (
-                <ProductCard key={product.id} product={product} index={i} category="sprays" />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Seção: Livros */}
-        {products.books && products.books.length > 0 && (
-          <div className="mb-16">
-            <motion.h3
-              className="text-3xl md:text-4xl text-[var(--cassia-purple-dark)] mb-8 text-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              Livros
-            </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8 items-stretch">
-              {products.books.map((product, i) => (
-                <ProductCard key={product.id} product={product} index={i} category="books" />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Seção: Outros Produtos */}
-        {products.other && products.other.length > 0 && (
-          <div className="mb-16">
-            <motion.h3
-              className="text-3xl md:text-4xl text-[var(--cassia-purple-dark)] mb-8 text-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              Outros Produtos
-            </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8 items-stretch">
-              {products.other.map((product, i) => (
-                <ProductCard key={product.id} product={product} index={i} category="other" />
-              ))}
-            </div>
-          </div>
+        {/* Grid de Produtos Filtrado */}
+        {activeProducts.length > 0 && (
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6 items-stretch"
+          >
+            {activeProducts.map((product, i) => (
+              <ProductCard key={product.id} product={product} index={i} category={activeTab} />
+            ))}
+          </motion.div>
         )}
       </div>
     </section>
