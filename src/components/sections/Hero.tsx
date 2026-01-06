@@ -13,7 +13,7 @@ export function Hero() {
   const imageParallaxY = useTransform(scrollYProgress, [0, 1], [6, -6]);
 
   return (
-    <section className="relative pt-32 pb-24 md:pt-40 md:pb-32 overflow-hidden cassia-hero-gradient">
+    <section className="relative pt-24 pb-16 md:pt-32 md:pb-20 overflow-hidden cassia-hero-gradient">
       {/* Overlay sutil sobre o gradiente animado */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-white/10" />
       
