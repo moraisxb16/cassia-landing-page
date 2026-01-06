@@ -145,14 +145,11 @@ export function Courses() {
         className="overflow-hidden bg-[var(--cassia-surface)]/95 backdrop-blur-sm border-[var(--cassia-border-soft)] hover:border-[var(--cassia-purple)] transition-all duration-500 group h-full flex flex-col"
         style={{ boxShadow: 'var(--shadow-soft)' }}
       >
-        <div className="relative w-full h-[260px] overflow-hidden rounded-t-lg">
+        <div className="relative w-full h-[280px] overflow-hidden rounded-t-lg bg-[var(--cassia-lavender-light)]/20">
           <ImageWithFallback
             src={course.image}
             alt={course.name}
-            className={course.category === 'service' 
-              ? "w-full h-full object-cover object-center"
-              : "max-w-full max-h-full object-contain object-center p-4"
-            }
+            className="w-full h-full object-cover object-center"
             style={{ imageRendering: 'auto' }}
           />
           
