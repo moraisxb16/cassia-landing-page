@@ -30,6 +30,16 @@ export function CheckoutForm() {
 
   const [form, setForm] = useState<CheckoutFormData>(defaultForm);
   
+  // Verificar se há produtos com preço PIX no carrinho
+  const hasPixProducts = items.some(item => item.pricePix !== undefined && item.pricePix > 0);
+  
+  // Se não houver produtos com PIX, forçar método de pagamento para 'card'
+  React.useEffect(() => {
+    if (!hasPixProducts && form.paymentMethod === 'pix') {
+      setForm(prev => ({ ...prev, paymentMethod: 'card' }));
+    }
+  }, [hasPixProducts, form.paymentMethod]);
+  
   // Calcular total baseado no método de pagamento selecionado
   const currentTotal = getTotalPrice(form.paymentMethod);
 
@@ -197,52 +207,69 @@ export function CheckoutForm() {
               </div>
             </div>
 
-            {/* Seletor de Método de Pagamento */}
-            <div className="space-y-4">
-              <h3 className="text-purple-900">Método de Pagamento</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <label className={`cursor-pointer border-2 rounded-lg p-4 transition-all ${
-                  form.paymentMethod === 'pix'
-                    ? 'border-purple-600 bg-purple-50'
-                    : 'border-gray-200 hover:border-purple-300'
-                }`}>
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="pix"
-                    checked={form.paymentMethod === 'pix'}
-                    onChange={(e) => setForm(prev => ({ ...prev, paymentMethod: e.target.value as 'pix' | 'card' }))}
-                    className="mr-2"
-                  />
-                  <span className="font-semibold text-purple-900">PIX</span>
-                  {getTotalPrice('pix') < totalPrice && (
-                    <p className="text-sm text-green-600 mt-1">
-                      Economize R$ {(totalPrice - getTotalPrice('pix')).toFixed(2).replace('.', ',')}
-                    </p>
-                  )}
-                </label>
-                <label className={`cursor-pointer border-2 rounded-lg p-4 transition-all ${
-                  form.paymentMethod === 'card'
-                    ? 'border-purple-600 bg-purple-50'
-                    : 'border-gray-200 hover:border-purple-300'
-                }`}>
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="card"
-                    checked={form.paymentMethod === 'card'}
-                    onChange={(e) => setForm(prev => ({ ...prev, paymentMethod: e.target.value as 'pix' | 'card' }))}
-                    className="mr-2"
-                  />
-                  <span className="font-semibold text-purple-900">Cartão de Crédito</span>
-                </label>
+            {/* Seletor de Método de Pagamento - Apenas se houver produtos com PIX */}
+            {hasPixProducts && (
+              <div className="space-y-4">
+                <h3 className="text-purple-900">Método de Pagamento</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <label className={`cursor-pointer border-2 rounded-lg p-4 transition-all ${
+                    form.paymentMethod === 'pix'
+                      ? 'border-purple-600 bg-purple-50'
+                      : 'border-gray-200 hover:border-purple-300'
+                  }`}>
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="pix"
+                      checked={form.paymentMethod === 'pix'}
+                      onChange={(e) => setForm(prev => ({ ...prev, paymentMethod: e.target.value as 'pix' | 'card' }))}
+                      className="mr-2"
+                    />
+                    <span className="font-semibold text-purple-900">PIX</span>
+                    {getTotalPrice('pix') < totalPrice && (
+                      <p className="text-sm text-green-600 mt-1">
+                        Economize R$ {(totalPrice - getTotalPrice('pix')).toFixed(2).replace('.', ',')}
+                      </p>
+                    )}
+                  </label>
+                  <label className={`cursor-pointer border-2 rounded-lg p-4 transition-all ${
+                    form.paymentMethod === 'card'
+                      ? 'border-purple-600 bg-purple-50'
+                      : 'border-gray-200 hover:border-purple-300'
+                  }`}>
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="card"
+                      checked={form.paymentMethod === 'card'}
+                      onChange={(e) => setForm(prev => ({ ...prev, paymentMethod: e.target.value as 'pix' | 'card' }))}
+                      className="mr-2"
+                    />
+                    <span className="font-semibold text-purple-900">Cartão de Crédito</span>
+                  </label>
+                </div>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <p className="text-sm text-blue-800">
+                    💳 Você finalizará o pagamento no checkout seguro da InfinitePay. O valor será processado conforme o método escolhido.
+                  </p>
+                </div>
               </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-sm text-blue-800">
-                  💳 Você finalizará o pagamento no checkout seguro da InfinitePay. O valor será processado conforme o método escolhido.
-                </p>
+            )}
+            
+            {/* Se não houver produtos com PIX, mostrar apenas informação do método */}
+            {!hasPixProducts && (
+              <div className="space-y-4">
+                <h3 className="text-purple-900">Método de Pagamento</h3>
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                  <p className="text-sm text-purple-800 font-semibold">
+                    💳 Cartão de Crédito
+                  </p>
+                  <p className="text-xs text-purple-700 mt-1">
+                    Você finalizará o pagamento no checkout seguro da InfinitePay.
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
 
             <InfinitePayButton
               description="Compra na Cassia Corviniy"
