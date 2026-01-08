@@ -179,8 +179,8 @@ export function Hero() {
               style={{ boxShadow: '0 0 14px rgba(255, 255, 255, 0.25)' }}
             >
               <ImageWithFallback
-                src="https://images.unsplash.com/photo-1608581821109-f825056e31c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoZWFsaW5nJTIwY3J5c3RhbHMlMjBlc3NlbnRpYWwlMjBvaWxzJTIwemVufGVufDF8fHx8MTc2MzY1MzMzM3ww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                alt="Cristais, Óleos Essenciais e Produtos Holísticos"
+                src="https://i.ibb.co/prygpWrC/Logotipo-C-ssia-Corviniy-9-1.jpg"
+                alt="Cassia Corviniy - Logotipo"
                 className="w-full h-auto"
               />
               
