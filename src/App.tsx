@@ -3,6 +3,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './cart/CartContext';
 import { Header } from './components/layout/Header';
 import { Hero } from './components/sections/Hero';
+import { AboutMe } from './components/sections/AboutMe';
+import { MyWork } from './components/sections/MyWork';
+import { MySpecializations } from './components/sections/MySpecializations';
+import { MyTools } from './components/sections/MyTools';
 import { Services } from './components/sections/Services';
 import { Courses } from './components/sections/Courses';
 import { Products } from './components/sections/Products';
@@ -18,8 +22,12 @@ function HomePage() {
     <>
       <Header />
       <Hero />
-      <Services />
+      <AboutMe />
+      <MyWork />
+      <MySpecializations />
+      <MyTools />
       <Courses />
+      <Services />
       <Testimonials />
       <Products />
       <Footer />

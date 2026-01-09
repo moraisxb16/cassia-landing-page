@@ -66,41 +66,27 @@ export function Hero() {
               whileHover={{ scale: 1.02 }}
             >
               <Sparkles className="w-4 h-4 text-[var(--cassia-gold)]" />
-              <span className="text-[var(--cassia-purple-dark)] text-sm">Transformação Espiritual</span>
+              <span className="text-[var(--cassia-purple-dark)] text-sm">✨ Transformação Mental, Física e Espiritual</span>
             </motion.div>
 
             {/* Título Principal */}
             <motion.h2
-              className="text-5xl md:text-6xl lg:text-7xl font-semibold leading-tight mb-6 text-center"
-              style={{
-                background: 'none',
-                backgroundColor: 'transparent',
-                backgroundImage:
-                  'linear-gradient(90deg, #FFFFFF 0%, #EDE7F8 40%, #C7B4FF 100%)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                color: 'transparent',
-                WebkitTextFillColor: 'transparent',
-                letterSpacing: '0.06em',
-                textShadow: 'none',
-                filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.25))',
-                opacity: 1,
-              }}
+              className="text-5xl md:text-6xl lg:text-7xl font-semibold leading-tight mb-6 text-center text-white"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.25, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              Desperte Sua Luz Interior
+              QUERER é o início de toda transformação.
             </motion.h2>
             
             {/* Descrição - mais concisa e focada no valor */}
             <motion.p
-              className="text-lg md:text-xl text-[var(--cassia-night)]/90 max-w-2xl mx-auto mb-8 font-medium"
+              className="text-lg md:text-xl text-[var(--cassia-purple)] max-w-2xl mx-auto mb-8 font-medium"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.8 }}
             >
-              Transforme sua vida através da cura energética e autoconhecimento profundo.
+              Um espaço seguro para se compreender, transformar padrões e se reconectar com SUA ESSÊNCIA.
             </motion.p>
 
             {/* CTA Principal - Destacado */}
@@ -114,10 +100,10 @@ export function Hero() {
                 <Button 
                   className="w-full sm:w-auto bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-purple)] hover:from-[var(--cassia-purple)] hover:to-[var(--cassia-purple-dark)] text-white border-0 px-12 py-7 text-lg font-semibold min-h-[56px]"
                   style={{ boxShadow: '0 8px 24px rgba(94, 90, 154, 0.4)' }}
-                  onClick={() => document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => document.getElementById('diagnostico')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <Sparkles className="w-5 h-5 mr-2" />
-                  Começar Minha Transformação
+                  Começar a minha transformação
                 </Button>
               </motion.div>
             </motion.div>
@@ -130,11 +116,11 @@ export function Hero() {
               transition={{ delay: 0.9 }}
             >
               {[
-                { icon: Heart, text: 'Cura Energética' },
-                { icon: Moon, text: 'Desenvolvimento Espiritual' },
-                { icon: Zap, text: 'Transformação Pessoal' }
+                { text: 'Quem Eu Sou' },
+                { text: 'Meu Trabalho' },
+                { text: 'Minhas Especializações' },
+                { text: 'Minhas Ferramentas' }
               ].map((item, i) => {
-                const Icon = item.icon;
                 return (
                   <motion.div
                     key={i}
@@ -145,7 +131,6 @@ export function Hero() {
                     transition={{ delay: 1 + i * 0.1 }}
                     whileHover={{ scale: 1.05 }}
                   >
-                    <Icon className="w-4 h-4 text-[var(--cassia-purple)]" />
                     <span className="text-sm text-[var(--cassia-night)]/80 font-medium">{item.text}</span>
                   </motion.div>
                 );
@@ -156,7 +141,7 @@ export function Hero() {
           {/* Imagem Hero */}
           <motion.div
             ref={imageRef}
-            className="relative max-w-3xl mx-auto"
+            className="relative max-w-5xl mx-auto"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4 }}
@@ -175,14 +160,16 @@ export function Hero() {
             
             {/* Container da imagem */}
             <div
-              className="relative rounded-3xl overflow-hidden border-2 border-white/50"
+              className="relative rounded-3xl overflow-hidden border-2 border-white/50 max-w-5xl mx-auto"
               style={{ boxShadow: '0 0 14px rgba(255, 255, 255, 0.25)' }}
             >
-              <ImageWithFallback
-                src="https://i.ibb.co/prygpWrC/Logotipo-C-ssia-Corviniy-9-1.jpg"
-                alt="Cassia Corviniy - Logotipo"
-                className="w-full h-auto"
-              />
+              <div className="w-full" style={{ aspectRatio: '16/9' }}>
+                <ImageWithFallback
+                  src="https://i.ibb.co/prygpWrC/Logotipo-C-ssia-Corviniy-9-1.jpg"
+                  alt="Cassia Corviniy - Logotipo"
+                  className="w-full h-full object-cover"
+                />
+              </div>
               
               {/* Overlay gradiente */}
               <div className="absolute inset-0 bg-gradient-to-t from-[var(--cassia-purple)]/15 via-transparent to-white/5" />

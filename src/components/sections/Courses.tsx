@@ -58,10 +58,10 @@ const courses: Course[] = [
   // ATENDIMENTOS
   {
     id: 'mesa-radionica-dragonlight',
-    name: 'Mesa Radiônica Dragonlight',
+    name: 'Atendimento Individual – Mesa Radiônica Dragonlight',
     description: 'Ferramenta de autoconhecimento que atua em três pilares: limpeza energética em todos os níveis, fortalecimento da verdadeira identidade e cocriação dos desejos do coração. Trabalho sutil e profundo, com reflexos no campo físico, emocional e espiritual.',
     price: 630.00,
-    image: 'https://i.ibb.co/1fbKfP7J/Whats-App-Image-2026-01-06-at-08-52-06.jpg',
+    image: 'https://i.ibb.co/MxV5TLjC/Whats-App-Image-2026-01-06-at-08-52-06.jpg',
     type: 'service',
     category: 'service',
     format: 'Individual',
@@ -69,10 +69,10 @@ const courses: Course[] = [
   },
   {
     id: 'dragon-coaching',
-    name: 'Dragon Coaching',
+    name: 'Atendimento Individual – Dragon Coaching',
     description: 'Atendimento de coaching com ferramentas energéticas Dragonlight para acelerar resultados, trabalhando intenção e clareza energética.',
     price: 630.00,
-    image: 'https://i.ibb.co/S4BXv22Y/Whats-App-Image-2025-12-26-at-11-03-29-1.jpg',
+    image: 'https://i.ibb.co/xSNnYm7r/Whats-App-Image-2026-01-06-at-14-59-46.jpg',
     type: 'service',
     category: 'service',
     format: 'Individual',
@@ -130,7 +130,11 @@ export function Courses() {
 
   // Separar por categoria
   const coursesList = courses.filter(c => c.category === 'course');
-  const servicesList = courses.filter(c => c.category === 'service');
+  // Apenas 2 atendimentos específicos
+  const servicesList = courses.filter(c => 
+    c.category === 'service' && 
+    (c.id === 'mesa-radionica-dragonlight' || c.id === 'dragon-coaching')
+  );
   const mentoringList = courses.filter(c => c.category === 'mentoring');
 
   const renderCourseCard = (course: Course, index: number) => (
@@ -320,6 +324,7 @@ export function Courses() {
           
           {/* Diagnóstico Terapêutico - Gratuito */}
           <motion.div
+            id="diagnostico"
             className="max-w-2xl mx-auto bg-gradient-to-r from-[var(--cassia-lavender)]/30 to-[var(--cassia-gold)]/30 p-6 rounded-lg border border-[var(--cassia-purple)]/30"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -334,15 +339,14 @@ export function Courses() {
                   Diagnóstico Terapêutico (20 minutos gratuito)
                 </h3>
                 <p className="text-[var(--cassia-purple-dark)]/80 mb-4">
-                  Momento de troca para entender a necessidade do cliente e definir o melhor caminho terapêutico inicial.
+                  Um momento especial de conversa entre eu e você, para que juntas possamos entender a sua necessidade e definir seu Caminho Terapêutico.
                 </p>
                 <div className="flex justify-center items-center w-full">
                   <Button
                     className="bg-[var(--cassia-purple)] hover:bg-[var(--cassia-purple-dark)] text-white mx-auto"
                     onClick={() => {
                       // Abrir WhatsApp ou link de agendamento
-                      // ATUALIZAR: Substituir pelo número de WhatsApp correto ou link do ClickUp
-                      const whatsappNumber = '5519996760107'; // ATUALIZAR COM O NÚMERO REAL
+                      const whatsappNumber = '5519996760107';
                       const message = encodeURIComponent('Olá! Gostaria de agendar um Diagnóstico Terapêutico (20 minutos gratuito).');
                       window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
                     }}
