@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Button } from '../ui/button';
-import { Sparkles, Heart, Moon, Zap } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { ImageWithFallback } from '../shared/ImageWithFallback';
 
@@ -13,7 +13,7 @@ export function Hero() {
   const imageParallaxY = useTransform(scrollYProgress, [0, 1], [6, -6]);
 
   return (
-    <section className="relative pt-24 pb-16 md:pt-32 md:pb-20 overflow-hidden cassia-hero-gradient">
+    <section className="relative pt-32 pb-20 md:pt-40 md:pb-24 overflow-hidden cassia-hero-gradient">
       {/* Overlay sutil sobre o gradiente animado */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-white/10" />
       
@@ -47,213 +47,230 @@ export function Hero() {
           transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
+
+      {/* Partículas sutis flutuantes */}
+      {[...Array(25)].map((_, i) => (
+        <motion.div
+          key={`particle-${i}`}
+          className="absolute w-1 h-1 rounded-full pointer-events-none"
+          style={{
+            background: i % 3 === 0 ? 'rgba(255,255,255,0.4)' : i % 3 === 1 ? 'rgba(162,117,227,0.3)' : 'rgba(207,175,99,0.3)',
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+          animate={{
+            y: [0, -30 - Math.random() * 40, 0],
+            x: [0, (Math.random() - 0.5) * 20, 0],
+            opacity: [0.2, 0.5, 0.2],
+            scale: [0.8, 1.2, 0.8],
+          }}
+          transition={{
+            duration: 8 + Math.random() * 4,
+            repeat: Infinity,
+            delay: Math.random() * 5,
+            ease: "easeInOut"
+          }}
+        />
+      ))}
       
       <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-6xl mx-auto">
-          {/* Conteúdo superior */}
-          <motion.div
-            className="text-center mb-12 md:mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            {/* Badge */}
+        <div className="max-w-7xl mx-auto">
+          {/* Layout 2 colunas no desktop */}
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center mb-12 md:mb-16">
+            {/* Coluna esquerda: Foto da Cássia */}
             <motion.div
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-8 hero-badge"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              whileHover={{ scale: 1.02 }}
+              className="flex justify-center md:justify-start order-2 md:order-1"
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <Sparkles className="w-4 h-4 text-[var(--cassia-gold)]" />
-              <span className="text-[var(--cassia-purple-dark)] text-sm">✨ Transformação Mental, Física e Espiritual</span>
+              <div className="relative">
+                {/* Foto circular com borda dourada e glow */}
+                <div className="relative w-[140px] h-[140px] md:w-[140px] md:h-[140px]">
+                  <div 
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      border: '4px solid #CFAF63',
+                      boxShadow: '0 0 20px rgba(207,175,99,0.4), 0 0 40px rgba(162,117,227,0.2), inset 0 0 20px rgba(207,175,99,0.1)',
+                    }}
+                  />
+                  <motion.div
+                    className="absolute inset-0 rounded-full overflow-hidden"
+                    animate={{
+                      boxShadow: [
+                        '0 0 20px rgba(207,175,99,0.4), 0 0 40px rgba(162,117,227,0.2)',
+                        '0 0 30px rgba(207,175,99,0.6), 0 0 50px rgba(162,117,227,0.3)',
+                        '0 0 20px rgba(207,175,99,0.4), 0 0 40px rgba(162,117,227,0.2)',
+                      ],
+                    }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <ImageWithFallback
+                      src="https://via.placeholder.com/140x140/CFAF63/FFFFFF?text=C%C3%A1ssia"
+                      alt="Cássia Corviniy"
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  </motion.div>
+                </div>
+              </div>
             </motion.div>
 
-            {/* Título Principal */}
-            <motion.h2
-              className="text-5xl md:text-6xl lg:text-7xl font-semibold leading-tight mb-6 text-center text-white"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-            >
-              QUERER é o início de toda transformação.
-            </motion.h2>
-            
-            {/* Descrição - mais concisa e focada no valor */}
-            <motion.p
-              className="text-lg md:text-xl text-[var(--cassia-purple)] max-w-2xl mx-auto mb-8 font-medium"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-            >
-              Um espaço seguro para se compreender, transformar padrões e se reconectar com SUA ESSÊNCIA.
-            </motion.p>
-
-            {/* CTA Principal - Destacado */}
+            {/* Coluna direita: Título + Subtítulo + CTA */}
             <motion.div
-              className="flex justify-center mb-8"
-              initial={{ opacity: 0, y: 20 }}
+              className="text-center md:text-left order-1 md:order-2"
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
+              transition={{ duration: 0.8 }}
             >
-              <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.98 }}>
-                <Button 
-                  className="w-full sm:w-auto bg-gradient-to-r from-[var(--cassia-purple-dark)] to-[var(--cassia-purple)] hover:from-[var(--cassia-purple)] hover:to-[var(--cassia-purple-dark)] text-white border-0 px-12 py-7 text-lg font-semibold min-h-[56px]"
-                  style={{ boxShadow: '0 8px 24px rgba(94, 90, 154, 0.4)' }}
-                  onClick={() => document.getElementById('diagnostico')?.scrollIntoView({ behavior: 'smooth' })}
+              {/* Badge */}
+              <motion.div
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 hero-badge"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.3 }}
+                whileHover={{ scale: 1.02 }}
+              >
+                <Sparkles className="w-4 h-4 text-[var(--cassia-gold)]" />
+                <span className="text-[var(--cassia-purple-dark)] text-sm">✨ Transformação Mental, Física e Espiritual</span>
+              </motion.div>
+
+              {/* Título Principal - Premium */}
+              <motion.h2
+                className="text-4xl md:text-5xl lg:text-[56px] font-bold leading-tight mb-6 text-white"
+                style={{
+                  letterSpacing: '-0.02em',
+                  textShadow: '0 2px 20px rgba(255,255,255,0.1), 0 4px 40px rgba(162,117,227,0.2)',
+                }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+              >
+                QUERER é o início de toda transformação.
+              </motion.h2>
+              
+              {/* Subtítulo - Melhorado */}
+              <motion.p
+                className="text-base md:text-lg text-[var(--cassia-purple)] max-w-[640px] mx-auto md:mx-0 mb-6 font-medium leading-relaxed"
+                style={{ lineHeight: '1.6' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6, duration: 0.8 }}
+              >
+                Um espaço seguro para se compreender, transformar padrões e se reconectar com SUA ESSÊNCIA.
+              </motion.p>
+
+              {/* CTA Principal - Premium */}
+              <motion.div
+                className="flex justify-center md:justify-start mt-5 md:mt-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8 }}
+              >
+                <motion.div 
+                  whileHover={{ scale: 1.02, y: -3 }} 
+                  whileTap={{ scale: 0.98 }}
+                  animate={{
+                    boxShadow: [
+                      '0 8px 32px rgba(162,117,227,0.45)',
+                      '0 12px 40px rgba(162,117,227,0.55)',
+                      '0 8px 32px rgba(162,117,227,0.45)',
+                    ],
+                  }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 >
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  Começar a minha transformação
-                </Button>
+                  <Button 
+                    className="w-full sm:w-auto bg-gradient-to-r from-[#A275E3] to-[#8A4FC3] hover:from-[#8A4FC3] hover:to-[#A275E3] text-white border-0 px-12 py-6 text-lg font-semibold"
+                    style={{ 
+                      height: '56px',
+                      boxShadow: '0 8px 32px rgba(162,117,227,0.45)',
+                    }}
+                    onClick={() => document.getElementById('diagnostico')?.scrollIntoView({ behavior: 'smooth' })}
+                  >
+                    <Sparkles className="w-5 h-5 mr-2" />
+                    Começar a minha transformação
+                  </Button>
+                </motion.div>
               </motion.div>
             </motion.div>
+          </div>
 
-            {/* Pills de benefícios - Simplificadas */}
-            <motion.div
-              className="flex flex-wrap gap-3 justify-center mb-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.9 }}
-            >
-              {[
-                { text: 'Quem Eu Sou' },
-                { text: 'Meu Trabalho' },
-                { text: 'Minhas Especializações' },
-                { text: 'Minhas Ferramentas' }
-              ].map((item, i) => {
-                return (
-                  <motion.div
-                    key={i}
-                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 backdrop-blur-sm border border-[var(--cassia-purple)]/20"
-                    style={{ boxShadow: '0 2px 8px rgba(94, 90, 154, 0.15)' }}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 1 + i * 0.1 }}
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <span className="text-sm text-[var(--cassia-night)]/80 font-medium">{item.text}</span>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
+          {/* Chips - Menos destaque (abaixo do CTA) */}
+          <motion.div
+            className="flex flex-wrap gap-3 justify-center mb-8 md:mb-12"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+          >
+            {[
+              { text: 'Quem Eu Sou' },
+              { text: 'Meu Trabalho' },
+              { text: 'Minhas Especializações' },
+              { text: 'Minhas Ferramentas' }
+            ].map((item, i) => {
+              return (
+                <motion.div
+                  key={i}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 backdrop-blur-sm border border-[var(--cassia-purple)]/15"
+                  style={{ 
+                    boxShadow: '0 2px 8px rgba(94, 90, 154, 0.1)',
+                    opacity: 0.85,
+                  }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 0.85, scale: 1 }}
+                  transition={{ delay: 1.1 + i * 0.05 }}
+                  whileHover={{ scale: 1.05, opacity: 1 }}
+                >
+                  <span className="text-sm text-[var(--cassia-night)]/70 font-medium">{item.text}</span>
+                </motion.div>
+              );
+            })}
           </motion.div>
 
-          {/* Imagem Hero */}
+          {/* Logo Hero - Reduzido (25-30% da viewport) */}
           <motion.div
             ref={imageRef}
-            className="relative max-w-5xl mx-auto"
+            className="relative max-w-3xl mx-auto"
+            style={{ maxHeight: '30vh' }}
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4 }}
-            style={{ y: imageParallaxY }}
           >
             {/* Glow animado */}
             <motion.div
-              className="absolute -inset-12 bg-gradient-to-br from-[var(--cassia-purple)]/25 via-[var(--cassia-lavender)]/15 to-[var(--cassia-gold)]/20 rounded-full"
-              style={{ filter: 'var(--blur-hard)' }}
+              className="absolute -inset-8 bg-gradient-to-br from-[var(--cassia-purple)]/20 via-[var(--cassia-lavender)]/10 to-[var(--cassia-gold)]/15 rounded-full"
+              style={{ filter: 'var(--blur-mid)' }}
               animate={{
-                scale: [1, 1.15, 1],
-                opacity: [0.3, 0.5, 0.3],
+                scale: [1, 1.1, 1],
+                opacity: [0.2, 0.4, 0.2],
               }}
               transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
             />
             
             {/* Container da imagem */}
             <div
-              className="relative rounded-3xl overflow-hidden border-2 border-white/50 max-w-5xl mx-auto"
-              style={{ boxShadow: '0 0 14px rgba(255, 255, 255, 0.25)' }}
+              className="relative rounded-2xl overflow-hidden border-2 border-white/40"
+              style={{ 
+                boxShadow: '0 0 14px rgba(255, 255, 255, 0.2)',
+                maxHeight: '30vh',
+              }}
             >
-              <div className="w-full" style={{ aspectRatio: '16/9' }}>
+              <div className="w-full" style={{ aspectRatio: '16/9', maxHeight: '30vh' }}>
                 <ImageWithFallback
                   src="https://i.ibb.co/prygpWrC/Logotipo-C-ssia-Corviniy-9-1.jpg"
-                  alt="Cassia Corviniy - Logotipo"
+                  alt="Cássia Corviniy - Logotipo"
                   className="w-full h-full object-cover"
                 />
               </div>
               
               {/* Overlay gradiente */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--cassia-purple)]/15 via-transparent to-white/5" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--cassia-purple)]/10 via-transparent to-white/5" />
               
               {/* Borda interna */}
-              <div className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/30" />
+              <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/20" />
             </div>
-
-            {/* Elementos decorativos flutuantes */}
-            <motion.div
-              className="absolute -top-8 -left-8 w-32 h-32 rounded-full bg-gradient-to-br from-[var(--cassia-purple)]/35 to-[var(--cassia-lavender)]/25"
-              style={{ filter: 'var(--blur-mid)' }}
-              animate={{ 
-                y: [0, 18, 0],
-                x: [0, 12, 0],
-                opacity: [0.35, 0.65, 0.35],
-              }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.div
-              className="absolute -bottom-8 -right-8 w-40 h-40 rounded-full bg-gradient-to-tl from-[var(--cassia-gold)]/35 to-[var(--cassia-gold-light)]/25"
-              style={{ filter: 'var(--blur-mid)' }}
-              animate={{ 
-                y: [0, -18, 0],
-                x: [0, -12, 0],
-                opacity: [0.35, 0.65, 0.35],
-              }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            />
-            
-            {/* Sparkles decorativos */}
-            <motion.div
-              className="absolute top-1/4 -right-4 w-3 h-3 rounded-full bg-[var(--cassia-gold)]"
-              animate={{ 
-                scale: [0, 1.2, 0],
-                opacity: [0, 0.9, 0],
-              }}
-              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
-            />
-            <motion.div
-              className="absolute bottom-1/3 -left-4 w-2 h-2 rounded-full bg-[var(--cassia-purple)]"
-              animate={{ 
-                scale: [0, 1.2, 0],
-                opacity: [0, 0.9, 0],
-              }}
-              transition={{ duration: 3, repeat: Infinity, repeatDelay: 1, delay: 1 }}
-            />
-            <motion.div
-              className="absolute top-1/2 -right-8 w-2.5 h-2.5 rounded-full bg-[var(--cassia-lavender)]"
-              animate={{ 
-                scale: [0, 1, 0],
-                opacity: [0, 0.8, 0],
-              }}
-              transition={{ duration: 3, repeat: Infinity, repeatDelay: 1.5, delay: 0.5 }}
-            />
           </motion.div>
         </div>
       </div>
-
-      {/* Partículas místicas */}
-      {[...Array(10)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-1 h-1 rounded-full pointer-events-none"
-          style={{
-            background: i % 2 === 0 ? 'rgba(255,255,255,0.85)' : 'rgba(190,185,208,0.9)',
-            left: `${15 + Math.random() * 70}%`,
-            top: `${20 + Math.random() * 60}%`,
-          }}
-          animate={{
-            y: [0, -70, 0],
-            opacity: [0, 0.5, 0],
-            scale: [0, 1.2, 0],
-          }}
-          transition={{
-            duration: 7 + Math.random() * 3,
-            repeat: Infinity,
-            delay: Math.random() * 4,
-            ease: "easeInOut"
-          }}
-        />
-      ))}
     </section>
   );
 }
-
-

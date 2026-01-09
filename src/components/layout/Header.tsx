@@ -70,7 +70,7 @@ export function Header() {
             </div>
             <div>
               <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] via-[var(--cassia-purple)] to-[var(--cassia-gold)]">
-                Cassia Corvini
+                Cássia Corviniy
               </h1>
               <a 
                 href="https://www.instagram.com/cassiacorviniy/" 
