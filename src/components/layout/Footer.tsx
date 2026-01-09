@@ -118,7 +118,7 @@ export function Footer() {
               Feito com <Heart className="w-4 h-4 fill-current text-[var(--cassia-gold)] animate-pulse" /> para sua jornada espiritual
             </p>
             <p className="text-[var(--cassia-purple-dark)]/60 text-xs">
-              © 2025 Cassia Corvini. Todos os direitos reservados.
+              © 2025 Cássia Corviniy. Todos os direitos reservados.
             </p>
           </div>
         </motion.div>
