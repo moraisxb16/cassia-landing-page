@@ -1,12 +1,11 @@
 import React from 'react';
-import { Button } from '../ui/button';
 import { Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
 import { ImageWithFallback } from '../shared/ImageWithFallback';
 
 export function Hero() {
   return (
-    <section className="relative pt-32 pb-20 md:pt-40 md:pb-24 overflow-hidden cassia-hero-gradient min-h-screen flex items-center">
+    <section className="relative pt-32 pb-20 md:pt-40 md:pb-24 overflow-hidden cassia-hero-gradient min-h-screen flex items-center justify-center">
       {/* Overlay sutil sobre o gradiente animado */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-white/10" />
       
@@ -41,31 +40,31 @@ export function Hero() {
         />
       </div>
 
-      {/* Partículas místicas flutuantes melhoradas */}
+      {/* Partículas místicas flutuantes - 30 elementos dourados */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(25)].map((_, i) => {
+        {[...Array(30)].map((_, i) => {
           const randomX = Math.random();
           const randomY = Math.random();
-          const size = Math.random() * 4 + 2;
+          const size = Math.random() * 3 + 1;
           return (
             <motion.div
               key={`particle-${i}`}
-              className="absolute rounded-full"
+              className="absolute rounded-full bg-[#F8E3BB]"
               style={{
                 width: `${size}px`,
                 height: `${size}px`,
                 left: `${randomX * 100}%`,
                 top: `${randomY * 100}%`,
-                background: 'radial-gradient(circle, rgba(248, 227, 187, 0.8) 0%, rgba(207, 175, 99, 0.4) 50%, transparent 100%)',
+                opacity: 0.6,
               }}
               animate={{
                 y: [0, -80 - Math.random() * 40, -120 - Math.random() * 40],
                 x: [0, (randomX - 0.5) * 100, (randomX - 0.5) * 160],
-                opacity: [0, 0.8, 0.6, 0],
-                scale: [0, 1, 1, 0],
+                opacity: [0, 0.6, 1, 0.4, 0],
+                scale: [0, 1, 1.5, 1, 0.5],
               }}
               transition={{
-                duration: 15 + Math.random() * 10,
+                duration: 10 + Math.random() * 15,
                 repeat: Infinity,
                 delay: Math.random() * 5,
                 ease: "easeInOut"
@@ -76,28 +75,22 @@ export function Hero() {
       </div>
       
       <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center gap-8">
           {/* Foto da Cássia - Centralizada acima do título */}
           <motion.div
-            className="mb-8"
+            className="mb-4"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <div className="relative inline-block">
-              <div 
-                className="absolute inset-0 rounded-full -z-10"
+              <ImageWithFallback
+                src="https://via.placeholder.com/140x140/CFAF63/FFFFFF?text=C%C3%A1ssia"
+                alt="Cássia Corviniy - Terapeuta Holística"
+                className="w-[140px] h-[140px] md:w-[160px] md:h-[160px] rounded-full object-cover"
                 style={{
                   border: '4px solid #CFAF63',
                   boxShadow: '0 0 0 8px rgba(207, 175, 99, 0.2), 0 0 40px rgba(207, 175, 99, 0.5), 0 8px 32px rgba(162, 117, 227, 0.3)',
-                }}
-              />
-              <ImageWithFallback
-                src="https://via.placeholder.com/140x140/CFAF63/FFFFFF?text=C%C3%A1ssia"
-                alt="Cássia Corviniy"
-                className="w-[140px] h-[140px] rounded-full object-cover"
-                style={{
-                  border: '4px solid #CFAF63',
                 }}
               />
             </div>
@@ -105,7 +98,7 @@ export function Hero() {
 
           {/* Badge */}
           <motion.div
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-8 hero-badge"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full hero-badge"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 }}
@@ -117,7 +110,7 @@ export function Hero() {
 
           {/* Título Principal - 60px com gradiente holográfico */}
           <motion.h2
-            className="hero-title text-[48px] md:text-[60px] font-bold leading-[1.15] mb-6"
+            className="hero-title text-[48px] md:text-[56px] lg:text-[60px] font-bold leading-[1.2]"
             style={{
               letterSpacing: '-0.02em',
             }}
@@ -128,10 +121,12 @@ export function Hero() {
             QUERER é o início de toda transformação.
           </motion.h2>
           
-          {/* Subtítulo - 20px, visível, opacity 0.95 */}
+          {/* Subtítulo - 20px, opacity 0.95, text-shadow */}
           <motion.p
-            className="hero-subtitle text-lg md:text-[20px] leading-[1.6] text-[#FDF6FF] font-normal max-w-[650px] mx-auto mb-10"
-            style={{ opacity: 0.95 }}
+            className="hero-subtitle text-lg md:text-[20px] leading-[1.6] text-[#FDF6FF] font-normal max-w-[650px] mx-auto"
+            style={{ 
+              opacity: 0.95,
+            }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.95 }}
             transition={{ delay: 0.6, duration: 0.8 }}
@@ -139,9 +134,9 @@ export function Hero() {
             Terapeuta Holística e Mestra Dragonlight, guiando sua jornada de autoconhecimento e transformação espiritual.
           </motion.p>
 
-          {/* CTA Principal - Premium com sombra pulsante */}
+          {/* CTA Principal - Premium com glow pulsante forte */}
           <motion.div
-            className="flex justify-center"
+            className="flex justify-center mt-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
@@ -160,28 +155,12 @@ export function Hero() {
               whileTap={{ scale: 0.98 }}
               onClick={() => document.getElementById('diagnostico')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              <Sparkles size={20} />
-              Começar Minha Transformação
+              <Sparkles className="w-5 h-5" />
+              Começar a minha transformação
             </motion.button>
           </motion.div>
         </div>
       </div>
-
-      {/* Logo pequeno no canto inferior direito (opcional) */}
-      <motion.div
-        className="absolute bottom-10 right-10 opacity-85 hidden md:block"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.85 }}
-        transition={{ delay: 1.2 }}
-      >
-        <div className="w-[120px] h-auto">
-          <ImageWithFallback
-            src="https://i.ibb.co/prygpWrC/Logotipo-C-ssia-Corviniy-9-1.jpg"
-            alt="Cássia Corviniy - Logotipo"
-            className="w-full h-auto rounded-lg"
-          />
-        </div>
-      </motion.div>
     </section>
   );
 }
