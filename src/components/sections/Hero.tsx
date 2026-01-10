@@ -5,7 +5,7 @@ import { ImageWithFallback } from '../shared/ImageWithFallback';
 
 export function Hero() {
   return (
-    <section className="relative pt-32 pb-20 md:pt-40 md:pb-24 overflow-hidden cassia-hero-gradient min-h-screen flex items-center justify-center">
+    <section className="hero-section relative pt-24 pb-32 md:pt-32 md:pb-40 overflow-hidden cassia-hero-gradient min-h-screen flex items-center justify-center">
       {/* Overlay sutil sobre o gradiente animado */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-white/10" />
       
@@ -96,10 +96,10 @@ export function Hero() {
       
       {/* Conteúdo principal - ACIMA do background */}
       <div className="container mx-auto px-4 relative z-10">
-        <div className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center gap-6">
+        <div className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center gap-6" style={{ marginTop: '-100px', padding: '0 24px' }}>
           {/* Foto da Cássia - Protagonista centralizada acima do título */}
           <motion.div
-            className="mb-2"
+            className="mb-1"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -108,7 +108,7 @@ export function Hero() {
               <ImageWithFallback
                 src="https://i.ibb.co/mrqZ8sdn/a08e4f14-4dd8-421d-a7b0-ca30d2d87a11.png"
                 alt="Cássia Corviniy - Terapeuta Holística"
-                className="w-[85vw] max-w-[650px] h-[100px] md:w-[90vw] md:max-w-[900px] md:h-[120px] object-cover"
+                className="w-[85vw] max-w-[700px] h-[140px] md:w-[90vw] md:max-w-[1000px] md:h-[180px] object-cover"
                 style={{
                   borderRadius: '30% 70% 70% 30% / 50% 50% 50% 50%',
                   boxShadow: '0 0 15px rgba(162, 117, 227, 0.15)',

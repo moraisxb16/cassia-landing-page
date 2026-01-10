@@ -261,16 +261,27 @@ small {
   }
 }
 
+/* Hero Section - Padding e altura completa */
+.hero-section {
+  min-height: 100vh !important;
+  padding-top: 100px !important;
+  padding-bottom: 120px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  overflow-y: visible !important;
+}
+
 /* Hero Content - Espaçamento balanceado */
 .hero-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
   max-width: 900px;
   margin: 0 auto;
-  margin-top: -40px !important;  /* SOBE os textos */
-  padding-bottom: 60px !important;  /* Evita cortar embaixo */
+  margin-top: -100px !important;  /* SOBE os textos */
 }
 
 /* Hero Logo Background - Decorativo e Horizontal */
@@ -288,9 +299,10 @@ small {
   max-width: 1200px !important;
   min-width: 600px !important;
   height: auto !important;
+  max-height: 280px !important;  /* LIMITA ALTURA */
   object-fit: contain !important;
   aspect-ratio: 21 / 9;
-  margin: 0 auto;
+  margin: 0 auto 40px !important;
   display: block;
 }
 
@@ -300,6 +312,7 @@ small {
     width: 85vw !important;
     max-width: 1200px !important;
     min-width: 600px !important;
+    max-height: 280px !important;
     aspect-ratio: 21 / 9;
     opacity: 0.12 !important;
     filter: blur(50px) !important;
@@ -311,6 +324,7 @@ small {
     width: 85vw !important;
     max-width: 1200px !important;
     min-width: 600px !important;
+    max-height: 240px !important;
     aspect-ratio: 21 / 9;
     opacity: 0.15 !important;
     filter: blur(40px) !important;
@@ -318,13 +332,22 @@ small {
 }
 
 @media (max-width: 767px) {
+  .hero-section {
+    padding-bottom: 100px !important;
+  }
+  
   .hero-logo-bg-image {
-    width: 85vw !important;
+    width: 90vw !important;
     max-width: 1000px !important;
-    min-width: 400px !important;
+    min-width: 320px !important;
+    max-height: 200px !important;
     aspect-ratio: 16 / 9;
     opacity: 0.18 !important;
     filter: blur(30px) !important;
+  }
+  
+  .hero-content {
+    margin-top: -80px !important;
   }
 }
 
