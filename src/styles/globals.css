@@ -278,10 +278,10 @@ small {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
   max-width: 900px;
   margin: 0 auto;
-  margin-top: -100px !important;  /* SOBE os textos */
+  margin-top: -80px !important;  /* SOBE os textos - menos colado */
 }
 
 /* Hero Logo Background - Decorativo e Horizontal */
@@ -379,15 +379,16 @@ small {
 
 /* Mobile: Ajustes Específicos */
 @media (max-width: 768px) {
-  .hero-title-stars {
-    font-size: clamp(18px, 4vw, 22px);
-    margin-bottom: 20px;
+  .hero-content h2:first-of-type {
+    font-size: clamp(1.5rem, 5vw, 2rem) !important;  /* Headline mobile */
   }
   
+  .hero-content h2:last-of-type {
+    font-size: clamp(1.125rem, 4vw, 1.25rem) !important;  /* Subheadline mobile */
+  }
   
-  .hero-description {
-    font-size: clamp(14px, 3vw, 18px);
-    margin-bottom: 32px;
+  .hero-content p {
+    font-size: clamp(0.875rem, 3vw, 1rem) !important;  /* Descrição mobile */
   }
 }
 

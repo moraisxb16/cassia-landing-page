@@ -51,12 +51,13 @@ export function Hero() {
           transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute left-1/2 -translate-x-1/2 bg-[var(--cassia-purple)]/12"
+          className="absolute left-1/2 -translate-x-1/2"
           style={{ 
-            width: '900px',
-            height: '200px',
+            width: '1000px',
+            height: '180px',
             top: '28%',
             transform: 'translate(-50%, -50%)',
+            background: 'radial-gradient(ellipse 1000px 180px at center, rgba(162, 117, 227, 0.25) 0%, rgba(162, 117, 227, 0.15) 40%, transparent 70%)',
             borderRadius: '50%',
             filter: 'blur(60px)',
           }}
@@ -104,7 +105,7 @@ export function Hero() {
       
       {/* Conteúdo principal - ACIMA do background */}
       <div className="container mx-auto px-4 relative z-10">
-        <div className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center gap-6" style={{ marginTop: '-100px', padding: '0 24px' }}>
+        <div className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center" style={{ marginTop: '-80px', padding: '0 24px', gap: '16px' }}>
           {/* Foto da Cássia - Protagonista centralizada acima do título */}
           <motion.div
             className="mb-1"
@@ -125,22 +126,33 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* Badge/Título Dourado - MAIOR */}
-          <motion.div
-            className="hero-title-stars text-center mb-2"
+          {/* HEADLINE PRINCIPAL - MAIOR E BOLD */}
+          <motion.h2
+            className="text-center"
+            style={{
+              fontSize: '2.5rem',
+              fontWeight: 'bold',
+              color: 'var(--cassia-deep)',
+              textShadow: '0 2px 8px rgba(253, 246, 255, 0.6), 0 0 40px rgba(253, 246, 255, 0.3)',
+              marginBottom: '8px',
+            }}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
           >
             ✨ Transformação Mental, Física e Espiritual
-          </motion.div>
+          </motion.h2>
 
-          {/* Título Principal - Aumentado e melhorado */}
+          {/* SUBHEADLINE - MÉDIO */}
           <motion.h2
-            className="hero-title text-center"
+            className="text-center"
             style={{
+              fontSize: '1.5rem',
+              fontWeight: '500',
+              color: 'var(--cassia-purple-dark)',
+              textShadow: '0 2px 8px rgba(253, 246, 255, 0.5)',
+              marginBottom: '8px',
               letterSpacing: '-0.02em',
-              marginTop: '-8px',
             }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -149,14 +161,19 @@ export function Hero() {
             QUERER é o início de toda transformação.
           </motion.h2>
           
-          {/* Descrição - Aumentada e melhor legibilidade */}
+          {/* DESCRIÇÃO - MENOR E SUTIL */}
           <motion.p
-            className="hero-description text-center"
+            className="text-center"
             style={{ 
-              opacity: 0.9,
+              fontSize: '1.125rem',
+              fontWeight: 'normal',
+              color: 'var(--cassia-purple)',
+              opacity: 0.95,
+              textShadow: '0 2px 8px rgba(253, 246, 255, 0.4)',
+              marginBottom: '24px',
             }}
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.9 }}
+            animate={{ opacity: 0.95 }}
             transition={{ delay: 0.6, duration: 0.8 }}
           >
             Terapeuta Holística e Mestra Dragonlight, guiando sua jornada de autoconhecimento e transformação espiritual.
@@ -164,7 +181,7 @@ export function Hero() {
 
           {/* CTA Principal - Premium com glow pulsante forte */}
           <motion.div
-            className="flex justify-center mt-2"
+            className="flex justify-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
@@ -175,7 +192,7 @@ export function Hero() {
                 padding: '18px 48px',
                 fontSize: '18px',
                 fontWeight: 600,
-                marginTop: '16px',
+                marginTop: '32px',
               }}
               whileHover={{ 
                 y: -4,
