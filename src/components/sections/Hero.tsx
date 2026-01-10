@@ -128,7 +128,7 @@ export function Hero() {
 
           {/* Título Principal - Aumentado e melhorado */}
           <motion.h2
-            className="hero-title hero-subtitle-main text-center"
+            className="hero-title text-center"
             style={{
               letterSpacing: '-0.02em',
             }}

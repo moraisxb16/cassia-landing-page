@@ -324,9 +324,9 @@ small {
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* Hero Subtitle Main - Título Principal Melhorado (QUERER é...) */
-.hero-subtitle-main {
-  font-size: clamp(48px, 8vw, 60px);
+/* Hero Title - Título Principal melhorado */
+.hero-title {
+  font-size: clamp(48px, 8vw, 60px) !important;
   line-height: 1.2;
   color: rgba(255, 255, 255, 0.95);
   font-weight: 700;
