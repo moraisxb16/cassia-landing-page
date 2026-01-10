@@ -283,8 +283,8 @@ small {
   transform: translate(-50%, -50%);
   width: calc(85vw + 120px);
   max-width: calc(900px + 120px);
-  height: calc(160px + 50px);  /* ALTURA REDUZIDA: era calc(160px + 70px) = 210px → agora ~210px, reduzido de 70px para 50px */
-  max-height: calc(200px + 50px);  /* ALTURA REDUZIDA: era calc(200px + 70px) = 270px → agora ~250px, reduzido de 70px para 50px */
+  height: calc(160px + 10px);  /* ALTURA DRAMATICAMENTE REDUZIDA: era calc(160px + 20px) = 180px → agora ~170px */
+  max-height: calc(200px + 10px);  /* ALTURA DRAMATICAMENTE REDUZIDA: era calc(200px + 20px) = 220px → agora ~210px */
   background: radial-gradient(ellipse closest-side at 50% 50%, rgba(162, 117, 227, 0.45) 0%, rgba(162, 117, 227, 0.3) 25%, rgba(233, 138, 70, 0.25) 50%, transparent 75%);
   border-radius: 50%;
   filter: blur(70px);
@@ -311,8 +311,8 @@ small {
   .hero-section::before {
     width: calc(90vw + 120px);
     max-width: calc(900px + 120px);
-    height: calc(200px + 50px);  /* ALTURA REDUZIDA: era calc(200px + 70px) = 270px → agora ~250px, reduzido de 70px para 50px */
-    max-height: calc(200px + 50px);  /* ALTURA REDUZIDA: era calc(200px + 70px) = 270px → agora ~250px, reduzido de 70px para 50px */
+    height: calc(200px + 10px);  /* ALTURA DRAMATICAMENTE REDUZIDA: era calc(200px + 20px) = 220px → agora ~210px */
+    max-height: calc(200px + 10px);  /* ALTURA DRAMATICAMENTE REDUZIDA: era calc(200px + 20px) = 220px → agora ~210px */
   }
 }
 
@@ -440,7 +440,7 @@ small {
   .hero-section::before {
     width: calc(85vw + 80px) !important;
     max-width: calc(900px + 80px) !important;
-    height: calc(160px + 25px) !important;  /* ALTURA REDUZIDA: era calc(160px + 30px) = 190px → agora ~185px, reduzido de 30px para 25px */
+    height: calc(160px + 8px) !important;  /* ALTURA DRAMATICAMENTE REDUZIDA: era calc(160px + 15px) = 175px → agora ~168px */
     /* Posição: padding-top (120px) + margin-top logo (36px) + metade altura logo (~80px) ≈ 236px do topo */
     top: 236px !important;
     left: 50% !important;
