@@ -96,10 +96,10 @@ export function Hero() {
       
       {/* Conteúdo principal - ACIMA do background */}
       <div className="container mx-auto px-4 relative z-10">
-        <div className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center gap-8">
+        <div className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center gap-6">
           {/* Foto da Cássia - Protagonista centralizada acima do título */}
           <motion.div
-            className="mb-4"
+            className="mb-2"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -118,7 +118,7 @@ export function Hero() {
 
           {/* Badge/Título Dourado - MAIOR */}
           <motion.div
-            className="hero-title-stars text-center mb-6"
+            className="hero-title-stars text-center mb-4"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
@@ -154,7 +154,7 @@ export function Hero() {
 
           {/* CTA Principal - Premium com glow pulsante forte */}
           <motion.div
-            className="flex justify-center mt-4"
+            className="flex justify-center mt-2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}

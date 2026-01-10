@@ -196,7 +196,7 @@ small {
   font-weight: 700;
   letter-spacing: -0.02em;
   max-width: 900px;
-  margin: 0 auto 20px;
+  margin: 0 auto 12px;
   background: linear-gradient(
     135deg,
     #FFFFFF 0%,
@@ -266,11 +266,11 @@ small {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 32px;
+  gap: 20px;
   max-width: 900px;
   margin: 0 auto;
-  margin-top: -60px !important;  /* SOBE os textos */
-  padding-bottom: 80px !important;  /* Evita cortar embaixo */
+  margin-top: -40px !important;  /* SOBE os textos */
+  padding-bottom: 60px !important;  /* Evita cortar embaixo */
 }
 
 /* Hero Logo Background - Decorativo e Horizontal */
@@ -335,6 +335,7 @@ small {
   color: #CFAF63;
   opacity: 1;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  margin-bottom: 16px;
 }
 
 
@@ -344,7 +345,7 @@ small {
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.9);
   max-width: 750px;
-  margin: 0 auto 40px;
+  margin: 0 auto 24px;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
