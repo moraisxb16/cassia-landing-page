@@ -329,6 +329,7 @@ small {
   margin: 0 auto;
   position: relative;
   z-index: 1;
+  padding: 0 24px;  /* Adicionado padding aqui ao invés de inline style */
 }
 
 /* Hero Logo - Wrapper único com layout normal (flex/grid) */
@@ -420,10 +421,10 @@ small {
 }
 
 /* Mobile: Logo única visível, acima do título, com layout normal (flex/grid) */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .hero-section {
     padding-bottom: 100px !important;
-    padding-top: 120px !important;  /* Espaçamento confortável do topo */
+    padding-top: 180px !important;  /* AUMENTADO: era 120px → agora 180px - logo mais pra baixo */
   }
   
   /* Esconder logo de background decorativo no mobile - APENAS 1 logo visível */
@@ -433,7 +434,7 @@ small {
   
   /* Logo única - wrapper com layout normal (flex/grid, NÃO position: fixed) */
   .hero-logo {
-    margin-top: 36px !important;  /* Ajuste: +24px a +48px - mover logo um pouco para baixo, mas no topo do hero */
+    margin-top: 64px !important;  /* AUMENTADO: era 36px → agora 64px - descer logo/oval mais */
     margin-bottom: 24px !important;
     padding-top: 0 !important;
   }
@@ -441,24 +442,23 @@ small {
   /* Ajustar oval para ficar exatamente atrás da logo (mesmo ponto focal) - SEMPRE ATRÁS */
   /* Centralização visual: usar posição relativa ao centro da logo */
   .hero-section::before {
-    width: calc(85vw + 60px) !important;  /* REDUZIDO: era calc(85vw + 80px) → agora calc(85vw + 60px) - oval mais estreita */
-    max-width: calc(900px + 60px) !important;  /* REDUZIDO: era calc(900px + 80px) → agora calc(900px + 60px) */
+    width: calc(85vw + 60px) !important;  /* REDUZIDO: oval mais estreita */
+    max-width: calc(900px + 60px) !important;
     height: calc(160px + 8px) !important;  /* ALTURA DRAMATICAMENTE REDUZIDA: ~168px */
     background: radial-gradient(ellipse 65% 35% at 50% 50%, rgba(162, 117, 227, 0.35) 0%, rgba(162, 117, 227, 0.25) 30%, rgba(233, 138, 70, 0.2) 55%, transparent 80%) !important;  /* Forma mais compacta verticalmente */
-    filter: blur(55px) !important;  /* REDUZIDO: era 70px → agora 55px */
-    opacity: 0.3 !important;  /* REDUZIDO: era 0.4 → agora 0.3 */
-    /* Posição: padding-top (120px) + margin-top logo (36px) + metade altura logo (~80px) ≈ 236px do topo */
-    top: 236px !important;
+    filter: blur(55px) !important;  /* REDUZIDO blur */
+    opacity: 0.3 !important;  /* REDUZIDO opacity */
+    /* Posição: padding-top (180px) + margin-top logo (64px) + metade altura logo (~80px) ≈ 324px do topo */
+    top: 324px !important;
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
-    background: radial-gradient(ellipse closest-side at 50% 50%, rgba(162, 117, 227, 0.45) 0%, rgba(162, 117, 227, 0.3) 25%, rgba(233, 138, 70, 0.25) 50%, transparent 75%) !important;
     z-index: 0 !important;  /* SEMPRE ATRÁS - nunca por cima do conteúdo */
     animation: none !important;  /* Simplificar no mobile - apenas posição estática atrás da logo */
     pointer-events: none !important;  /* Não bloquear cliques */
   }
   
   .hero-content {
-    margin-top: 0 !important;  /* Remover margin negativo - layout normal */
+    margin-top: 0px !important;  /* REMOVER "puxada" pra cima - layout normal */
   }
   
   /* Garantir z-index: oval atrás (0), conteúdo na frente (1) - nunca sobrepor */

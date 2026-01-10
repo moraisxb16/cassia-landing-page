@@ -5,7 +5,7 @@ import { ImageWithFallback } from '../shared/ImageWithFallback';
 
 export function Hero() {
   return (
-    <section className="hero-section relative pt-24 pb-32 md:pt-32 md:pb-40 overflow-hidden cassia-hero-gradient min-h-screen flex items-center justify-center">
+    <section className="hero-section relative overflow-hidden cassia-hero-gradient min-h-screen flex items-center justify-center">
       {/* Overlay sutil sobre o gradiente animado */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-white/10" />
       
@@ -86,7 +86,7 @@ export function Hero() {
       
       {/* Conteúdo principal - ACIMA do background */}
       <div className="container mx-auto px-4 relative" style={{ zIndex: 1 }}>
-        <div className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center" style={{ padding: '0 24px', gap: '16px' }}>
+        <div className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center">
           {/* Logo/Foto da Cássia - WRAPPER ÚNICO COM LAYOUT NORMAL (mobile: acima do título) */}
           <motion.div
             className="hero-logo mb-6 md:mb-8 relative mx-auto"
