@@ -9,7 +9,7 @@ export function Hero() {
       {/* Overlay sutil sobre o gradiente animado */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-white/10" />
       
-      {/* Logo como Background Decorativo - VERSÃO 2 (Recomendado) */}
+      {/* Logo como Background Decorativo - CENTRO ALINHADO COM A LOGO */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
         <motion.div
           className="hero-logo-bg w-full h-full flex items-center justify-center"
@@ -25,6 +25,7 @@ export function Hero() {
             style={{
               filter: 'blur(50px)',
               transform: 'scale(1.2)',
+              objectPosition: 'center center',
             }}
           />
         </motion.div>
@@ -96,12 +97,12 @@ export function Hero() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            {/* SOMBRA OVAL - EXATAMENTE ATRÁS DA FOTO (CENTRO - PONTO DE MAIOR INTENSIDADE NO CENTRO) */}
+            {/* SOMBRA OVAL - PERFEITAMENTE ENQUADRADA NA LOGO (CENTRO ALINHADO) */}
             <motion.div
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
               style={{ 
-                width: 'calc(100% + 120px)',
-                height: 'calc(100% + 100px)',
+                width: 'calc(100% + 40px)',
+                height: 'calc(100% + 30px)',
                 background: 'radial-gradient(ellipse closest-side at 50% 50%, rgba(162, 117, 227, 0.45) 0%, rgba(162, 117, 227, 0.3) 25%, rgba(233, 138, 70, 0.25) 50%, transparent 75%)',
                 borderRadius: '50%',
                 filter: 'blur(70px)',
