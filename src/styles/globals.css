@@ -269,6 +269,8 @@ small {
   gap: 32px;
   max-width: 900px;
   margin: 0 auto;
+  margin-top: -60px !important;  /* SOBE os textos */
+  padding-bottom: 80px !important;  /* Evita cortar embaixo */
 }
 
 /* Hero Logo Background - Decorativo e Horizontal */
@@ -282,19 +284,22 @@ small {
 }
 
 .hero-logo-bg-image {
-  width: clamp(500px, 60vw, 900px);
+  width: 85vw !important;
+  max-width: 1200px !important;
+  min-width: 600px !important;
+  height: auto !important;
+  object-fit: contain !important;
   aspect-ratio: 21 / 9;
-  object-fit: contain;
-  height: auto;
   margin: 0 auto;
   display: block;
 }
 
-/* Responsivo: Logo Background Horizontal */
+/* Responsivo: Logo Background Horizontal Aumentada */
 @media (min-width: 1024px) {
   .hero-logo-bg-image {
-    width: clamp(500px, 60vw, 900px);
-    max-width: 900px;
+    width: 85vw !important;
+    max-width: 1200px !important;
+    min-width: 600px !important;
     aspect-ratio: 21 / 9;
     opacity: 0.12 !important;
     filter: blur(50px) !important;
@@ -303,8 +308,9 @@ small {
 
 @media (min-width: 768px) and (max-width: 1023px) {
   .hero-logo-bg-image {
-    width: clamp(500px, 60vw, 700px);
-    max-width: 700px;
+    width: 85vw !important;
+    max-width: 1200px !important;
+    min-width: 600px !important;
     aspect-ratio: 21 / 9;
     opacity: 0.15 !important;
     filter: blur(40px) !important;
@@ -313,8 +319,9 @@ small {
 
 @media (max-width: 767px) {
   .hero-logo-bg-image {
-    width: clamp(400px, 85vw, 500px);
-    max-width: 500px;
+    width: 85vw !important;
+    max-width: 1000px !important;
+    min-width: 400px !important;
     aspect-ratio: 16 / 9;
     opacity: 0.18 !important;
     filter: blur(30px) !important;
