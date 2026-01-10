@@ -108,7 +108,7 @@ export function Hero() {
               <ImageWithFallback
                 src="https://i.ibb.co/rGPhdZm2/Logotipo-C-ssia-Corviniy-9-1.jpg"
                 alt="Cássia Corviniy - Terapeuta Holística"
-                className="w-[140px] h-[140px] md:w-[160px] md:h-[160px] rounded-full object-cover border-4 border-[#CFAF63]"
+                className="w-[120px] h-[120px] md:w-[180px] md:h-[140px] rounded-full object-cover border-4 border-[#CFAF63]"
                 style={{
                   boxShadow: '0 0 0 8px rgba(207, 175, 99, 0.2), 0 0 40px rgba(207, 175, 99, 0.5), 0 8px 32px rgba(162, 117, 227, 0.3)',
                 }}
@@ -118,7 +118,7 @@ export function Hero() {
 
           {/* Badge/Título Dourado - MAIOR */}
           <motion.div
-            className="hero-title-stars text-center mb-4"
+            className="hero-title-stars text-center mb-2"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
@@ -131,6 +131,7 @@ export function Hero() {
             className="hero-title text-center"
             style={{
               letterSpacing: '-0.02em',
+              marginTop: '-8px',
             }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
