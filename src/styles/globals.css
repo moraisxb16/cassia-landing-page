@@ -376,10 +376,10 @@ small {
 /* Desktop: Background decorativo - ajustar posição para não invadir topo */
 @media (min-width: 1024px) {
   .hero-logo-bg {
-    top: 45% !important;  /* AJUSTADO: era 65% → agora 45% - parar de invadir o topo */
+    top: 52% !important;  /* desce para não invadir o topo */
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
-    background-position: 50% 45% !important;
+    background-position: 50% 52% !important;
   }
   
   .hero-logo-bg-image {
@@ -390,8 +390,8 @@ small {
     aspect-ratio: 21 / 9;
     opacity: 0.05 !important;
     filter: blur(100px) !important;
-    transform: scale(1.25) !important;  /* REDUZIDO: era 1.6 → agora 1.25 - diminuir forma */
-    object-position: center 45% !important;
+    transform: scale(1.10) !important;  /* diminui a forma */
+    object-position: center 52% !important;
   }
   
   /* Ajustar oval também no desktop para acompanhar */
@@ -437,11 +437,11 @@ small {
   
   /* Ajustar .hero-logo-bg no mobile antes de esconder (para referência) */
   .hero-logo-bg {
-    top: 56% !important;  /* AJUSTADO: era 48% → agora 56% - parar de invadir topo (mobile) */
+    top: 62% !important;  /* desce no mobile */
   }
   
   .hero-logo-bg-image {
-    max-height: 170px !important;  /* LIMITADO: era 350px → agora 170px - diminuir forma no mobile */
+    max-height: 160px !important;  /* diminui a forma no mobile */
   }
   
   /* Logo única - wrapper com layout normal (flex/grid, NÃO position: fixed) */
