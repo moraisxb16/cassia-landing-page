@@ -501,18 +501,42 @@ small {
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
+/* Hero Text Styles - Controlados via CSS, não Tailwind */
+.hero-headline {
+  font-size: clamp(2.25rem, 7vw, 3.5rem) !important;  /* Primeira frase - MAIOR E EM NEGRITO */
+  font-weight: bold !important;
+  color: #FFFFFF !important;
+  text-shadow: 0 4px 20px rgba(43, 38, 70, 0.7), 0 2px 10px rgba(0, 0, 0, 0.5) !important;
+}
+
+.hero-subheadline {
+  font-size: clamp(1.75rem, 5vw, 2.5rem) !important;  /* Subheadline - MAIOR */
+  font-weight: 500 !important;
+  color: #FFFFFF !important;
+  opacity: 0.95 !important;
+  text-shadow: 0 3px 15px rgba(43, 38, 70, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+  letter-spacing: -0.02em !important;
+}
+
+.hero-description-text {
+  font-size: clamp(1.375rem, 4vw, 1.75rem) !important;  /* Descrição - MAIOR */
+  color: #FFFFFF !important;
+  opacity: 0.85 !important;
+  text-shadow: 0 2px 10px rgba(43, 38, 70, 0.5), 0 1px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
 /* Mobile: Ajustes Específicos */
 @media (max-width: 768px) {
-  .hero-content h2:first-of-type {
-    font-size: clamp(1.5rem, 5vw, 2rem) !important;  /* Headline mobile */
+  .hero-headline {
+    font-size: clamp(1.75rem, 6vw, 2.5rem) !important;  /* Headline mobile - ainda maior */
   }
   
-  .hero-content h2:last-of-type {
-    font-size: clamp(1.125rem, 4vw, 1.25rem) !important;  /* Subheadline mobile */
+  .hero-subheadline {
+    font-size: clamp(1.5rem, 5vw, 2rem) !important;  /* Subheadline mobile - maior */
   }
   
-  .hero-content p {
-    font-size: clamp(0.875rem, 3vw, 1rem) !important;  /* Descrição mobile */
+  .hero-description-text {
+    font-size: clamp(1.125rem, 4vw, 1.5rem) !important;  /* Descrição mobile - maior */
   }
 }
 

@@ -108,14 +108,9 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* HEADLINE PRINCIPAL - MAIOR E EM NEGRITO */}
+          {/* HEADLINE PRINCIPAL - MAIOR E EM NEGRITO - Controlado via CSS */}
           <motion.h2
-            className="text-[clamp(2.25rem,7vw,3.5rem)] text-center mb-3"
-            style={{
-              color: '#FFFFFF',
-              fontWeight: 'bold',
-              textShadow: '0 4px 20px rgba(43, 38, 70, 0.7), 0 2px 10px rgba(0, 0, 0, 0.5)',
-            }}
+            className="hero-headline text-center mb-3"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
@@ -123,15 +118,9 @@ export function Hero() {
             ✨ Transformação Mental, Física e Espiritual
           </motion.h2>
 
-          {/* SUBHEADLINE - MAIOR */}
+          {/* SUBHEADLINE - MAIOR - Controlado via CSS */}
           <motion.h2
-            className="text-[clamp(1.75rem,5vw,2.5rem)] text-center mb-4 font-medium"
-            style={{
-              color: '#FFFFFF',
-              opacity: 0.95,
-              textShadow: '0 3px 15px rgba(43, 38, 70, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4)',
-              letterSpacing: '-0.02em',
-            }}
+            className="hero-subheadline text-center mb-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
@@ -139,16 +128,11 @@ export function Hero() {
             QUERER é o início de toda transformação.
           </motion.h2>
           
-          {/* DESCRIÇÃO - MAIOR */}
+          {/* DESCRIÇÃO - MAIOR - Controlado via CSS */}
           <motion.p
-            className="text-[clamp(1.375rem,4vw,1.75rem)] text-center mb-6"
-            style={{ 
-              color: '#FFFFFF',
-              opacity: 0.85,
-              textShadow: '0 2px 10px rgba(43, 38, 70, 0.5), 0 1px 5px rgba(0, 0, 0, 0.3)',
-            }}
+            className="hero-description-text text-center mb-6"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.85 }}
+            animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.8 }}
           >
             Terapeuta Holística e Mestra Dragonlight, guiando sua jornada de autoconhecimento e transformação espiritual.
