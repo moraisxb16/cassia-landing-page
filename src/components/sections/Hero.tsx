@@ -148,6 +148,9 @@ export function Hero() {
           >
             <motion.button
               className="hero-cta inline-flex items-center gap-3 bg-gradient-to-r from-[#A275E3] to-[#8A4FC3] text-white font-semibold rounded-2xl border-none cursor-pointer px-8 md:px-12 py-4 md:py-[18px] text-lg md:text-xl mt-8"
+              style={{
+                fontWeight: 600,
+              }}
               whileHover={{ 
                 y: -4,
                 scale: 1.03,
@@ -155,7 +158,7 @@ export function Hero() {
               whileTap={{ scale: 0.98 }}
               onClick={() => document.getElementById('diagnostico')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              <Sparkles className="w-5 h-5 hero-cta-icon" />
+              <Sparkles className="w-5 h-5" />
               Começar a minha transformação
             </motion.button>
           </motion.div>
