@@ -147,7 +147,7 @@ export function Hero() {
             transition={{ delay: 0.8 }}
           >
             <motion.button
-              className="hero-cta inline-flex items-center gap-3 bg-gradient-to-r from-[#A275E3] to-[#8A4FC3] text-white font-semibold rounded-2xl border-none cursor-pointer px-8 md:px-12 py-4 md:py-[18px] text-lg md:text-xl mt-8"
+              className="hero-cta inline-flex items-center gap-3 text-white border-none cursor-pointer px-8 md:px-12 mt-8"
               whileHover={{ 
                 y: -4,
                 scale: 1.03,
