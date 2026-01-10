@@ -1,5 +1,4 @@
-@import 'tailwindcss';
-
+/* Estilos globais customizados - Tailwind já importado via index.css */
 :root {
   /* 🎨 Paleta oficial Cássia Corviniy (roxo / lilás / laranja) */
   --cassia-purple: #5e5a9a;        /* roxo principal */
@@ -223,21 +222,10 @@ small {
   }
 }
 
-/* Hero CTA com sombra pulsante forte */
+/* Hero CTA com sombra pulsante forte - Ajustes mínimos para não quebrar o design */
 .hero-cta {
-  width: 360px !important;  /* Fixed width from browser preview (final: 360px) */
-  flex-wrap: wrap !important;  /* Allow wrapping */
-  font-weight: 400 !important;  /* Changed from 600 to 400 */
+  /* Mantém classes Tailwind originais, apenas ajustes específicos se necessário */
   letter-spacing: 0.1px !important;  /* Added letter spacing */
-  padding-top: 12px !important;  /* Changed from default to 12px */
-  padding-bottom: 12px !important;  /* Changed from default to 12px */
-  border-radius: 20px !important;  /* Changed from rounded-2xl (16px) to 20px */
-  font-size: 19px !important;  /* Fixed size from browser preview (final: 19px) */
-  line-height: 25.3333px !important;  /* Fixed line-height from browser preview */
-  background: linear-gradient(15deg, rgba(162, 117, 227, 1) 0%, rgba(0, 0, 0, 1) 100%) !important;  /* Changed gradient */
-  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15), inset 0px 4px 12px 0px rgba(0, 0, 0, 0.15) !important;  /* Updated shadow */
-  vertical-align: top !important;  /* Added vertical alignment */
-  text-align: left !important;  /* Changed from center to left */
   animation: pulse-cta 2.5s ease-in-out infinite;
   transition: all 0.3s ease;
 }
@@ -355,8 +343,6 @@ small {
   position: relative;
   z-index: 1;
   padding: 0 24px;  /* Adicionado padding aqui ao invés de inline style */
-  border-width: 1px !important;  /* Added from browser preview */
-  border-color: rgba(0, 0, 0, 1) !important;  /* Added from browser preview */
 }
 
 /* Hero Logo - Wrapper único com layout normal (flex/grid) */
