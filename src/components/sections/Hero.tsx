@@ -108,9 +108,9 @@ export function Hero() {
               <ImageWithFallback
                 src="https://i.ibb.co/mrqZ8sdn/a08e4f14-4dd8-421d-a7b0-ca30d2d87a11.png"
                 alt="Cássia Corviniy - Terapeuta Holística"
-                className="w-[200px] h-[200px] md:w-[280px] md:h-[280px] rounded-full object-cover"
+                className="w-[260px] h-[260px] md:w-[360px] md:h-[360px] rounded-full object-cover"
                 style={{
-                  boxShadow: '0 0 40px rgba(207, 175, 99, 0.5), 0 8px 32px rgba(162, 117, 227, 0.3)',
+                  boxShadow: '0 0 20px rgba(162, 117, 227, 0.2)',
                 }}
               />
             </div>
