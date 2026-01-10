@@ -84,15 +84,16 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <div className="relative inline-block">
-              <ImageWithFallback
-                src="https://via.placeholder.com/140x140/CFAF63/FFFFFF?text=C%C3%A1ssia"
-                alt="Cássia Corviniy - Terapeuta Holística"
-                className="w-[140px] h-[140px] md:w-[160px] md:h-[160px] rounded-full object-cover"
-                style={{
-                  border: '4px solid #CFAF63',
-                  boxShadow: '0 0 0 8px rgba(207, 175, 99, 0.2), 0 0 40px rgba(207, 175, 99, 0.5), 0 8px 32px rgba(162, 117, 227, 0.3)',
-                }}
-              />
+              <div className="relative">
+                <ImageWithFallback
+                  src="https://i.ibb.co/rGPhdZm2/Logotipo-C-ssia-Corviniy-9-1.jpg"
+                  alt="Cássia Corviniy - Terapeuta Holística"
+                  className="w-[140px] h-[140px] md:w-[160px] md:h-[160px] rounded-full object-cover border-4 border-[#CFAF63]"
+                  style={{
+                    boxShadow: '0 0 0 8px rgba(207, 175, 99, 0.2), 0 0 40px rgba(207, 175, 99, 0.5), 0 8px 32px rgba(162, 117, 227, 0.3)',
+                  }}
+                />
+              </div>
             </div>
           </motion.div>
 
