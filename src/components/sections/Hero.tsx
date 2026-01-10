@@ -51,15 +51,16 @@ export function Hero() {
           transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute left-1/2 -translate-x-1/2"
+          className="absolute left-1/2 -translate-x-1/2 pointer-events-none"
           style={{ 
             width: '1000px',
             height: '180px',
-            top: '28%',
+            top: '16%',
             transform: 'translate(-50%, -50%)',
             background: 'radial-gradient(ellipse 1000px 180px at center, rgba(162, 117, 227, 0.25) 0%, rgba(162, 117, 227, 0.15) 40%, transparent 70%)',
             borderRadius: '50%',
             filter: 'blur(60px)',
+            zIndex: 0,
           }}
           animate={{
             scale: [1, 1.1, 1],
@@ -126,15 +127,12 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* HEADLINE PRINCIPAL - MAIOR E BOLD */}
+          {/* HEADLINE PRINCIPAL - BRANCA COM HIERARQUIA */}
           <motion.h2
-            className="text-center"
+            className="text-[clamp(1.75rem,5vw,2.5rem)] text-center mb-3 font-bold"
             style={{
-              fontSize: '2.5rem',
-              fontWeight: 'bold',
-              color: 'var(--cassia-deep)',
-              textShadow: '0 2px 8px rgba(253, 246, 255, 0.6), 0 0 40px rgba(253, 246, 255, 0.3)',
-              marginBottom: '8px',
+              color: '#FFFFFF',
+              textShadow: '0 4px 20px rgba(43, 38, 70, 0.7), 0 2px 10px rgba(0, 0, 0, 0.5)',
             }}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -143,37 +141,32 @@ export function Hero() {
             ✨ Transformação Mental, Física e Espiritual
           </motion.h2>
 
-          {/* SUBHEADLINE - MÉDIO */}
+          {/* SUBHEADLINE - BRANCA */}
           <motion.h2
-            className="text-center"
+            className="text-[clamp(1.125rem,3.5vw,1.5rem)] text-center mb-4 font-medium"
             style={{
-              fontSize: '1.5rem',
-              fontWeight: '500',
-              color: 'var(--cassia-purple-dark)',
-              textShadow: '0 2px 8px rgba(253, 246, 255, 0.5)',
-              marginBottom: '8px',
+              color: '#FFFFFF',
+              opacity: 0.95,
+              textShadow: '0 3px 15px rgba(43, 38, 70, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4)',
               letterSpacing: '-0.02em',
             }}
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 0.95, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
           >
             QUERER é o início de toda transformação.
           </motion.h2>
           
-          {/* DESCRIÇÃO - MENOR E SUTIL */}
+          {/* DESCRIÇÃO - BRANCA SUTIL */}
           <motion.p
-            className="text-center"
+            className="text-[clamp(0.875rem,2.5vw,1.125rem)] text-center mb-6"
             style={{ 
-              fontSize: '1.125rem',
-              fontWeight: 'normal',
-              color: 'var(--cassia-purple)',
-              opacity: 0.95,
-              textShadow: '0 2px 8px rgba(253, 246, 255, 0.4)',
-              marginBottom: '24px',
+              color: '#FFFFFF',
+              opacity: 0.85,
+              textShadow: '0 2px 10px rgba(43, 38, 70, 0.5), 0 1px 5px rgba(0, 0, 0, 0.3)',
             }}
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.95 }}
+            animate={{ opacity: 0.85 }}
             transition={{ delay: 0.6, duration: 0.8 }}
           >
             Terapeuta Holística e Mestra Dragonlight, guiando sua jornada de autoconhecimento e transformação espiritual.
