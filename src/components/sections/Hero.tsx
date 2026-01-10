@@ -106,9 +106,9 @@ export function Hero() {
           >
             <div className="relative inline-block">
               <ImageWithFallback
-                src="https://i.ibb.co/rGPhdZm2/Logotipo-C-ssia-Corviniy-9-1.jpg"
+                src="https://i.ibb.co/mrqZ8sdn/a08e4f14-4dd8-421d-a7b0-ca30d2d87a11.png"
                 alt="Cássia Corviniy - Terapeuta Holística"
-                className="w-[120px] h-[120px] md:w-[180px] md:h-[140px] rounded-full object-cover border-4 border-[#CFAF63]"
+                className="w-[160px] h-[160px] md:w-[220px] md:h-[220px] rounded-full object-cover border-4 border-[#CFAF63]"
                 style={{
                   boxShadow: '0 0 0 8px rgba(207, 175, 99, 0.2), 0 0 40px rgba(207, 175, 99, 0.5), 0 8px 32px rgba(162, 117, 227, 0.3)',
                 }}
