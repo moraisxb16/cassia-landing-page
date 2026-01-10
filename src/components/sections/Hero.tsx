@@ -130,8 +130,8 @@ export function Hero() {
           
           {/* DESCRIÇÃO - MAIOR - Controlado via CSS */}
           <motion.p
-            className="text-[clamp(1.35rem,3.2vw,1.7rem)] text-center mb-6"
-            style={{ color: '#FFFFFF' }}
+            className="hero-description-text text-center mb-6"
+            style={{ color: '#FFFFFF', opacity: 1 }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.8 }}

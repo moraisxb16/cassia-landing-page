@@ -516,40 +516,44 @@ small {
 
 /* Hero Text Styles - Controlados via CSS, não Tailwind */
 .hero-headline {
-  font-size: clamp(2.5rem, 8vw, 4rem) !important;  /* AUMENTADO: primeira frase - MAIOR E EM NEGRITO */
+  font-size: clamp(3rem, 9vw, 5rem) !important;  /* AUMENTADO AINDA MAIS: primeira frase - MUITO MAIOR E EM NEGRITO BRANCO */
   font-weight: bold !important;
   color: #FFFFFF !important;
+  opacity: 1 !important;
   text-shadow: 0 4px 20px rgba(43, 38, 70, 0.7), 0 2px 10px rgba(0, 0, 0, 0.5) !important;
 }
 
 .hero-subheadline {
-  font-size: clamp(2rem, 6vw, 3rem) !important;  /* AUMENTADO: subheadline - MAIOR */
+  font-size: clamp(2.5rem, 7vw, 4rem) !important;  /* AUMENTADO: subheadline - MUITO MAIOR EM BRANCO */
   font-weight: 500 !important;
   color: #FFFFFF !important;
-  opacity: 0.95 !important;
+  opacity: 1 !important;  /* BRANCO SÓLIDO - removido opacity 0.95 */
   text-shadow: 0 3px 15px rgba(43, 38, 70, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4) !important;
   letter-spacing: -0.02em !important;
 }
 
 .hero-description-text {
-  font-size: clamp(1.5rem, 4vw, 2rem) !important;  /* AUMENTADO: descrição - MUITO MAIOR */
+  font-size: clamp(1.75rem, 4.5vw, 2.25rem) !important;  /* AUMENTADO: descrição - MUITO MAIOR EM BRANCO */
   color: #FFFFFF !important;
-  opacity: 0.85 !important;
+  opacity: 1 !important;  /* BRANCO SÓLIDO - removido opacity 0.85 */
   text-shadow: 0 2px 10px rgba(43, 38, 70, 0.5), 0 1px 5px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* Mobile: Ajustes Específicos */
 @media (max-width: 768px) {
   .hero-headline {
-    font-size: clamp(2rem, 7vw, 3rem) !important;  /* AUMENTADO: headline mobile - MUITO maior */
+    font-size: clamp(2.5rem, 8vw, 3.5rem) !important;  /* AUMENTADO: headline mobile - MUITO MAIOR EM BRANCO NEGRITO */
+    opacity: 1 !important;
   }
   
   .hero-subheadline {
-    font-size: clamp(1.75rem, 6vw, 2.5rem) !important;  /* AUMENTADO: subheadline mobile - MUITO maior */
+    font-size: clamp(2rem, 7vw, 3rem) !important;  /* AUMENTADO: subheadline mobile - MUITO MAIOR EM BRANCO */
+    opacity: 1 !important;
   }
   
   .hero-description-text {
-    font-size: clamp(1.5rem, 4vw, 2rem) !important;  /* AUMENTADO: descrição mobile - MUITO maior */
+    font-size: clamp(1.75rem, 4.5vw, 2.25rem) !important;  /* AUMENTADO: descrição mobile - MUITO MAIOR EM BRANCO */
+    opacity: 1 !important;
   }
 }
 
