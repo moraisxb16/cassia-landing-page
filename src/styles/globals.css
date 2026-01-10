@@ -281,16 +281,16 @@ small {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: calc(85vw + 120px);
-  max-width: calc(900px + 120px);
-  height: calc(160px + 10px);  /* ALTURA DRAMATICAMENTE REDUZIDA: era calc(160px + 20px) = 180px → agora ~170px */
-  max-height: calc(200px + 10px);  /* ALTURA DRAMATICAMENTE REDUZIDA: era calc(200px + 20px) = 220px → agora ~210px */
-  background: radial-gradient(ellipse closest-side at 50% 50%, rgba(162, 117, 227, 0.45) 0%, rgba(162, 117, 227, 0.3) 25%, rgba(233, 138, 70, 0.25) 50%, transparent 75%);
+  width: calc(85vw + 80px);  /* REDUZIDO: era calc(85vw + 120px) → agora calc(85vw + 80px) - oval mais estreita */
+  max-width: calc(900px + 80px);  /* REDUZIDO: era calc(900px + 120px) → agora calc(900px + 80px) */
+  height: calc(160px + 10px);  /* ALTURA DRAMATICAMENTE REDUZIDA: ~170px */
+  max-height: calc(200px + 10px);  /* ALTURA DRAMATICAMENTE REDUZIDA: ~210px */
+  background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(162, 117, 227, 0.35) 0%, rgba(162, 117, 227, 0.25) 30%, rgba(233, 138, 70, 0.2) 55%, transparent 80%);  /* Ajustado: ellipse 60% 40% - mais compacta verticalmente */
   border-radius: 50%;
-  filter: blur(70px);
+  filter: blur(60px);  /* REDUZIDO: era 70px → agora 60px - menos expansão visual */
   z-index: 0;
   pointer-events: none;
-  opacity: 0.4;
+  opacity: 0.35;  /* REDUZIDO: era 0.4 → agora 0.35 - menos visível */
   animation: hero-oval-pulse 25s ease-in-out infinite;
 }
 
@@ -309,10 +309,13 @@ small {
 /* Tablet/Desktop: Ajustar tamanho da oval */
 @media (min-width: 768px) {
   .hero-section::before {
-    width: calc(90vw + 120px);
-    max-width: calc(900px + 120px);
-    height: calc(200px + 10px);  /* ALTURA DRAMATICAMENTE REDUZIDA: era calc(200px + 20px) = 220px → agora ~210px */
-    max-height: calc(200px + 10px);  /* ALTURA DRAMATICAMENTE REDUZIDA: era calc(200px + 20px) = 220px → agora ~210px */
+    width: calc(90vw + 80px);  /* REDUZIDO: era calc(90vw + 120px) → agora calc(90vw + 80px) - oval mais estreita */
+    max-width: calc(900px + 80px);  /* REDUZIDO: era calc(900px + 120px) → agora calc(900px + 80px) */
+    height: calc(200px + 10px);  /* ALTURA DRAMATICAMENTE REDUZIDA: ~210px */
+    max-height: calc(200px + 10px);  /* ALTURA DRAMATICAMENTE REDUZIDA: ~210px */
+    background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(162, 117, 227, 0.35) 0%, rgba(162, 117, 227, 0.25) 30%, rgba(233, 138, 70, 0.2) 55%, transparent 80%);  /* Forma mais compacta */
+    filter: blur(60px);  /* REDUZIDO blur */
+    opacity: 0.35;  /* REDUZIDO opacity */
   }
 }
 
@@ -438,9 +441,12 @@ small {
   /* Ajustar oval para ficar exatamente atrás da logo (mesmo ponto focal) - SEMPRE ATRÁS */
   /* Centralização visual: usar posição relativa ao centro da logo */
   .hero-section::before {
-    width: calc(85vw + 80px) !important;
-    max-width: calc(900px + 80px) !important;
-    height: calc(160px + 8px) !important;  /* ALTURA DRAMATICAMENTE REDUZIDA: era calc(160px + 15px) = 175px → agora ~168px */
+    width: calc(85vw + 60px) !important;  /* REDUZIDO: era calc(85vw + 80px) → agora calc(85vw + 60px) - oval mais estreita */
+    max-width: calc(900px + 60px) !important;  /* REDUZIDO: era calc(900px + 80px) → agora calc(900px + 60px) */
+    height: calc(160px + 8px) !important;  /* ALTURA DRAMATICAMENTE REDUZIDA: ~168px */
+    background: radial-gradient(ellipse 65% 35% at 50% 50%, rgba(162, 117, 227, 0.35) 0%, rgba(162, 117, 227, 0.25) 30%, rgba(233, 138, 70, 0.2) 55%, transparent 80%) !important;  /* Forma mais compacta verticalmente */
+    filter: blur(55px) !important;  /* REDUZIDO: era 70px → agora 55px */
+    opacity: 0.3 !important;  /* REDUZIDO: era 0.4 → agora 0.3 */
     /* Posição: padding-top (120px) + margin-top logo (36px) + metade altura logo (~80px) ≈ 236px do topo */
     top: 236px !important;
     left: 50% !important;
