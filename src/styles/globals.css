@@ -232,6 +232,15 @@ small {
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   animation: pulse-cta 2.5s ease-in-out infinite;
   transition: all 0.3s ease;
+  /* Estilos base para desktop */
+  font-size: 24px !important;
+  width: 410px !important;
+  padding-top: 25px !important;
+  padding-bottom: 25px !important;
+  padding-left: 1px !important;
+  padding-right: 1px !important;
+  margin-left: 10px !important;
+  margin-right: 10px !important;
 }
 
 .hero-cta:hover {
@@ -516,8 +525,8 @@ small {
 
 /* Hero Text Styles - Controlados via CSS, não Tailwind */
 .hero-headline {
-  font-size: 28px !important;  /* Tamanho fixo 28px conforme solicitado */
-  font-weight: 200 !important;  /* Changed from bold to 200 */
+  font-size: 30px !important;  /* Tamanho 30px */
+  font-weight: 700 !important;  /* Negrito */
   color: rgba(255, 255, 255, 1) !important;  /* Branco sólido */
   opacity: 1 !important;
   line-height: 60px !important;  /* Changed from 24px to 60px */
@@ -532,39 +541,118 @@ small {
 }
 
 .hero-subheadline {
-  font-size: clamp(2.5rem, 7vw, 4rem) !important;  /* AUMENTADO: subheadline - MUITO MAIOR EM BRANCO */
+  font-size: 24px !important;
   font-weight: 500 !important;
-  color: rgba(247, 247, 247, 1) !important;
-  opacity: 1 !important;  /* BRANCO SÓLIDO - removido opacity 0.95 */
+  color: rgba(255, 255, 255, 1) !important;  /* Branco sólido */
+  opacity: 1 !important;
   text-shadow: 0 3px 15px rgba(43, 38, 70, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4) !important;
   letter-spacing: -0.02em !important;
 }
 
+.hero-subheadline strong {
+  font-weight: 700 !important;  /* Negrito para QUERER */
+}
+
 .hero-description-text {
-  font-size: clamp(1.75rem, 4.5vw, 2.25rem) !important;  /* AUMENTADO: descrição - MUITO MAIOR EM BRANCO */
-  color: #FFFFFF !important;
-  opacity: 1 !important;  /* BRANCO SÓLIDO - removido opacity 0.85 */
+  font-size: 18px !important;
+  color: rgba(255, 255, 255, 1) !important;  /* Branco sólido */
+  opacity: 1 !important;
   text-shadow: 0 2px 10px rgba(43, 38, 70, 0.5), 0 1px 5px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* Mobile: Ajustes Específicos */
 @media (max-width: 768px) {
   .hero-headline {
-    font-size: 28px !important;  /* Tamanho fixo 28px no mobile também */
-    font-weight: 200 !important;
+    font-size: 30px !important;  /* Tamanho 30px no mobile também */
+    font-weight: 700 !important;  /* Negrito */
+    color: rgba(255, 255, 255, 1) !important;  /* Branco sólido */
     line-height: 60px !important;
     letter-spacing: -0.2px !important;
     opacity: 1 !important;
   }
   
   .hero-subheadline {
-    font-size: clamp(2rem, 7vw, 3rem) !important;  /* AUMENTADO: subheadline mobile - MUITO MAIOR EM BRANCO */
+    font-size: 24px !important;  /* Tamanho fixo 24px no mobile também */
+    color: rgba(255, 255, 255, 1) !important;  /* Branco sólido */
     opacity: 1 !important;
   }
   
+  .hero-subheadline strong {
+    font-weight: 700 !important;  /* Negrito para QUERER no mobile */
+  }
+  
   .hero-description-text {
-    font-size: clamp(1.75rem, 4.5vw, 2.25rem) !important;  /* AUMENTADO: descrição mobile - MUITO MAIOR EM BRANCO */
+    font-size: 18px !important;  /* Tamanho fixo 18px no mobile também */
+    color: rgba(255, 255, 255, 1) !important;  /* Branco sólido */
     opacity: 1 !important;
+  }
+  
+  .hero-cta {
+    width: auto !important;  /* Ajustar largura no mobile */
+    max-width: 90vw !important;
+    font-size: 20px !important;  /* Font-size menor no mobile */
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* Tablet: Ajustes Específicos */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .hero-headline {
+    font-size: 30px !important;
+    font-weight: 700 !important;
+    color: rgba(255, 255, 255, 1) !important;
+  }
+  
+  .hero-subheadline {
+    font-size: 24px !important;
+    color: rgba(255, 255, 255, 1) !important;
+  }
+  
+  .hero-subheadline strong {
+    font-weight: 700 !important;
+  }
+  
+  .hero-description-text {
+    font-size: 18px !important;
+    color: rgba(255, 255, 255, 1) !important;
+  }
+  
+  .hero-cta {
+    width: 410px !important;
+    font-size: 24px !important;
+  }
+}
+
+/* Desktop: Garantir que todos os estilos estejam aplicados */
+@media (min-width: 1025px) {
+  .hero-headline {
+    font-size: 30px !important;
+    font-weight: 700 !important;
+    color: rgba(255, 255, 255, 1) !important;
+  }
+  
+  .hero-subheadline {
+    font-size: 24px !important;
+    color: rgba(255, 255, 255, 1) !important;
+  }
+  
+  .hero-subheadline strong {
+    font-weight: 700 !important;
+  }
+  
+  .hero-description-text {
+    font-size: 18px !important;
+    color: rgba(255, 255, 255, 1) !important;
+  }
+  
+  .hero-cta {
+    width: 410px !important;
+    font-size: 24px !important;
   }
 }
 

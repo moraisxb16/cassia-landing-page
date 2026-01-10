@@ -127,7 +127,7 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            QUERER é o início de toda transformação.
+            <strong>QUERER</strong> é o início de toda transformação.
           </motion.h2>
           
           {/* DESCRIÇÃO - MAIOR - Controlado via CSS */}
@@ -149,9 +149,15 @@ export function Hero() {
             transition={{ delay: 0.8 }}
           >
             <motion.button
-              className="hero-cta inline-flex items-center gap-3 bg-gradient-to-r from-[#A275E3] to-[#8A4FC3] text-white font-semibold rounded-2xl border-none cursor-pointer px-8 md:px-12 py-4 md:py-[18px] text-lg md:text-xl mt-8"
+              className="hero-cta inline-flex items-center gap-3 text-white font-semibold border-none cursor-pointer mt-8"
               style={{
                 fontWeight: 600,
+                background: 'linear-gradient(15deg, rgba(162, 117, 227, 1) 0%, rgba(0, 0, 0, 1) 100%)',
+                borderRadius: '20px',
+                borderTopLeftRadius: '20px',
+                borderTopRightRadius: '20px',
+                borderBottomRightRadius: '20px',
+                borderBottomLeftRadius: '20px',
               }}
               whileHover={{ 
                 y: -4,
