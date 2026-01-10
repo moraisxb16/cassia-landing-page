@@ -50,24 +50,6 @@ export function Hero() {
           }}
           transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
         />
-        <motion.div
-          className="absolute left-1/2 -translate-x-1/2 pointer-events-none"
-          style={{ 
-            width: '1000px',
-            height: '180px',
-            top: '16%',
-            transform: 'translate(-50%, -50%)',
-            background: 'radial-gradient(ellipse 1000px 180px at center, rgba(162, 117, 227, 0.25) 0%, rgba(162, 117, 227, 0.15) 40%, transparent 70%)',
-            borderRadius: '50%',
-            filter: 'blur(60px)',
-            zIndex: 0,
-          }}
-          animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.15, 0.25, 0.15],
-          }}
-          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-        />
       </div>
 
       {/* Partículas místicas flutuantes - 30 elementos dourados */}
@@ -107,29 +89,49 @@ export function Hero() {
       {/* Conteúdo principal - ACIMA do background */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center" style={{ marginTop: '-80px', padding: '0 24px', gap: '16px' }}>
-          {/* Foto da Cássia - Protagonista centralizada acima do título */}
+          {/* Foto da Cássia COM SOMBRA OVAL ATRÁS - Centralizada */}
           <motion.div
-            className="mb-1"
+            className="mb-6 md:mb-8 relative mx-auto"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <div className="relative inline-block">
+            {/* SOMBRA OVAL - EXATAMENTE ATRÁS DA FOTO (CENTRO - PONTO DE MAIOR INTENSIDADE NO CENTRO) */}
+            <motion.div
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+              style={{ 
+                width: 'calc(100% + 120px)',
+                height: 'calc(100% + 100px)',
+                background: 'radial-gradient(ellipse closest-side at 50% 50%, rgba(162, 117, 227, 0.45) 0%, rgba(162, 117, 227, 0.3) 25%, rgba(233, 138, 70, 0.25) 50%, transparent 75%)',
+                borderRadius: '50%',
+                filter: 'blur(70px)',
+                zIndex: -1,
+                pointerEvents: 'none',
+              }}
+              animate={{
+                scale: [1, 1.15, 1],
+                opacity: [0.4, 0.6, 0.4],
+              }}
+              transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+            />
+
+            {/* FOTO POR CIMA - CENTRALIZADA */}
+            <div className="relative z-10">
               <ImageWithFallback
                 src="https://i.ibb.co/mrqZ8sdn/a08e4f14-4dd8-421d-a7b0-ca30d2d87a11.png"
                 alt="Cássia Corviniy - Terapeuta Holística"
-                className="w-[85vw] max-w-[700px] h-[140px] md:w-[90vw] md:max-w-[1000px] md:h-[180px] object-cover"
+                className="w-[85vw] max-w-[900px] h-[160px] md:h-[200px] object-cover mx-auto block"
                 style={{
-                  borderRadius: '45% 55% 55% 45% / 75% 25% 75% 25%',
-                  boxShadow: '0 0 15px rgba(162, 117, 227, 0.15)',
+                  borderRadius: '48% 52% 54% 46% / 68% 32% 68% 32%',
+                  boxShadow: '0 8px 32px rgba(162, 117, 227, 0.35), 0 4px 16px rgba(138, 79, 195, 0.25), 0 0 80px rgba(162, 117, 227, 0.2)',
                 }}
               />
             </div>
           </motion.div>
 
-          {/* HEADLINE PRINCIPAL - BRANCA COM HIERARQUIA */}
+          {/* HEADLINE PRINCIPAL - MAIOR */}
           <motion.h2
-            className="text-[clamp(1.75rem,5vw,2.5rem)] text-center mb-3 font-bold"
+            className="text-[clamp(2rem,6vw,3rem)] text-center mb-3 font-bold"
             style={{
               color: '#FFFFFF',
               textShadow: '0 4px 20px rgba(43, 38, 70, 0.7), 0 2px 10px rgba(0, 0, 0, 0.5)',
@@ -141,9 +143,9 @@ export function Hero() {
             ✨ Transformação Mental, Física e Espiritual
           </motion.h2>
 
-          {/* SUBHEADLINE - BRANCA */}
+          {/* SUBHEADLINE - MAIOR */}
           <motion.h2
-            className="text-[clamp(1.125rem,3.5vw,1.5rem)] text-center mb-4 font-medium"
+            className="text-[clamp(1.5rem,4.5vw,2rem)] text-center mb-4 font-medium"
             style={{
               color: '#FFFFFF',
               opacity: 0.95,
@@ -151,15 +153,15 @@ export function Hero() {
               letterSpacing: '-0.02em',
             }}
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 0.95, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
           >
             QUERER é o início de toda transformação.
           </motion.h2>
           
-          {/* DESCRIÇÃO - BRANCA SUTIL */}
+          {/* DESCRIÇÃO - MAIOR */}
           <motion.p
-            className="text-[clamp(0.875rem,2.5vw,1.125rem)] text-center mb-6"
+            className="text-[clamp(1.125rem,3vw,1.375rem)] text-center mb-6"
             style={{ 
               color: '#FFFFFF',
               opacity: 0.85,
@@ -180,12 +182,9 @@ export function Hero() {
             transition={{ delay: 0.8 }}
           >
             <motion.button
-              className="hero-cta inline-flex items-center gap-3 bg-gradient-to-r from-[#A275E3] to-[#8A4FC3] text-white font-semibold rounded-2xl border-none cursor-pointer"
+              className="hero-cta inline-flex items-center gap-3 bg-gradient-to-r from-[#A275E3] to-[#8A4FC3] text-white font-semibold rounded-2xl border-none cursor-pointer px-8 md:px-12 py-4 md:py-[18px] text-base md:text-lg mt-8"
               style={{
-                padding: '18px 48px',
-                fontSize: '18px',
                 fontWeight: 600,
-                marginTop: '32px',
               }}
               whileHover={{ 
                 y: -4,
