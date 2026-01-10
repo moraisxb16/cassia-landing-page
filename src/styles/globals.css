@@ -265,6 +265,44 @@ small {
   margin: 0 auto;
 }
 
+/* Hero Logo Background - Decorativo */
+.hero-logo-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Responsivo: Logo Background */
+@media (min-width: 1024px) {
+  .hero-logo-bg img {
+    width: 60vw !important;
+    max-width: 800px !important;
+    opacity: 0.12 !important;
+    filter: blur(50px) !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-logo-bg img {
+    width: 70vw !important;
+    max-width: 600px !important;
+    opacity: 0.15 !important;
+    filter: blur(40px) !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-logo-bg img {
+    width: 80vw !important;
+    max-width: 500px !important;
+    opacity: 0.18 !important;
+    filter: blur(30px) !important;
+  }
+}
+
 /* Hero Subtitle - Melhor legibilidade */
 .hero-subtitle {
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);

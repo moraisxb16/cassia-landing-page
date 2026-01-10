@@ -9,8 +9,28 @@ export function Hero() {
       {/* Overlay sutil sobre o gradiente animado */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-white/10" />
       
+      {/* Logo como Background Decorativo - VERSÃO 2 (Recomendado) */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+        <motion.div
+          className="hero-logo-bg w-full h-full flex items-center justify-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.3 }}
+        >
+          <ImageWithFallback
+            src="https://i.ibb.co/rGPhdZm2/Logotipo-C-ssia-Corviniy-9-1.jpg"
+            alt=""
+            className="w-[60vw] max-w-[800px] h-auto opacity-[0.12]"
+            style={{
+              filter: 'blur(50px)',
+              transform: 'scale(1.2)',
+            }}
+          />
+        </motion.div>
+      </div>
+      
       {/* Orbs de luz místicos */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <motion.div
           className="absolute top-0 left-1/4 w-96 h-96 bg-[var(--cassia-lavender)]/20 rounded-full"
           style={{ filter: 'var(--blur-hard)' }}
@@ -41,7 +61,7 @@ export function Hero() {
       </div>
 
       {/* Partículas místicas flutuantes - 30 elementos dourados */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         {[...Array(30)].map((_, i) => {
           const randomX = Math.random();
           const randomY = Math.random();
@@ -74,9 +94,10 @@ export function Hero() {
         })}
       </div>
       
+      {/* Conteúdo principal - ACIMA do background */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center gap-8">
-          {/* Foto da Cássia - Centralizada acima do título */}
+          {/* Foto da Cássia - Protagonista centralizada acima do título */}
           <motion.div
             className="mb-4"
             initial={{ opacity: 0, scale: 0.8 }}
@@ -84,16 +105,14 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <div className="relative inline-block">
-              <div className="relative">
-                <ImageWithFallback
-                  src="https://i.ibb.co/rGPhdZm2/Logotipo-C-ssia-Corviniy-9-1.jpg"
-                  alt="Cássia Corviniy - Terapeuta Holística"
-                  className="w-[140px] h-[140px] md:w-[160px] md:h-[160px] rounded-full object-cover border-4 border-[#CFAF63]"
-                  style={{
-                    boxShadow: '0 0 0 8px rgba(207, 175, 99, 0.2), 0 0 40px rgba(207, 175, 99, 0.5), 0 8px 32px rgba(162, 117, 227, 0.3)',
-                  }}
-                />
-              </div>
+              <ImageWithFallback
+                src="https://i.ibb.co/rGPhdZm2/Logotipo-C-ssia-Corviniy-9-1.jpg"
+                alt="Cássia Corviniy - Terapeuta Holística"
+                className="w-[140px] h-[140px] md:w-[160px] md:h-[160px] rounded-full object-cover border-4 border-[#CFAF63]"
+                style={{
+                  boxShadow: '0 0 0 8px rgba(207, 175, 99, 0.2), 0 0 40px rgba(207, 175, 99, 0.5), 0 8px 32px rgba(162, 117, 227, 0.3)',
+                }}
+              />
             </div>
           </motion.div>
 
