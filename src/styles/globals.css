@@ -196,7 +196,7 @@ small {
   font-weight: 700;
   letter-spacing: -0.02em;
   max-width: 900px;
-  margin: 0 auto 12px;
+  margin: -8px auto 12px;
   background: linear-gradient(
     135deg,
     #FFFFFF 0%,
@@ -335,7 +335,7 @@ small {
   color: #CFAF63;
   opacity: 1;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 
