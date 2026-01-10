@@ -304,18 +304,28 @@ small {
   aspect-ratio: 21 / 9;
   margin: 0 auto 40px !important;
   display: block;
+  object-position: center center;
+  opacity: 0.12 !important;  /* Base desktop */
+  filter: blur(50px) !important;  /* Base desktop */
+  transform: scale(1.2) !important;  /* Base desktop */
 }
 
-/* Responsivo: Logo Background Horizontal Aumentada */
+/* Desktop: Background decorativo mais para cima e mais difuso */
 @media (min-width: 1024px) {
+  .hero-logo-bg {
+    top: 35% !important;  /* SOBE o background decorativo (era 50%) - ponto focal mais para cima */
+    transform: translate(-50%, -50%) !important;
+  }
+  
   .hero-logo-bg-image {
     width: 85vw !important;
     max-width: 1200px !important;
     min-width: 600px !important;
     max-height: 280px !important;
     aspect-ratio: 21 / 9;
-    opacity: 0.12 !important;
-    filter: blur(50px) !important;
+    opacity: 0.06 !important;  /* MENOS CONTRASTE - mais difusa (era 0.12) - sem anel evidente */
+    filter: blur(90px) !important;  /* MAIS DIFUSA - blur maior (era 50px) - se funde naturalmente */
+    transform: scale(1.5) !important;  /* MAIS ESPALHADA (era 1.2) - menos marcada */
   }
 }
 
@@ -331,9 +341,16 @@ small {
   }
 }
 
+/* Mobile: Logo e oval mais para baixo - mantendo centralizada horizontalmente */
 @media (max-width: 767px) {
   .hero-section {
     padding-bottom: 100px !important;
+    padding-top: 160px !important;  /* AUMENTA espaçamento do topo - logo mais para baixo */
+  }
+  
+  .hero-logo-bg {
+    top: 48% !important;  /* Ajusta background decorativo para acompanhar a logo mais baixa */
+    transform: translate(-50%, -50%) !important;
   }
   
   .hero-logo-bg-image {
@@ -347,9 +364,14 @@ small {
   }
   
   .hero-content {
-    margin-top: -80px !important;
+    margin-top: -50px !important;  /* Ajustado para compensar padding-top maior */
+  }
+  
+  .hero-photo-container {
+    margin-top: 48px !important;  /* Logo MAIS PARA BAIXO no mobile - oval acompanha automaticamente (mesmo centro X/Y) */
   }
 }
+
 
 /* Hero Title Stars - Badge Dourado Maior */
 .hero-title-stars {

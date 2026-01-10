@@ -21,10 +21,8 @@ export function Hero() {
           <ImageWithFallback
             src="https://i.ibb.co/rGPhdZm2/Logotipo-C-ssia-Corviniy-9-1.jpg"
             alt=""
-            className="hero-logo-bg-image opacity-[0.12]"
+            className="hero-logo-bg-image"
             style={{
-              filter: 'blur(50px)',
-              transform: 'scale(1.2)',
               objectPosition: 'center center',
             }}
           />
@@ -92,7 +90,7 @@ export function Hero() {
         <div className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center" style={{ marginTop: '-80px', padding: '0 24px', gap: '16px' }}>
           {/* Foto da Cássia COM SOMBRA OVAL ATRÁS - Centralizada */}
           <motion.div
-            className="mb-6 md:mb-8 relative mx-auto"
+            className="hero-photo-container mb-6 md:mb-8 relative mx-auto"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
