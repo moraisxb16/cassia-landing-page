@@ -140,7 +140,7 @@ export function Hero() {
           
           {/* DESCRIÇÃO - MAIOR */}
           <motion.p
-            className="text-[clamp(1.125rem,3vw,1.375rem)] text-center mb-6"
+            className="text-[clamp(1.3125rem,3vw,1.5625rem)] text-center mb-6"
             style={{ 
               color: '#FFFFFF',
               opacity: 0.85,
