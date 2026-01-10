@@ -108,10 +108,10 @@ export function Hero() {
               <ImageWithFallback
                 src="https://i.ibb.co/mrqZ8sdn/a08e4f14-4dd8-421d-a7b0-ca30d2d87a11.png"
                 alt="Cássia Corviniy - Terapeuta Holística"
-                className="w-[85vw] max-w-[650px] h-[140px] md:w-[90vw] md:max-w-[900px] md:h-[160px] object-cover"
+                className="w-[85vw] max-w-[650px] h-[100px] md:w-[90vw] md:max-w-[900px] md:h-[120px] object-cover"
                 style={{
-                  borderRadius: '45% 55% 60% 40% / 65% 35% 65% 35%',
-                  boxShadow: '0 0 20px rgba(162, 117, 227, 0.2)',
+                  borderRadius: '30% 70% 70% 30% / 50% 50% 50% 50%',
+                  boxShadow: '0 0 15px rgba(162, 117, 227, 0.15)',
                 }}
               />
             </div>
