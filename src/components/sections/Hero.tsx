@@ -101,6 +101,8 @@ export function Hero() {
                 alt="Cássia Corviniy - Terapeuta Holística"
                 className="w-[85vw] max-w-[900px] h-[160px] md:h-[280px] object-cover mx-auto block"
                 style={{
+                  width: '700px',
+                  height: '450px',
                   borderRadius: '48% 52% 54% 46% / 68% 32% 68% 32%',
                   boxShadow: '0 8px 32px rgba(162, 117, 227, 0.35), 0 4px 16px rgba(138, 79, 195, 0.25), 0 0 80px rgba(162, 117, 227, 0.2)',
                 }}
