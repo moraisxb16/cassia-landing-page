@@ -281,16 +281,16 @@ small {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: calc(85vw + 80px);  /* REDUZIDO: era calc(85vw + 120px) → agora calc(85vw + 80px) - oval mais estreita */
-  max-width: calc(900px + 80px);  /* REDUZIDO: era calc(900px + 120px) → agora calc(900px + 80px) */
-  height: calc(160px + 5px);  /* ALTURA MUITO REDUZIDA: ~165px (era ~170px) */
-  max-height: calc(200px + 5px);  /* ALTURA MUITO REDUZIDA: ~205px (era ~210px) */
-  background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(162, 117, 227, 0.35) 0%, rgba(162, 117, 227, 0.25) 30%, rgba(233, 138, 70, 0.2) 55%, transparent 80%);  /* Ajustado: ellipse 60% 40% - mais compacta verticalmente */
+  width: calc(85vw + 80px);
+  max-width: calc(900px + 80px);
+  height: calc(100px + 3px) !important;  /* ALTURA DRASTICAMENTE REDUZIDA: ~103px (era ~165px) */
+  max-height: calc(120px + 3px) !important;  /* ALTURA DRASTICAMENTE REDUZIDA: ~123px (era ~205px) */
+  background: radial-gradient(ellipse 60% 30% at 50% 50%, rgba(162, 117, 227, 0.35) 0%, rgba(162, 117, 227, 0.25) 30%, rgba(233, 138, 70, 0.2) 55%, transparent 80%);  /* ellipse 60% 30% - MUITO mais compacta verticalmente */
   border-radius: 50%;
-  filter: blur(60px);  /* REDUZIDO: era 70px → agora 60px - menos expansão visual */
+  filter: blur(60px);
   z-index: 0;
   pointer-events: none;
-  opacity: 0.35;  /* REDUZIDO: era 0.4 → agora 0.35 - menos visível */
+  opacity: 0.35;
   animation: hero-oval-pulse 25s ease-in-out infinite;
 }
 
@@ -309,13 +309,13 @@ small {
 /* Tablet/Desktop: Ajustar tamanho da oval */
 @media (min-width: 768px) {
   .hero-section::before {
-    width: calc(90vw + 80px);  /* REDUZIDO: era calc(90vw + 120px) → agora calc(90vw + 80px) - oval mais estreita */
-    max-width: calc(900px + 80px);  /* REDUZIDO: era calc(900px + 120px) → agora calc(900px + 80px) */
-    height: calc(200px + 5px);  /* ALTURA MUITO REDUZIDA: ~205px (era ~210px) */
-    max-height: calc(200px + 5px);  /* ALTURA MUITO REDUZIDA: ~205px (era ~210px) */
-    background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(162, 117, 227, 0.35) 0%, rgba(162, 117, 227, 0.25) 30%, rgba(233, 138, 70, 0.2) 55%, transparent 80%);  /* Forma mais compacta */
-    filter: blur(60px);  /* REDUZIDO blur */
-    opacity: 0.35;  /* REDUZIDO opacity */
+    width: calc(90vw + 80px);
+    max-width: calc(900px + 80px);
+    height: calc(120px + 3px) !important;  /* ALTURA DRASTICAMENTE REDUZIDA: ~123px (era ~205px) */
+    max-height: calc(120px + 3px) !important;  /* ALTURA DRASTICAMENTE REDUZIDA: ~123px (era ~205px) */
+    background: radial-gradient(ellipse 60% 30% at 50% 50%, rgba(162, 117, 227, 0.35) 0%, rgba(162, 117, 227, 0.25) 30%, rgba(233, 138, 70, 0.2) 55%, transparent 80%);  /* Forma MUITO mais compacta */
+    filter: blur(60px);
+    opacity: 0.35;
   }
 }
 
@@ -394,11 +394,14 @@ small {
     object-position: center 45% !important;
   }
   
-  /* Ajustar oval também no desktop para acompanhar - descer mais */
+  /* Ajustar oval também no desktop para acompanhar */
   .hero-section::before {
-    top: 60% !important;  /* DESCER: era 45% → agora 60% - acompanha background decorativo mais para baixo */
-    opacity: 0.3 !important;  /* Mais suave */
-    filter: blur(80px) !important;  /* Mais difusa */
+    height: calc(120px + 3px) !important;  /* ALTURA DRASTICAMENTE REDUZIDA no desktop: ~123px */
+    max-height: calc(120px + 3px) !important;  /* ALTURA DRASTICAMENTE REDUZIDA no desktop: ~123px */
+    background: radial-gradient(ellipse 60% 30% at 50% 50%, rgba(162, 117, 227, 0.35) 0%, rgba(162, 117, 227, 0.25) 30%, rgba(233, 138, 70, 0.2) 55%, transparent 80%) !important;  /* Forma MUITO mais compacta */
+    top: 60% !important;
+    opacity: 0.3 !important;
+    filter: blur(80px) !important;
   }
 }
 
@@ -451,19 +454,20 @@ small {
   /* Ajustar oval para ficar exatamente atrás da logo (mesmo ponto focal) - SEMPRE ATRÁS */
   /* Centralização visual: usar posição relativa ao centro da logo */
   .hero-section::before {
-    width: calc(85vw + 60px) !important;  /* REDUZIDO: oval mais estreita */
+    width: calc(85vw + 60px) !important;
     max-width: calc(900px + 60px) !important;
-    height: calc(160px + 5px) !important;  /* ALTURA MUITO REDUZIDA: ~165px (era ~168px) */
-    background: radial-gradient(ellipse 65% 35% at 50% 50%, rgba(162, 117, 227, 0.35) 0%, rgba(162, 117, 227, 0.25) 30%, rgba(233, 138, 70, 0.2) 55%, transparent 80%) !important;  /* Forma mais compacta verticalmente */
-    filter: blur(55px) !important;  /* REDUZIDO blur */
-    opacity: 0.3 !important;  /* REDUZIDO opacity */
+    height: calc(100px + 3px) !important;  /* ALTURA DRASTICAMENTE REDUZIDA no mobile: ~103px (era ~165px) */
+    max-height: calc(100px + 3px) !important;  /* ALTURA DRASTICAMENTE REDUZIDA no mobile: ~103px */
+    background: radial-gradient(ellipse 65% 30% at 50% 50%, rgba(162, 117, 227, 0.35) 0%, rgba(162, 117, 227, 0.25) 30%, rgba(233, 138, 70, 0.2) 55%, transparent 80%) !important;  /* Forma MUITO mais compacta verticalmente */
+    filter: blur(55px) !important;
+    opacity: 0.3 !important;
     /* Posição: padding-top (180px) + margin-top logo (64px) + metade altura logo (~80px) ≈ 324px do topo */
     top: 324px !important;
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
-    z-index: 0 !important;  /* SEMPRE ATRÁS - nunca por cima do conteúdo */
-    animation: none !important;  /* Simplificar no mobile - apenas posição estática atrás da logo */
-    pointer-events: none !important;  /* Não bloquear cliques */
+    z-index: 0 !important;
+    animation: none !important;
+    pointer-events: none !important;
   }
   
   .hero-content {
@@ -512,14 +516,14 @@ small {
 
 /* Hero Text Styles - Controlados via CSS, não Tailwind */
 .hero-headline {
-  font-size: clamp(2.25rem, 7vw, 3.5rem) !important;  /* Primeira frase - MAIOR E EM NEGRITO */
+  font-size: clamp(2.5rem, 8vw, 4rem) !important;  /* AUMENTADO: primeira frase - MAIOR E EM NEGRITO */
   font-weight: bold !important;
   color: #FFFFFF !important;
   text-shadow: 0 4px 20px rgba(43, 38, 70, 0.7), 0 2px 10px rgba(0, 0, 0, 0.5) !important;
 }
 
 .hero-subheadline {
-  font-size: clamp(1.75rem, 5vw, 2.5rem) !important;  /* Subheadline - MAIOR */
+  font-size: clamp(2rem, 6vw, 3rem) !important;  /* AUMENTADO: subheadline - MAIOR */
   font-weight: 500 !important;
   color: #FFFFFF !important;
   opacity: 0.95 !important;
@@ -528,7 +532,7 @@ small {
 }
 
 .hero-description-text {
-  font-size: clamp(1.35rem, 3.2vw, 1.7rem) !important;  /* AUMENTADO: era clamp(1.125rem,3vw,1.375rem) → agora clamp(1.35rem,3.2vw,1.7rem) */
+  font-size: clamp(1.5rem, 4vw, 2rem) !important;  /* AUMENTADO: descrição - MUITO MAIOR */
   color: #FFFFFF !important;
   opacity: 0.85 !important;
   text-shadow: 0 2px 10px rgba(43, 38, 70, 0.5), 0 1px 5px rgba(0, 0, 0, 0.3) !important;
@@ -537,15 +541,15 @@ small {
 /* Mobile: Ajustes Específicos */
 @media (max-width: 768px) {
   .hero-headline {
-    font-size: clamp(1.75rem, 6vw, 2.5rem) !important;  /* Headline mobile - ainda maior */
+    font-size: clamp(2rem, 7vw, 3rem) !important;  /* AUMENTADO: headline mobile - MUITO maior */
   }
   
   .hero-subheadline {
-    font-size: clamp(1.5rem, 5vw, 2rem) !important;  /* Subheadline mobile - maior */
+    font-size: clamp(1.75rem, 6vw, 2.5rem) !important;  /* AUMENTADO: subheadline mobile - MUITO maior */
   }
   
   .hero-description-text {
-    font-size: clamp(1.35rem, 3.2vw, 1.7rem) !important;  /* AUMENTADO: mesmo tamanho em mobile também */
+    font-size: clamp(1.5rem, 4vw, 2rem) !important;  /* AUMENTADO: descrição mobile - MUITO maior */
   }
 }
 
