@@ -283,8 +283,8 @@ small {
   transform: translate(-50%, -50%);
   width: calc(85vw + 80px);  /* REDUZIDO: era calc(85vw + 120px) → agora calc(85vw + 80px) - oval mais estreita */
   max-width: calc(900px + 80px);  /* REDUZIDO: era calc(900px + 120px) → agora calc(900px + 80px) */
-  height: calc(160px + 10px);  /* ALTURA DRAMATICAMENTE REDUZIDA: ~170px */
-  max-height: calc(200px + 10px);  /* ALTURA DRAMATICAMENTE REDUZIDA: ~210px */
+  height: calc(160px + 5px);  /* ALTURA MUITO REDUZIDA: ~165px (era ~170px) */
+  max-height: calc(200px + 5px);  /* ALTURA MUITO REDUZIDA: ~205px (era ~210px) */
   background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(162, 117, 227, 0.35) 0%, rgba(162, 117, 227, 0.25) 30%, rgba(233, 138, 70, 0.2) 55%, transparent 80%);  /* Ajustado: ellipse 60% 40% - mais compacta verticalmente */
   border-radius: 50%;
   filter: blur(60px);  /* REDUZIDO: era 70px → agora 60px - menos expansão visual */
@@ -311,8 +311,8 @@ small {
   .hero-section::before {
     width: calc(90vw + 80px);  /* REDUZIDO: era calc(90vw + 120px) → agora calc(90vw + 80px) - oval mais estreita */
     max-width: calc(900px + 80px);  /* REDUZIDO: era calc(900px + 120px) → agora calc(900px + 80px) */
-    height: calc(200px + 10px);  /* ALTURA DRAMATICAMENTE REDUZIDA: ~210px */
-    max-height: calc(200px + 10px);  /* ALTURA DRAMATICAMENTE REDUZIDA: ~210px */
+    height: calc(200px + 5px);  /* ALTURA MUITO REDUZIDA: ~205px (era ~210px) */
+    max-height: calc(200px + 5px);  /* ALTURA MUITO REDUZIDA: ~205px (era ~210px) */
     background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(162, 117, 227, 0.35) 0%, rgba(162, 117, 227, 0.25) 30%, rgba(233, 138, 70, 0.2) 55%, transparent 80%);  /* Forma mais compacta */
     filter: blur(60px);  /* REDUZIDO blur */
     opacity: 0.35;  /* REDUZIDO opacity */
@@ -444,7 +444,7 @@ small {
   .hero-section::before {
     width: calc(85vw + 60px) !important;  /* REDUZIDO: oval mais estreita */
     max-width: calc(900px + 60px) !important;
-    height: calc(160px + 8px) !important;  /* ALTURA DRAMATICAMENTE REDUZIDA: ~168px */
+    height: calc(160px + 5px) !important;  /* ALTURA MUITO REDUZIDA: ~165px (era ~168px) */
     background: radial-gradient(ellipse 65% 35% at 50% 50%, rgba(162, 117, 227, 0.35) 0%, rgba(162, 117, 227, 0.25) 30%, rgba(233, 138, 70, 0.2) 55%, transparent 80%) !important;  /* Forma mais compacta verticalmente */
     filter: blur(55px) !important;  /* REDUZIDO blur */
     opacity: 0.3 !important;  /* REDUZIDO opacity */

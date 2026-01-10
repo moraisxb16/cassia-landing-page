@@ -108,11 +108,12 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* HEADLINE PRINCIPAL - MAIOR */}
+          {/* HEADLINE PRINCIPAL - MAIOR E EM NEGRITO */}
           <motion.h2
-            className="text-[clamp(2rem,6vw,3rem)] text-center mb-3 font-bold"
+            className="text-[clamp(2.25rem,7vw,3.5rem)] text-center mb-3"
             style={{
               color: '#FFFFFF',
+              fontWeight: 'bold',
               textShadow: '0 4px 20px rgba(43, 38, 70, 0.7), 0 2px 10px rgba(0, 0, 0, 0.5)',
             }}
             initial={{ opacity: 0, scale: 0.9 }}
@@ -124,7 +125,7 @@ export function Hero() {
 
           {/* SUBHEADLINE - MAIOR */}
           <motion.h2
-            className="text-[clamp(1.5rem,4.5vw,2rem)] text-center mb-4 font-medium"
+            className="text-[clamp(1.75rem,5vw,2.5rem)] text-center mb-4 font-medium"
             style={{
               color: '#FFFFFF',
               opacity: 0.95,
@@ -140,7 +141,7 @@ export function Hero() {
           
           {/* DESCRIÇÃO - MAIOR */}
           <motion.p
-            className="text-[clamp(1.3125rem,3vw,1.5625rem)] text-center mb-6"
+            className="text-[clamp(1.375rem,4vw,1.75rem)] text-center mb-6"
             style={{ 
               color: '#FFFFFF',
               opacity: 0.85,
@@ -161,7 +162,7 @@ export function Hero() {
             transition={{ delay: 0.8 }}
           >
             <motion.button
-              className="hero-cta inline-flex items-center gap-3 bg-gradient-to-r from-[#A275E3] to-[#8A4FC3] text-white font-semibold rounded-2xl border-none cursor-pointer px-8 md:px-12 py-4 md:py-[18px] text-base md:text-lg mt-8"
+              className="hero-cta inline-flex items-center gap-3 bg-gradient-to-r from-[#A275E3] to-[#8A4FC3] text-white font-semibold rounded-2xl border-none cursor-pointer px-8 md:px-12 py-4 md:py-[18px] text-lg md:text-xl mt-8"
               style={{
                 fontWeight: 600,
               }}
