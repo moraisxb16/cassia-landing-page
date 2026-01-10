@@ -16,6 +16,7 @@ export function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.3 }}
+          style={{ zIndex: 1 }}
         >
           <ImageWithFallback
             src="https://i.ibb.co/rGPhdZm2/Logotipo-C-ssia-Corviniy-9-1.jpg"
@@ -50,11 +51,18 @@ export function Hero() {
           transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--cassia-purple)]/12 rounded-full"
-          style={{ filter: 'var(--blur-hard)' }}
+          className="absolute left-1/2 -translate-x-1/2 bg-[var(--cassia-purple)]/12"
+          style={{ 
+            width: '900px',
+            height: '200px',
+            top: '28%',
+            transform: 'translate(-50%, -50%)',
+            borderRadius: '50%',
+            filter: 'blur(60px)',
+          }}
           animate={{
-            scale: [1, 1.25, 1],
-            opacity: [0.12, 0.2, 0.12],
+            scale: [1, 1.1, 1],
+            opacity: [0.15, 0.25, 0.15],
           }}
           transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -110,7 +118,7 @@ export function Hero() {
                 alt="Cássia Corviniy - Terapeuta Holística"
                 className="w-[85vw] max-w-[700px] h-[140px] md:w-[90vw] md:max-w-[1000px] md:h-[180px] object-cover"
                 style={{
-                  borderRadius: '30% 70% 70% 30% / 50% 50% 50% 50%',
+                  borderRadius: '45% 55% 55% 45% / 75% 25% 75% 25%',
                   boxShadow: '0 0 15px rgba(162, 117, 227, 0.15)',
                 }}
               />
