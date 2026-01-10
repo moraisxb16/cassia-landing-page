@@ -271,6 +271,49 @@ small {
   justify-content: center !important;
   align-items: center !important;
   overflow-y: visible !important;
+  position: relative;
+}
+
+/* Oval transparente - BACKGROUND DO HERO (::before) - SEMPRE ATRÁS */
+.hero-section::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(85vw + 120px);
+  max-width: calc(900px + 120px);
+  height: calc(160px + 100px);
+  max-height: calc(200px + 100px);
+  background: radial-gradient(ellipse closest-side at 50% 50%, rgba(162, 117, 227, 0.45) 0%, rgba(162, 117, 227, 0.3) 25%, rgba(233, 138, 70, 0.25) 50%, transparent 75%);
+  border-radius: 50%;
+  filter: blur(70px);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  animation: hero-oval-pulse 25s ease-in-out infinite;
+}
+
+@keyframes hero-oval-pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.15);
+    opacity: 0.6;
+  }
+}
+
+/* Mobile: Desabilitar animação ou ajustar se necessário */
+/* Tablet/Desktop: Ajustar tamanho da oval */
+@media (min-width: 768px) {
+  .hero-section::before {
+    width: calc(90vw + 120px);
+    max-width: calc(900px + 120px);
+    height: calc(200px + 100px);
+    max-height: calc(200px + 100px);
+  }
 }
 
 /* Hero Content - Espaçamento balanceado */
@@ -281,10 +324,25 @@ small {
   gap: 16px;
   max-width: 900px;
   margin: 0 auto;
-  margin-top: -80px !important;  /* SOBE os textos - menos colado */
+  position: relative;
+  z-index: 1;
 }
 
-/* Hero Logo Background - Decorativo e Horizontal */
+/* Hero Logo - Wrapper único com layout normal (flex/grid) */
+.hero-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+/* Hero Logo Background - Decorativo e Horizontal (APENAS DESKTOP) */
+.hero-logo-bg-wrapper {
+  z-index: 0 !important;
+}
+
 .hero-logo-bg {
   position: absolute;
   top: 50%;
@@ -292,6 +350,7 @@ small {
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 0;
+  background-position: center center;
 }
 
 .hero-logo-bg-image {
@@ -313,8 +372,10 @@ small {
 /* Desktop: Background decorativo mais para cima e mais difuso */
 @media (min-width: 1024px) {
   .hero-logo-bg {
-    top: 35% !important;  /* SOBE o background decorativo (era 50%) - ponto focal mais para cima */
+    top: 20% !important;  /* SOBE o background decorativo (era 50%) - ponto focal mais para cima (50% 20%) */
+    left: 50% !important;
     transform: translate(-50%, -50%) !important;
+    background-position: 50% 20% !important;
   }
   
   .hero-logo-bg-image {
@@ -323,9 +384,17 @@ small {
     min-width: 600px !important;
     max-height: 280px !important;
     aspect-ratio: 21 / 9;
-    opacity: 0.06 !important;  /* MENOS CONTRASTE - mais difusa (era 0.12) - sem anel evidente */
-    filter: blur(90px) !important;  /* MAIS DIFUSA - blur maior (era 50px) - se funde naturalmente */
-    transform: scale(1.5) !important;  /* MAIS ESPALHADA (era 1.2) - menos marcada */
+    opacity: 0.05 !important;  /* MENOS CONTRASTE - mais difusa (era 0.12) - sem anel evidente */
+    filter: blur(100px) !important;  /* MAIS DIFUSA - blur maior (era 50px) - se funde naturalmente */
+    transform: scale(1.6) !important;  /* MAIS ESPALHADA (era 1.2) - menos marcada, mais suave */
+    object-position: 50% 20% !important;  /* Ponto focal mais para cima */
+  }
+  
+  /* Ajustar oval também no desktop para acompanhar */
+  .hero-section::before {
+    top: 45% !important;  /* Acompanha posição mais para cima */
+    opacity: 0.3 !important;  /* Mais suave */
+    filter: blur(80px) !important;  /* Mais difusa */
   }
 }
 
@@ -341,34 +410,55 @@ small {
   }
 }
 
-/* Mobile: Logo e oval mais para baixo - mantendo centralizada horizontalmente */
-@media (max-width: 767px) {
+/* Mobile: Logo única visível, acima do título, com layout normal (flex/grid) */
+@media (max-width: 768px) {
   .hero-section {
     padding-bottom: 100px !important;
-    padding-top: 160px !important;  /* AUMENTA espaçamento do topo - logo mais para baixo */
+    padding-top: 120px !important;  /* Espaçamento confortável do topo */
   }
   
-  .hero-logo-bg {
-    top: 48% !important;  /* Ajusta background decorativo para acompanhar a logo mais baixa */
+  /* Esconder logo de background decorativo no mobile - APENAS 1 logo visível */
+  .hero-logo-bg-wrapper {
+    display: none !important;
+  }
+  
+  /* Logo única - wrapper com layout normal (flex/grid, NÃO position: fixed) */
+  .hero-logo {
+    margin-top: 36px !important;  /* Ajuste: +24px a +48px - mover logo um pouco para baixo, mas no topo do hero */
+    margin-bottom: 24px !important;
+    padding-top: 0 !important;
+  }
+  
+  /* Ajustar oval para ficar exatamente atrás da logo (mesmo ponto focal) - SEMPRE ATRÁS */
+  /* Centralização visual: usar posição relativa ao centro da logo */
+  .hero-section::before {
+    width: calc(85vw + 80px) !important;
+    max-width: calc(900px + 80px) !important;
+    height: calc(160px + 60px) !important;
+    /* Posição: padding-top (120px) + margin-top logo (36px) + metade altura logo (~80px) ≈ 236px do topo */
+    top: 236px !important;
+    left: 50% !important;
     transform: translate(-50%, -50%) !important;
-  }
-  
-  .hero-logo-bg-image {
-    width: 90vw !important;
-    max-width: 1000px !important;
-    min-width: 320px !important;
-    max-height: 200px !important;
-    aspect-ratio: 16 / 9;
-    opacity: 0.18 !important;
-    filter: blur(30px) !important;
+    background: radial-gradient(ellipse closest-side at 50% 50%, rgba(162, 117, 227, 0.45) 0%, rgba(162, 117, 227, 0.3) 25%, rgba(233, 138, 70, 0.25) 50%, transparent 75%) !important;
+    z-index: 0 !important;  /* SEMPRE ATRÁS - nunca por cima do conteúdo */
+    animation: none !important;  /* Simplificar no mobile - apenas posição estática atrás da logo */
+    pointer-events: none !important;  /* Não bloquear cliques */
   }
   
   .hero-content {
-    margin-top: -50px !important;  /* Ajustado para compensar padding-top maior */
+    margin-top: 0 !important;  /* Remover margin negativo - layout normal */
   }
   
-  .hero-photo-container {
-    margin-top: 48px !important;  /* Logo MAIS PARA BAIXO no mobile - oval acompanha automaticamente (mesmo centro X/Y) */
+  /* Garantir z-index: oval atrás (0), conteúdo na frente (1) - nunca sobrepor */
+  .hero-content,
+  .hero-logo {
+    position: relative;
+    z-index: 1 !important;  /* CONTEÚDO NA FRENTE */
+  }
+  
+  /* Validação: Logo não pode estar no meio do texto, não pode duplicar, não pode sobrepor */
+  .hero-logo + * {
+    margin-top: 0 !important;  /* Garantir que título vem logo após a logo */
   }
 }
 

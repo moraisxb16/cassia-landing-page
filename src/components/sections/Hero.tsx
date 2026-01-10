@@ -9,14 +9,13 @@ export function Hero() {
       {/* Overlay sutil sobre o gradiente animado */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-white/10" />
       
-      {/* Logo como Background Decorativo - CENTRO ALINHADO COM A LOGO */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+      {/* Logo como Background Decorativo - APENAS DESKTOP */}
+      <div className="hidden md:block absolute inset-0 flex items-center justify-center pointer-events-none hero-logo-bg-wrapper" style={{ zIndex: 0 }}>
         <motion.div
           className="hero-logo-bg w-full h-full flex items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.3 }}
-          style={{ zIndex: 1 }}
         >
           <ImageWithFallback
             src="https://i.ibb.co/rGPhdZm2/Logotipo-C-ssia-Corviniy-9-1.jpg"
@@ -86,36 +85,17 @@ export function Hero() {
       </div>
       
       {/* Conteúdo principal - ACIMA do background */}
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center" style={{ marginTop: '-80px', padding: '0 24px', gap: '16px' }}>
-          {/* Foto da Cássia COM SOMBRA OVAL ATRÁS - Centralizada */}
+      <div className="container mx-auto px-4 relative" style={{ zIndex: 1 }}>
+        <div className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center" style={{ padding: '0 24px', gap: '16px' }}>
+          {/* Logo/Foto da Cássia - WRAPPER ÚNICO COM LAYOUT NORMAL (mobile: acima do título) */}
           <motion.div
-            className="hero-photo-container mb-6 md:mb-8 relative mx-auto"
+            className="hero-logo mb-6 md:mb-8 relative mx-auto"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            {/* SOMBRA OVAL - PERFEITAMENTE ENQUADRADA NA LOGO (CENTRO ALINHADO) */}
-            <motion.div
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-              style={{ 
-                width: 'calc(100% + 40px)',
-                height: 'calc(100% + 30px)',
-                background: 'radial-gradient(ellipse closest-side at 50% 50%, rgba(162, 117, 227, 0.45) 0%, rgba(162, 117, 227, 0.3) 25%, rgba(233, 138, 70, 0.25) 50%, transparent 75%)',
-                borderRadius: '50%',
-                filter: 'blur(70px)',
-                zIndex: -1,
-                pointerEvents: 'none',
-              }}
-              animate={{
-                scale: [1, 1.15, 1],
-                opacity: [0.4, 0.6, 0.4],
-              }}
-              transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-            />
-
-            {/* FOTO POR CIMA - CENTRALIZADA */}
-            <div className="relative z-10">
+            {/* FOTO - CENTRALIZADA */}
+            <div className="relative">
               <ImageWithFallback
                 src="https://i.ibb.co/mrqZ8sdn/a08e4f14-4dd8-421d-a7b0-ca30d2d87a11.png"
                 alt="Cássia Corviniy - Terapeuta Holística"
