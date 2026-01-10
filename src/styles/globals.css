@@ -225,11 +225,19 @@ small {
 
 /* Hero CTA com sombra pulsante forte */
 .hero-cta {
-  box-shadow: 
-    0 8px 32px rgba(162, 117, 227, 0.6),
-    0 4px 16px rgba(138, 79, 195, 0.5),
-    0 0 80px rgba(162, 117, 227, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  width: 360px !important;  /* Fixed width from browser preview (final: 360px) */
+  flex-wrap: wrap !important;  /* Allow wrapping */
+  font-weight: 400 !important;  /* Changed from 600 to 400 */
+  letter-spacing: 0.1px !important;  /* Added letter spacing */
+  padding-top: 12px !important;  /* Changed from default to 12px */
+  padding-bottom: 12px !important;  /* Changed from default to 12px */
+  border-radius: 20px !important;  /* Changed from rounded-2xl (16px) to 20px */
+  font-size: 19px !important;  /* Fixed size from browser preview (final: 19px) */
+  line-height: 25.3333px !important;  /* Fixed line-height from browser preview */
+  background: linear-gradient(15deg, rgba(162, 117, 227, 1) 0%, rgba(0, 0, 0, 1) 100%) !important;  /* Changed gradient */
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15), inset 0px 4px 12px 0px rgba(0, 0, 0, 0.15) !important;  /* Updated shadow */
+  vertical-align: top !important;  /* Added vertical alignment */
+  text-align: left !important;  /* Changed from center to left */
   animation: pulse-cta 2.5s ease-in-out infinite;
   transition: all 0.3s ease;
 }
@@ -240,6 +248,23 @@ small {
     0 6px 24px rgba(138, 79, 195, 0.6),
     0 0 100px rgba(162, 117, 227, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Hero CTA Icon (Sparkles) styles from browser preview */
+.hero-cta-icon,
+.hero-cta svg {
+  width: 50px !important;  /* Changed from 20px to 50px */
+  height: 30px !important;  /* Changed from 20px to 30px */
+  padding: 2px !important;  /* Added padding */
+  letter-spacing: 0.3px !important;  /* Added letter spacing */
+  font-size: 20px !important;  /* Added font-size */
+  font-weight: 300 !important;  /* Added font-weight */
+}
+
+.hero-cta-icon path,
+.hero-cta svg path {
+  font-size: 20px !important;  /* Added font-size for path elements */
+  font-weight: 300 !important;  /* Added font-weight for path elements */
 }
 
 @keyframes pulse-cta {
@@ -330,6 +355,8 @@ small {
   position: relative;
   z-index: 1;
   padding: 0 24px;  /* Adicionado padding aqui ao invés de inline style */
+  border-width: 1px !important;  /* Added from browser preview */
+  border-color: rgba(0, 0, 0, 1) !important;  /* Added from browser preview */
 }
 
 /* Hero Logo - Wrapper único com layout normal (flex/grid) */
@@ -340,6 +367,17 @@ small {
   width: 100%;
   position: relative;
   z-index: 1;
+}
+
+.hero-logo .relative {
+  font-size: 18px !important;  /* Applied from browser preview */
+}
+
+.hero-logo img {
+  line-height: 10px !important;  /* Applied from browser preview */
+  /* Note: height and width are controlled by Tailwind classes h-[160px] md:h-[280px] and w-[85vw] max-w-[900px] */
+  /* The browser preview showed height: 400px and width: 600px, but these conflict with responsive classes */
+  /* Keeping responsive classes and only applying line-height as it doesn't conflict */
 }
 
 /* Hero Logo Background - Decorativo e Horizontal (APENAS DESKTOP) */
@@ -516,15 +554,22 @@ small {
 
 /* Hero Text Styles - Controlados via CSS, não Tailwind */
 .hero-headline {
-  font-size: clamp(3rem, 9vw, 5rem) !important;  /* AUMENTADO AINDA MAIS: primeira frase - MUITO MAIOR E EM NEGRITO BRANCO */
-  font-weight: bold !important;
+  font-size: 26px !important;  /* Fixed size from browser preview */
+  font-weight: 600 !important;  /* Changed from bold to 600 */
+  line-height: 20px !important;  /* Changed from default to 20px */
   color: #FFFFFF !important;
   opacity: 1 !important;
+  background-clip: unset !important;  /* Remove gradient text effect */
+  -webkit-background-clip: unset !important;
+  border-width: 0px !important;  /* Changed from 1px to 0px */
+  border-color: rgba(0, 0, 0, 0) !important;  /* Transparent border */
+  border-image: none !important;  /* Remove border image */
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15) !important;  /* Added shadow */
   text-shadow: 0 4px 20px rgba(43, 38, 70, 0.7), 0 2px 10px rgba(0, 0, 0, 0.5) !important;
 }
 
 .hero-subheadline {
-  font-size: clamp(2.5rem, 7vw, 4rem) !important;  /* AUMENTADO: subheadline - MUITO MAIOR EM BRANCO */
+  font-size: 20px !important;  /* Fixed size from browser preview */
   font-weight: 500 !important;
   color: #FFFFFF !important;
   opacity: 1 !important;  /* BRANCO SÓLIDO - removido opacity 0.95 */
@@ -533,7 +578,7 @@ small {
 }
 
 .hero-description-text {
-  font-size: clamp(1.75rem, 4.5vw, 2.25rem) !important;  /* AUMENTADO: descrição - MUITO MAIOR EM BRANCO */
+  font-size: 18px !important;  /* Fixed size from browser preview */
   color: #FFFFFF !important;
   opacity: 1 !important;  /* BRANCO SÓLIDO - removido opacity 0.85 */
   text-shadow: 0 2px 10px rgba(43, 38, 70, 0.5), 0 1px 5px rgba(0, 0, 0, 0.3) !important;
@@ -542,17 +587,18 @@ small {
 /* Mobile: Ajustes Específicos */
 @media (max-width: 768px) {
   .hero-headline {
-    font-size: clamp(2.5rem, 8vw, 3.5rem) !important;  /* AUMENTADO: headline mobile - MUITO MAIOR EM BRANCO NEGRITO */
+    font-size: 26px !important;  /* Fixed size from browser preview */
+    line-height: 20px !important;  /* Applied from browser preview */
     opacity: 1 !important;
   }
   
   .hero-subheadline {
-    font-size: clamp(2rem, 7vw, 3rem) !important;  /* AUMENTADO: subheadline mobile - MUITO MAIOR EM BRANCO */
+    font-size: 20px !important;  /* Fixed size from browser preview */
     opacity: 1 !important;
   }
   
   .hero-description-text {
-    font-size: clamp(1.75rem, 4.5vw, 2.25rem) !important;  /* AUMENTADO: descrição mobile - MUITO MAIOR EM BRANCO */
+    font-size: 18px !important;  /* Fixed size from browser preview */
     opacity: 1 !important;
   }
 }
