@@ -20,7 +20,7 @@ export function Hero() {
           <ImageWithFallback
             src="https://i.ibb.co/rGPhdZm2/Logotipo-C-ssia-Corviniy-9-1.jpg"
             alt=""
-            className="w-[60vw] max-w-[800px] h-auto opacity-[0.12]"
+            className="hero-logo-bg-image opacity-[0.12]"
             style={{
               filter: 'blur(50px)',
               transform: 'scale(1.2)',
@@ -116,21 +116,19 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* Badge */}
+          {/* Badge/Título Dourado - MAIOR */}
           <motion.div
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full hero-badge"
+            className="hero-title-stars text-center mb-6"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3 }}
-            whileHover={{ scale: 1.02 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
           >
-            <Sparkles className="w-4 h-4 text-[var(--cassia-gold)]" />
-            <span className="text-[var(--cassia-purple-dark)] text-sm">✨ Transformação Mental, Física e Espiritual</span>
+            ✨ Transformação Mental, Física e Espiritual
           </motion.div>
 
-          {/* Título Principal - 60px com gradiente holográfico */}
+          {/* Título Principal - Aumentado e melhorado */}
           <motion.h2
-            className="hero-title text-[48px] md:text-[56px] lg:text-[60px] font-bold leading-[1.2]"
+            className="hero-title hero-subtitle-main text-center"
             style={{
               letterSpacing: '-0.02em',
             }}
@@ -141,14 +139,14 @@ export function Hero() {
             QUERER é o início de toda transformação.
           </motion.h2>
           
-          {/* Subtítulo - 20px, opacity 0.95, text-shadow */}
+          {/* Descrição - Aumentada e melhor legibilidade */}
           <motion.p
-            className="hero-subtitle text-lg md:text-[20px] leading-[1.6] text-[#FDF6FF] font-normal max-w-[650px] mx-auto"
+            className="hero-description text-center"
             style={{ 
-              opacity: 0.95,
+              opacity: 0.9,
             }}
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.95 }}
+            animate={{ opacity: 0.9 }}
             transition={{ delay: 0.6, duration: 0.8 }}
           >
             Terapeuta Holística e Mestra Dragonlight, guiando sua jornada de autoconhecimento e transformação espiritual.
@@ -164,9 +162,10 @@ export function Hero() {
             <motion.button
               className="hero-cta inline-flex items-center gap-3 bg-gradient-to-r from-[#A275E3] to-[#8A4FC3] text-white font-semibold rounded-2xl border-none cursor-pointer"
               style={{
-                padding: '20px 48px',
-                fontSize: '19px',
+                padding: '18px 48px',
+                fontSize: '18px',
                 fontWeight: 600,
+                marginTop: '16px',
               }}
               whileHover={{ 
                 y: -4,
