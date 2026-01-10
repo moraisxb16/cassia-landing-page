@@ -345,7 +345,7 @@ small {
 
 .hero-logo-bg {
   position: absolute;
-  top: 50%;
+  top: 58% !important;  /* DESCER: era 50% → agora 58% - ponto focal mais para baixo, invade mais espaço inferior */
   left: 50%;
   transform: translate(-50%, -50%);
   pointer-events: none;
@@ -358,55 +358,61 @@ small {
   max-width: 1200px !important;
   min-width: 600px !important;
   height: auto !important;
-  max-height: 280px !important;  /* LIMITA ALTURA */
+  max-height: 350px !important;  /* AUMENTADO: era 280px → agora 350px - ocupa mais área abaixo sem crescer para cima */
   object-fit: contain !important;
   aspect-ratio: 21 / 9;
   margin: 0 auto 40px !important;
   display: block;
-  object-position: center center;
+  object-position: center 60% !important;  /* Ajustar objeto para focar mais abaixo */
   opacity: 0.12 !important;  /* Base desktop */
   filter: blur(50px) !important;  /* Base desktop */
   transform: scale(1.2) !important;  /* Base desktop */
 }
 
-/* Desktop: Background decorativo mais para cima e mais difuso */
+/* Desktop: Background decorativo desce para invadir mais espaço inferior */
 @media (min-width: 1024px) {
   .hero-logo-bg {
-    top: 20% !important;  /* SOBE o background decorativo (era 50%) - ponto focal mais para cima (50% 20%) */
+    top: 65% !important;  /* DESCER: era 20% → agora 65% - ponto focal muito mais para baixo, invade mais espaço inferior */
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
-    background-position: 50% 20% !important;
+    background-position: 50% 65% !important;  /* Foco mais para baixo */
   }
   
   .hero-logo-bg-image {
     width: 85vw !important;
     max-width: 1200px !important;
     min-width: 600px !important;
-    max-height: 280px !important;
+    max-height: 400px !important;  /* AUMENTADO: era 280px → agora 400px - ocupa muito mais área abaixo */
     aspect-ratio: 21 / 9;
     opacity: 0.05 !important;  /* MENOS CONTRASTE - mais difusa (era 0.12) - sem anel evidente */
     filter: blur(100px) !important;  /* MAIS DIFUSA - blur maior (era 50px) - se funde naturalmente */
     transform: scale(1.6) !important;  /* MAIS ESPALHADA (era 1.2) - menos marcada, mais suave */
-    object-position: 50% 20% !important;  /* Ponto focal mais para cima */
+    object-position: center 65% !important;  /* Ponto focal mais para baixo, invade mais espaço inferior */
   }
   
-  /* Ajustar oval também no desktop para acompanhar */
+  /* Ajustar oval também no desktop para acompanhar - descer mais */
   .hero-section::before {
-    top: 45% !important;  /* Acompanha posição mais para cima */
+    top: 60% !important;  /* DESCER: era 45% → agora 60% - acompanha background decorativo mais para baixo */
     opacity: 0.3 !important;  /* Mais suave */
     filter: blur(80px) !important;  /* Mais difusa */
   }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
+  .hero-logo-bg {
+    top: 62% !important;  /* DESCER: era 50% → agora 62% - ponto focal mais para baixo, invade mais espaço inferior */
+    background-position: 50% 62% !important;
+  }
+  
   .hero-logo-bg-image {
     width: 85vw !important;
     max-width: 1200px !important;
     min-width: 600px !important;
-    max-height: 240px !important;
+    max-height: 320px !important;  /* AUMENTADO: era 240px → agora 320px - ocupa mais área abaixo */
     aspect-ratio: 21 / 9;
     opacity: 0.15 !important;
     filter: blur(40px) !important;
+    object-position: center 62% !important;  /* Foco mais para baixo */
   }
 }
 
