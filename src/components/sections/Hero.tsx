@@ -124,7 +124,7 @@ export function Hero() {
           <motion.h2
             className="hero-headline text-center mb-3 md:mb-8"
             style={{
-              fontSize: isDesktop ? '42px' : '22px',
+              fontSize: isDesktop ? '36px' : '22px',
               fontWeight: 700,
               color: '#FFFFFF',
             }}
@@ -139,7 +139,7 @@ export function Hero() {
           <motion.h2
             className="hero-subheadline text-center mb-4 md:mb-10"
             style={{
-              fontSize: isDesktop ? '32px' : '18px',
+              fontSize: isDesktop ? '28px' : '18px',
               color: '#FFFFFF',
             }}
             initial={{ opacity: 0, y: 20 }}
