@@ -21,7 +21,7 @@ const courses: Course[] = [
     hours: '8h',
     includes: 'Mesa Dragon Coaching, pêndulo, cartas, apostila e certificado PDF',
     updatePrice: 748.50,
-    image: 'https://i.ibb.co/S4BXv22Y/Whats-App-Image-2025-12-26-at-11-03-29-1.jpg',
+    image: 'https://i.ibb.co/gFRNMwQG/01994820-a535-4451-ac8d-4d05c0d6ae1b.jpg',
     type: 'course',
     category: 'course',
     level: 'Para todos',
