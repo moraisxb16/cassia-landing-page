@@ -331,19 +331,19 @@ export function Courses() {
             viewport={{ once: true }}
           >
             <div className="flex items-start gap-4">
-              <div className="flex-shrink-0">
+              <div className="flex-shrink-0 hidden md:block">
                 <Sparkles className="w-6 h-6 text-[var(--cassia-gold)]" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 text-center md:text-left">
                 <h3 className="text-xl font-semibold text-[var(--cassia-purple-dark)] mb-2">
                   Diagnóstico Terapêutico (20 minutos gratuito)
                 </h3>
                 <p className="text-[var(--cassia-purple-dark)]/80 mb-4">
                   Um momento especial de conversa entre eu e você, para que juntas possamos entender a sua necessidade e definir seu Caminho Terapêutico.
                 </p>
-                <div className="flex justify-center items-center w-full">
+                <div className="flex justify-center w-full">
                   <Button
-                    className="bg-[var(--cassia-purple)] hover:bg-[var(--cassia-purple-dark)] text-white mx-auto"
+                    className="bg-[var(--cassia-purple)] hover:bg-[var(--cassia-purple-dark)] text-white"
                     onClick={() => {
                       // Abrir WhatsApp ou link de agendamento
                       const whatsappNumber = '5519996760107';
