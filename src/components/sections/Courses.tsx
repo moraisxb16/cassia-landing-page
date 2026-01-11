@@ -231,8 +231,8 @@ export function Courses() {
               R$ {course.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
             {course.updatePrice && (
-              <div className="text-xs text-[var(--cassia-purple-dark)]/70 mt-0.5">
-                Atualização: R$ {course.updatePrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              <div className="text-xs text-[var(--cassia-gold)] font-semibold mt-0.5">
+                💎 Oferta Especial: R$ {course.updatePrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
             )}
           </div>
