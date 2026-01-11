@@ -153,7 +153,7 @@ export function Hero() {
           <motion.p
             className="hero-description-text text-center mb-6 md:mb-12"
             style={{
-              fontSize: isDesktop ? '26px' : '14px',
+              fontSize: isDesktop ? '24px' : '14px',
               color: '#FFFFFF',
               opacity: 1,
             }}
