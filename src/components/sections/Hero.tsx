@@ -99,10 +99,8 @@ export function Hero() {
               <ImageWithFallback
                 src="https://i.ibb.co/mrqZ8sdn/a08e4f14-4dd8-421d-a7b0-ca30d2d87a11.png"
                 alt="Cássia Corviniy - Terapeuta Holística"
-                className="w-[85vw] max-w-[900px] h-[160px] md:h-[280px] object-cover mx-auto block"
+                className="w-[85vw] max-w-[700px] h-[200px] md:h-[450px] md:w-[700px] object-cover mx-auto block"
                 style={{
-                  width: '700px',
-                  height: '450px',
                   borderRadius: '48% 52% 54% 46% / 68% 32% 68% 32%',
                   boxShadow: '0 8px 32px rgba(162, 117, 227, 0.35), 0 4px 16px rgba(138, 79, 195, 0.25), 0 0 80px rgba(162, 117, 227, 0.2)',
                 }}
@@ -112,9 +110,8 @@ export function Hero() {
 
           {/* HEADLINE PRINCIPAL - MAIOR E EM NEGRITO - Controlado via CSS */}
           <motion.h2
-            className="hero-headline text-center mb-3"
+            className="hero-headline text-center mb-3 text-[22px] md:text-[30px]"
             style={{
-              fontSize: '30px',
               fontWeight: 700,
               color: '#FFFFFF',
             }}
@@ -127,9 +124,8 @@ export function Hero() {
 
           {/* SUBHEADLINE - MAIOR - Controlado via CSS */}
           <motion.h2
-            className="hero-subheadline text-center mb-4"
+            className="hero-subheadline text-center mb-4 text-[18px] md:text-[24px]"
             style={{
-              fontSize: '24px',
               color: '#FFFFFF',
             }}
             initial={{ opacity: 0, y: 20 }}
@@ -141,7 +137,7 @@ export function Hero() {
           
           {/* DESCRIÇÃO - MAIOR - Controlado via CSS */}
           <motion.p
-            className="hero-description-text text-center mb-6"
+            className="hero-description-text text-center mb-6 text-[14px] md:text-[18px]"
             style={{ color: '#FFFFFF', opacity: 1 }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -158,7 +154,7 @@ export function Hero() {
             transition={{ delay: 0.8 }}
           >
             <motion.button
-              className="hero-cta inline-flex items-center gap-3 text-white font-semibold border-none cursor-pointer mt-8"
+              className="hero-cta inline-flex items-center gap-2 md:gap-3 text-white font-semibold border-none cursor-pointer mt-8 text-[18px] md:text-[26px] w-[90vw] max-w-[320px] md:w-[480px] md:mx-[10px] py-3 md:py-5 px-4 md:px-8"
               style={{
                 fontWeight: 600,
                 background: 'linear-gradient(15deg, rgba(162, 117, 227, 1) 0%, rgba(0, 0, 0, 1) 100%)',
@@ -167,14 +163,6 @@ export function Hero() {
                 borderTopRightRadius: '20px',
                 borderBottomRightRadius: '20px',
                 borderBottomLeftRadius: '20px',
-                fontSize: '26px',
-                width: '480px',
-                paddingTop: '20px',
-                paddingBottom: '20px',
-                paddingLeft: '32px',
-                paddingRight: '32px',
-                marginLeft: '10px',
-                marginRight: '10px',
               }}
               whileHover={{ 
                 y: -4,
@@ -183,7 +171,7 @@ export function Hero() {
               whileTap={{ scale: 0.98 }}
               onClick={() => document.getElementById('diagnostico')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              <Sparkles className="w-5 h-5" />
+              <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
               Começar a minha transformação
             </motion.button>
           </motion.div>
