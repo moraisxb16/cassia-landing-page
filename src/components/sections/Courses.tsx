@@ -359,23 +359,6 @@ export function Courses() {
           </motion.div>
         </motion.div>
 
-        {/* ATENDIMENTOS */}
-        {servicesList.length > 0 && (
-          <div className="mb-16">
-            <motion.h3
-              className="text-3xl md:text-4xl text-[var(--cassia-purple-dark)] mb-8 text-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              Atendimentos
-            </motion.h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8 items-stretch">
-              {servicesList.map((course, index) => renderCourseCard(course, index))}
-            </div>
-          </div>
-        )}
-
         {/* CURSOS */}
         {coursesList.length > 0 && (
           <div className="mb-16">
@@ -393,8 +376,8 @@ export function Courses() {
           </div>
         )}
 
-        {/* MENTORIA */}
-        {mentoringList.length > 0 && (
+        {/* MENTORIA E ATENDIMENTOS */}
+        {(servicesList.length > 0 || mentoringList.length > 0) && (
           <div>
             <motion.h3
               className="text-3xl md:text-4xl text-[var(--cassia-purple-dark)] mb-8 text-center"
@@ -402,10 +385,10 @@ export function Courses() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              Mentoria
+              Mentoria e Atendimentos
             </motion.h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-8 items-stretch">
-              {mentoringList.map((course, index) => renderCourseCard(course, index))}
+              {[...servicesList, ...mentoringList].map((course, index) => renderCourseCard(course, index))}
             </div>
           </div>
         )}
