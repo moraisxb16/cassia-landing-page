@@ -6,7 +6,7 @@ export function MySpecializations() {
   const specializations = [
     {
       title: 'Comunicadora e Publicitária',
-      institution: 'Faculdades Anhanguera',
+      institution: 'Faculdade Anhanguera',
       year: '2003',
     },
     {
