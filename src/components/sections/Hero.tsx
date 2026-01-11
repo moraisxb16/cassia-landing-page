@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
 import { ImageWithFallback } from '../shared/ImageWithFallback';
 
 export function Hero() {
   const [isDesktop, setIsDesktop] = useState(false);
-  const [textColor, setTextColor] = useState('#FFFFFF'); // Branco por padrão
-  const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkScreen = () => {
@@ -15,37 +13,6 @@ export function Hero() {
     checkScreen();
     window.addEventListener('resize', checkScreen);
     return () => window.removeEventListener('resize', checkScreen);
-  }, []);
-
-  useEffect(() => {
-    if (!textRef.current) return;
-
-    const updateColor = () => {
-      if (!textRef.current) return;
-      
-      // Estimar cor baseado na posição Y do texto
-      // Como o gradiente vai de claro (topo) para escuro (fundo),
-      // usamos a posição Y para estimar se o background está claro ou escuro
-      const rect = textRef.current.getBoundingClientRect();
-      const y = rect.top + rect.height / 2;
-      const viewportHeight = window.innerHeight;
-      
-      // Se o texto está na parte superior (60% do viewport), background é mais claro
-      const isLightArea = y < viewportHeight * 0.6;
-      
-      setTextColor(isLightArea ? '#5e5a9a' : '#FFFFFF');
-    };
-
-    updateColor();
-    const interval = setInterval(updateColor, 1000); // Atualizar a cada segundo devido à animação
-    window.addEventListener('scroll', updateColor);
-    window.addEventListener('resize', updateColor);
-    
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener('scroll', updateColor);
-      window.removeEventListener('resize', updateColor);
-    };
   }, []);
   return (
     <section className="hero-section relative overflow-hidden cassia-hero-gradient min-h-screen flex items-center justify-center">
@@ -129,7 +96,7 @@ export function Hero() {
       
       {/* Conteúdo principal - ACIMA do background */}
       <div className="container mx-auto px-4 relative" style={{ zIndex: 1 }}>
-        <div ref={textRef} className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center">
+        <div className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center">
           {/* Logo/Foto da Cássia - WRAPPER ÚNICO COM LAYOUT NORMAL (mobile: acima do título) */}
           <motion.div
             className="hero-logo mb-6 md:mb-8 relative mx-auto"
@@ -159,8 +126,9 @@ export function Hero() {
             style={{
               fontSize: isDesktop ? '36px' : '22px',
               fontWeight: 700,
-              color: textColor,
-              transition: 'color 0.3s ease',
+              color: '#FFFFFF',
+              mixBlendMode: 'difference',
+              isolation: 'isolate',
             }}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -174,8 +142,9 @@ export function Hero() {
             className="hero-subheadline text-center mb-4 md:mb-10"
             style={{
               fontSize: isDesktop ? '28px' : '18px',
-              color: textColor,
-              transition: 'color 0.3s ease',
+              color: '#FFFFFF',
+              mixBlendMode: 'difference',
+              isolation: 'isolate',
             }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -189,9 +158,10 @@ export function Hero() {
             className="hero-description-text text-center mb-6 md:mb-12"
             style={{
               fontSize: isDesktop ? '24px' : '14px',
-              color: textColor,
+              color: '#FFFFFF',
               opacity: 1,
-              transition: 'color 0.3s ease',
+              mixBlendMode: 'difference',
+              isolation: 'isolate',
             }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
