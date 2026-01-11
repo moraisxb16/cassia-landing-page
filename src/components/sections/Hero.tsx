@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
 import { ImageWithFallback } from '../shared/ImageWithFallback';
 
 export function Hero() {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const checkScreen = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+    checkScreen();
+    window.addEventListener('resize', checkScreen);
+    return () => window.removeEventListener('resize', checkScreen);
+  }, []);
   return (
     <section className="hero-section relative overflow-hidden cassia-hero-gradient min-h-screen flex items-center justify-center">
       {/* Overlay sutil sobre o gradiente animado */}
@@ -99,8 +109,10 @@ export function Hero() {
               <ImageWithFallback
                 src="https://i.ibb.co/mrqZ8sdn/a08e4f14-4dd8-421d-a7b0-ca30d2d87a11.png"
                 alt="Cássia Corviniy - Terapeuta Holística"
-                className="w-[85vw] max-w-[700px] h-[200px] md:h-[450px] md:w-[700px] object-cover mx-auto block"
+                className="w-[85vw] max-w-[900px] object-cover mx-auto block"
                 style={{
+                  width: isDesktop ? '700px' : undefined,
+                  height: isDesktop ? '450px' : '150px',
                   borderRadius: '48% 52% 54% 46% / 68% 32% 68% 32%',
                   boxShadow: '0 8px 32px rgba(162, 117, 227, 0.35), 0 4px 16px rgba(138, 79, 195, 0.25), 0 0 80px rgba(162, 117, 227, 0.2)',
                 }}
