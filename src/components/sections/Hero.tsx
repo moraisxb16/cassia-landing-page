@@ -184,7 +184,7 @@ export function Hero() {
                 borderTopRightRadius: '20px',
                 borderBottomRightRadius: '20px',
                 borderBottomLeftRadius: '20px',
-                fontSize: isDesktop ? '22px' : '18px',
+                fontSize: isDesktop ? '24px' : '18px',
                 width: isDesktop ? '450px' : undefined,
                 paddingTop: isDesktop ? '18px' : '12px',
                 paddingBottom: isDesktop ? '18px' : '12px',
