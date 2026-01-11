@@ -113,6 +113,11 @@ export function Hero() {
           {/* HEADLINE PRINCIPAL - MAIOR E EM NEGRITO - Controlado via CSS */}
           <motion.h2
             className="hero-headline text-center mb-3"
+            style={{
+              fontSize: '30px',
+              fontWeight: 700,
+              color: '#FFFFFF',
+            }}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
@@ -123,11 +128,15 @@ export function Hero() {
           {/* SUBHEADLINE - MAIOR - Controlado via CSS */}
           <motion.h2
             className="hero-subheadline text-center mb-4"
+            style={{
+              fontSize: '24px',
+              color: '#FFFFFF',
+            }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <strong>QUERER</strong> é o início de toda transformação.
+            <strong style={{ fontWeight: 700 }}>QUERER</strong> é o início de toda transformação.
           </motion.h2>
           
           {/* DESCRIÇÃO - MAIOR - Controlado via CSS */}
@@ -158,6 +167,14 @@ export function Hero() {
                 borderTopRightRadius: '20px',
                 borderBottomRightRadius: '20px',
                 borderBottomLeftRadius: '20px',
+                fontSize: '26px',
+                width: '480px',
+                paddingTop: '20px',
+                paddingBottom: '20px',
+                paddingLeft: '32px',
+                paddingRight: '32px',
+                marginLeft: '10px',
+                marginRight: '10px',
               }}
               whileHover={{ 
                 y: -4,
