@@ -181,12 +181,12 @@ export function Hero() {
                 borderTopRightRadius: '20px',
                 borderBottomRightRadius: '20px',
                 borderBottomLeftRadius: '20px',
-                fontSize: isDesktop ? '26px' : '18px',
-                width: isDesktop ? '500px' : undefined,
-                paddingTop: isDesktop ? '22px' : '12px',
-                paddingBottom: isDesktop ? '22px' : '12px',
-                paddingLeft: isDesktop ? '36px' : '16px',
-                paddingRight: isDesktop ? '36px' : '16px',
+                fontSize: isDesktop ? '24px' : '18px',
+                width: isDesktop ? '480px' : undefined,
+                paddingTop: isDesktop ? '20px' : '12px',
+                paddingBottom: isDesktop ? '20px' : '12px',
+                paddingLeft: isDesktop ? '32px' : '16px',
+                paddingRight: isDesktop ? '32px' : '16px',
               }}
               whileHover={{ 
                 y: -4,
