@@ -124,7 +124,7 @@ export function Hero() {
           <motion.h2
             className="hero-headline text-center mb-3 md:mb-8"
             style={{
-              fontSize: isDesktop ? '36px' : '22px',
+              fontSize: isDesktop ? '32px' : '22px',
               fontWeight: 700,
               color: '#FFFFFF',
               textShadow: '0 2px 8px rgba(0, 0, 0, 0.3), 0 0 16px rgba(94, 90, 154, 0.4)',
@@ -140,7 +140,7 @@ export function Hero() {
           <motion.h2
             className="hero-subheadline text-center mb-4 md:mb-10"
             style={{
-              fontSize: isDesktop ? '28px' : '18px',
+              fontSize: isDesktop ? '26px' : '18px',
               color: '#FFFFFF',
               textShadow: '0 2px 8px rgba(0, 0, 0, 0.3), 0 0 16px rgba(94, 90, 154, 0.4)',
             }}
@@ -148,7 +148,7 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <strong style={{ fontWeight: 700 }}>QUERER</strong> é o início de toda transformação.
+            <strong style={{ fontWeight: 700, fontSize: isDesktop ? '26px' : '18px' }}>QUERER</strong> é o início de toda transformação.
           </motion.h2>
           
           {/* DESCRIÇÃO - MAIOR - Controlado via CSS */}
