@@ -201,7 +201,7 @@ export function Courses() {
             {course.name}
           </h3>
           
-          <p className={course.category === 'service' ? 'text-xs text-[var(--cassia-purple-dark)]/72 leading-relaxed flex-grow line-clamp-2' : 'text-sm text-[var(--cassia-purple-dark)]/72 leading-relaxed flex-grow line-clamp-2'}>
+          <p className="text-sm text-[var(--cassia-purple-dark)]/72 leading-relaxed flex-grow line-clamp-2">
             {course.description}
           </p>
           
