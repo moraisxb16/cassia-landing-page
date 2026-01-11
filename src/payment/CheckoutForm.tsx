@@ -264,7 +264,7 @@ export function CheckoutForm() {
                 <h3 className="text-purple-900">Método de Pagamento</h3>
                 <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
                   <p className="text-sm text-purple-800 font-semibold">
-                    💳 Cartão de Crédito
+                    💳 Cartão de Crédito / PIX
                   </p>
                   <p className="text-xs text-purple-700 mt-1">
                     Você finalizará o pagamento no checkout seguro da InfinitePay.
