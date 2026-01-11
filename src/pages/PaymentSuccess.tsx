@@ -223,7 +223,7 @@ export function PaymentSuccess() {
             </p>
             <button
               onClick={() => navigate('/')}
-              className="px-8 py-3 bg-gradient-to-r from-[var(--cassia-purple)] to-[var(--cassia-gold)] hover:opacity-90 text-white rounded-lg font-semibold transition-all"
+              className="px-10 py-4 text-lg bg-gradient-to-r from-[var(--cassia-purple)] to-[var(--cassia-gold)] hover:opacity-90 text-white rounded-lg font-semibold transition-all"
               style={{ boxShadow: 'var(--shadow-medium)' }}
             >
               Voltar ao Início
