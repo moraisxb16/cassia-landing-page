@@ -23,35 +23,29 @@ export function Hero() {
     const updateColor = () => {
       if (!textRef.current) return;
       
-      // Criar um elemento temporário na posição do texto para capturar a cor do background
+      // Estimar cor baseado na posição Y do texto
+      // Como o gradiente vai de claro (topo) para escuro (fundo),
+      // usamos a posição Y para estimar se o background está claro ou escuro
       const rect = textRef.current.getBoundingClientRect();
-      const x = rect.left + rect.width / 2;
       const y = rect.top + rect.height / 2;
-      
-      // Usar a section hero como referência
-      const heroSection = textRef.current.closest('.hero-section');
-      if (!heroSection) return;
-      
-      // Criar um canvas para capturar a cor do pixel
-      const canvas = document.createElement('canvas');
-      canvas.width = 1;
-      canvas.height = 1;
-      const ctx = canvas.getContext('2d', { willReadFrequently: true });
-      if (!ctx) return;
-      
-      // Tentar usar html2canvas ou uma abordagem diferente
-      // Como alternativa mais simples: usar a posição Y para estimar
-      // Se o texto está na parte superior (Y < viewport height / 2), background é mais claro
       const viewportHeight = window.innerHeight;
-      const isLightArea = y < viewportHeight * 0.6; // Área superior é mais clara
+      
+      // Se o texto está na parte superior (60% do viewport), background é mais claro
+      const isLightArea = y < viewportHeight * 0.6;
       
       setTextColor(isLightArea ? '#5e5a9a' : '#FFFFFF');
     };
 
     updateColor();
     const interval = setInterval(updateColor, 1000); // Atualizar a cada segundo devido à animação
+    window.addEventListener('scroll', updateColor);
+    window.addEventListener('resize', updateColor);
     
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('scroll', updateColor);
+      window.removeEventListener('resize', updateColor);
+    };
   }, []);
   return (
     <section className="hero-section relative overflow-hidden cassia-hero-gradient min-h-screen flex items-center justify-center">
