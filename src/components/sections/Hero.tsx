@@ -172,7 +172,7 @@ export function Hero() {
             transition={{ delay: 0.8 }}
           >
             <motion.button
-              className="hero-cta inline-flex items-center gap-2 md:gap-3 text-white font-semibold border-none cursor-pointer mt-8 text-[18px] md:text-[26px] w-[90vw] max-w-[320px] md:w-[480px] md:mx-[10px] py-3 md:py-5 px-4 md:px-8"
+              className="hero-cta inline-flex items-center gap-2 md:gap-3 text-white font-semibold border-none cursor-pointer mt-8 text-[18px] w-[90vw] max-w-[320px] md:mx-[10px] py-3 px-4"
               style={{
                 fontWeight: 600,
                 background: 'linear-gradient(15deg, rgba(162, 117, 227, 1) 0%, rgba(0, 0, 0, 1) 100%)',
@@ -181,6 +181,12 @@ export function Hero() {
                 borderTopRightRadius: '20px',
                 borderBottomRightRadius: '20px',
                 borderBottomLeftRadius: '20px',
+                fontSize: isDesktop ? '28px' : '18px',
+                width: isDesktop ? '520px' : undefined,
+                paddingTop: isDesktop ? '24px' : '12px',
+                paddingBottom: isDesktop ? '24px' : '12px',
+                paddingLeft: isDesktop ? '40px' : '16px',
+                paddingRight: isDesktop ? '40px' : '16px',
               }}
               whileHover={{ 
                 y: -4,
