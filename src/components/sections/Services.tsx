@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 const services = [
   {
     title: 'Terapia em Grupo – 100% online (Zoom)',
-    description: 'Terapia em Grupo – Cuidando da DOR\n\nO que é:\nEspaço seguro e acolhedor de escuta e consciência, onde olhamos para nossas dores com respeito e profundidade.\nAo final de cada encontro haverá uma prática de encerramento: meditação guiada, mensagens de reflexão, exercícios sistêmicos ou constelação.\n\nFormato:\n• 100% online (Zoom)\n• Quartas-feiras\n• 19h30 às 20h30\n• Quinzenal\n\nParticipação:\n• 3 meses – R$\n• 6 meses – R$\n• 12 meses – R$',
+    description: 'Terapia em Grupo – Cuidando da DOR\n\nO que é:\nEspaço seguro e acolhedor de escuta e consciência, onde olhamos para nossas dores com respeito e profundidade.\nAo final de cada encontro haverá uma prática de encerramento: meditação guiada, mensagens de reflexão, exercícios sistêmicos ou constelação.\n\nFormato:\n• 100% online (Zoom)\n• Quartas-feiras\n• 19h30 às 20h30\n• Quinzenal\n\nParticipação:\n• 3 meses –\n• 6 meses –\n• 12 meses –\n\nConsultar valores',
   },
   {
     title: 'Mentoria em Grupo – Método EMV (Eu Me Vejo)',
