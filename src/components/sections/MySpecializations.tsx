@@ -77,8 +77,8 @@ export function MySpecializations() {
                       <p className="text-[var(--cassia-purple-dark)]/70">
                         {spec.institution}
                         {(spec.year || spec.period) && (
-                          <span className="ml-2 text-[var(--cassia-gold)] font-medium">
-                            {spec.year || spec.period}
+                          <span className="text-[var(--cassia-gold)] font-medium">
+                            {' '}{spec.year || spec.period}
                           </span>
                         )}
                       </p>
