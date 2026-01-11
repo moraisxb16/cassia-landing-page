@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
 import { ImageWithFallback } from '../shared/ImageWithFallback';
 
 export function Hero() {
   const [isDesktop, setIsDesktop] = useState(false);
+  const [textColor, setTextColor] = useState('#FFFFFF'); // Branco por padrão
+  const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkScreen = () => {
@@ -13,6 +15,43 @@ export function Hero() {
     checkScreen();
     window.addEventListener('resize', checkScreen);
     return () => window.removeEventListener('resize', checkScreen);
+  }, []);
+
+  useEffect(() => {
+    if (!textRef.current) return;
+
+    const updateColor = () => {
+      if (!textRef.current) return;
+      
+      // Criar um elemento temporário na posição do texto para capturar a cor do background
+      const rect = textRef.current.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      
+      // Usar a section hero como referência
+      const heroSection = textRef.current.closest('.hero-section');
+      if (!heroSection) return;
+      
+      // Criar um canvas para capturar a cor do pixel
+      const canvas = document.createElement('canvas');
+      canvas.width = 1;
+      canvas.height = 1;
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      if (!ctx) return;
+      
+      // Tentar usar html2canvas ou uma abordagem diferente
+      // Como alternativa mais simples: usar a posição Y para estimar
+      // Se o texto está na parte superior (Y < viewport height / 2), background é mais claro
+      const viewportHeight = window.innerHeight;
+      const isLightArea = y < viewportHeight * 0.6; // Área superior é mais clara
+      
+      setTextColor(isLightArea ? '#5e5a9a' : '#FFFFFF');
+    };
+
+    updateColor();
+    const interval = setInterval(updateColor, 1000); // Atualizar a cada segundo devido à animação
+    
+    return () => clearInterval(interval);
   }, []);
   return (
     <section className="hero-section relative overflow-hidden cassia-hero-gradient min-h-screen flex items-center justify-center">
@@ -96,7 +135,7 @@ export function Hero() {
       
       {/* Conteúdo principal - ACIMA do background */}
       <div className="container mx-auto px-4 relative" style={{ zIndex: 1 }}>
-        <div className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center">
+        <div ref={textRef} className="hero-content max-w-4xl mx-auto text-center flex flex-col items-center">
           {/* Logo/Foto da Cássia - WRAPPER ÚNICO COM LAYOUT NORMAL (mobile: acima do título) */}
           <motion.div
             className="hero-logo mb-6 md:mb-8 relative mx-auto"
@@ -126,9 +165,8 @@ export function Hero() {
             style={{
               fontSize: isDesktop ? '36px' : '22px',
               fontWeight: 700,
-              color: '#FFFFFF',
-              mixBlendMode: 'difference',
-              filter: 'contrast(1.1)',
+              color: textColor,
+              transition: 'color 0.3s ease',
             }}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -142,9 +180,8 @@ export function Hero() {
             className="hero-subheadline text-center mb-4 md:mb-10"
             style={{
               fontSize: isDesktop ? '28px' : '18px',
-              color: '#FFFFFF',
-              mixBlendMode: 'difference',
-              filter: 'contrast(1.1)',
+              color: textColor,
+              transition: 'color 0.3s ease',
             }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -158,10 +195,9 @@ export function Hero() {
             className="hero-description-text text-center mb-6 md:mb-12"
             style={{
               fontSize: isDesktop ? '24px' : '14px',
-              color: '#FFFFFF',
+              color: textColor,
               opacity: 1,
-              mixBlendMode: 'difference',
-              filter: 'contrast(1.1)',
+              transition: 'color 0.3s ease',
             }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
