@@ -122,8 +122,9 @@ export function Hero() {
 
           {/* HEADLINE PRINCIPAL - MAIOR E EM NEGRITO - Controlado via CSS */}
           <motion.h2
-            className="hero-headline text-center mb-3 text-[22px] md:text-[48px] md:mb-8"
+            className="hero-headline text-center mb-3 md:mb-8"
             style={{
+              fontSize: isDesktop ? '48px' : '22px',
               fontWeight: 700,
               color: '#FFFFFF',
             }}
@@ -136,8 +137,9 @@ export function Hero() {
 
           {/* SUBHEADLINE - MAIOR - Controlado via CSS */}
           <motion.h2
-            className="hero-subheadline text-center mb-4 text-[18px] md:text-[36px] md:mb-10"
+            className="hero-subheadline text-center mb-4 md:mb-10"
             style={{
+              fontSize: isDesktop ? '36px' : '18px',
               color: '#FFFFFF',
             }}
             initial={{ opacity: 0, y: 20 }}
@@ -149,8 +151,12 @@ export function Hero() {
           
           {/* DESCRIÇÃO - MAIOR - Controlado via CSS */}
           <motion.p
-            className="hero-description-text text-center mb-6 text-[14px] md:text-[26px] md:mb-12"
-            style={{ color: '#FFFFFF', opacity: 1 }}
+            className="hero-description-text text-center mb-6 md:mb-12"
+            style={{
+              fontSize: isDesktop ? '26px' : '14px',
+              color: '#FFFFFF',
+              opacity: 1,
+            }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.8 }}
