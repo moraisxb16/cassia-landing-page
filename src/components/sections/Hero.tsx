@@ -127,8 +127,7 @@ export function Hero() {
               fontSize: isDesktop ? '36px' : '22px',
               fontWeight: 700,
               color: '#FFFFFF',
-              mixBlendMode: 'difference',
-              isolation: 'isolate',
+              textShadow: '0 2px 8px rgba(0, 0, 0, 0.3), 0 0 16px rgba(94, 90, 154, 0.4)',
             }}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -143,8 +142,7 @@ export function Hero() {
             style={{
               fontSize: isDesktop ? '28px' : '18px',
               color: '#FFFFFF',
-              mixBlendMode: 'difference',
-              isolation: 'isolate',
+              textShadow: '0 2px 8px rgba(0, 0, 0, 0.3), 0 0 16px rgba(94, 90, 154, 0.4)',
             }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -160,8 +158,7 @@ export function Hero() {
               fontSize: isDesktop ? '24px' : '14px',
               color: '#FFFFFF',
               opacity: 1,
-              mixBlendMode: 'difference',
-              isolation: 'isolate',
+              textShadow: '0 2px 8px rgba(0, 0, 0, 0.3), 0 0 16px rgba(94, 90, 154, 0.4)',
             }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
