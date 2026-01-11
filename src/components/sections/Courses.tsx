@@ -232,7 +232,7 @@ export function Courses() {
             </div>
             {course.updatePrice && (
               <div className="text-xs text-[var(--cassia-gold)] font-semibold mt-0.5">
-                💎 Oferta Especial: R$ {course.updatePrice.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                Oferta Especial
               </div>
             )}
           </div>
