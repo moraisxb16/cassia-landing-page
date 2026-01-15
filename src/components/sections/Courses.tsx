@@ -35,7 +35,7 @@ const courses: Course[] = [
     hours: '16h',
     includes: 'Mesa Turquesa, cartas, pêndulo, 09 essências, apostila, certificado PDF',
     updatePrice: 1128.00,
-    image: defaultCourseImage,
+    image: 'https://i.ibb.co/NzScRMj/164bced4-e2ab-433e-8b72-2025e1a4d08a.jpg',
     type: 'course',
     category: 'course',
     level: 'Iniciante',
