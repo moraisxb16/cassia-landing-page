@@ -22,7 +22,7 @@ export function AboutMe() {
           
           <div className="prose prose-lg max-w-none text-left mt-8">
             <p className="text-lg text-[var(--cassia-purple-dark)]/80 leading-relaxed mb-4">
-              Sou <strong className="text-[var(--cassia-purple-dark)]">Cássia Corviniy</strong>, terapeuta integrativa, Mestre Dragonlight e mentora em desenvolvimento humano.
+              Sou <strong className="text-[var(--cassia-purple-dark)]">Cássia Corviniy</strong>, Terapeuta Integrativa, Mestre Dragonlight e Mentora do Desenvolvimento Humano.
             </p>
             <p className="text-lg text-[var(--cassia-purple-dark)]/80 leading-relaxed mb-4">
               Há mais de <strong>15 anos</strong> conduzo pessoas e há <strong>04</strong> líderes a romper bloqueios emocionais, ganhar clareza e viver com mais equilíbrio e direção.
