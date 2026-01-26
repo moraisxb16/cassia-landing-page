@@ -38,7 +38,7 @@ export function Testimonials() {
             O Que Nossos Clientes Dizem
           </h2>
           <p className="text-lg text-[var(--cassia-purple-dark)]/70 max-w-2xl mx-auto">
-            Mais de 500+ atendimentos realizados com resultados transformadores
+            Mais de 6.500+ atendimentos realizados com resultados transformadores
           </p>
         </motion.div>
 
