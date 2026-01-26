@@ -1,4 +1,5 @@
-import { Instagram, Heart, Sparkles } from 'lucide-react';
+import React from 'react';
+import { Instagram, Heart, Sparkles, Youtube, Facebook } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export function Footer() {
@@ -100,6 +101,36 @@ export function Footer() {
                 <div className="text-sm">@cassiacorviniy</div>
               </div>
             </motion.a>
+
+            <motion.a 
+              href="https://www.youtube.com/@cassiacorviniy3950"
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[var(--cassia-surface)]/95 backdrop-blur-sm border border-[var(--cassia-border-soft)] text-[var(--cassia-purple-dark)] hover:border-[var(--cassia-purple)] transition-all mb-6 group"
+              style={{ boxShadow: 'var(--shadow-soft)' }}
+              whileHover={{ scale: 1.02, x: 5, boxShadow: 'var(--shadow-medium)' }}
+            >
+              <Youtube className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <div>
+                <div className="text-xs text-[var(--cassia-purple)]">Inscreva-se no YouTube</div>
+                <div className="text-sm">@cassiacorviniy3950</div>
+              </div>
+            </motion.a>
+
+            <motion.a 
+              href="https://web.facebook.com/cassia.corvini"
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[var(--cassia-surface)]/95 backdrop-blur-sm border border-[var(--cassia-border-soft)] text-[var(--cassia-purple-dark)] hover:border-[var(--cassia-purple)] transition-all mb-6 group"
+              style={{ boxShadow: 'var(--shadow-soft)' }}
+              whileHover={{ scale: 1.02, x: 5, boxShadow: 'var(--shadow-medium)' }}
+            >
+              <Facebook className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              <div>
+                <div className="text-xs text-[var(--cassia-purple)]">Siga no Facebook</div>
+                <div className="text-sm">/cassia.corvini</div>
+              </div>
+            </motion.a>
             
             <p className="text-sm text-[var(--cassia-purple-dark)]/72 leading-relaxed">
               Conteúdos diários sobre espiritualidade, rituais, dicas de cura energética e muito mais.
@@ -118,7 +149,7 @@ export function Footer() {
               Feito com <Heart className="w-4 h-4 fill-current text-[var(--cassia-gold)] animate-pulse" /> para sua jornada espiritual
             </p>
             <p className="text-[var(--cassia-purple-dark)]/60 text-xs">
-              © 2025 Cássia Corviniy. Todos os direitos reservados.
+              © 2026 Cássia Corviniy. Todos os direitos reservados.
             </p>
           </div>
         </motion.div>

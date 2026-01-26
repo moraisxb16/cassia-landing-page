@@ -89,7 +89,7 @@ export function MyWork() {
             transition={{ delay: 0.4 }}
           >
             <p className="text-lg text-[var(--cassia-purple-dark)]/90 font-medium">
-              Fomos fragmentados ao longo da história humana, mas somos <strong className="text-[var(--cassia-purple-dark)]">SERES INTEGRADOS</strong>.
+              Nos afastamos de partes de nós ao longo da vida, mas nossa essência sempre foi integrada.
             </p>
           </motion.div>
         </motion.div>

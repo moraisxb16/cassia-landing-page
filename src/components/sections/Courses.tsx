@@ -118,7 +118,7 @@ const courses: Course[] = [
     description: 'Encontros online e ao vivo para fortalecimento da autoestima, foco e autoconhecimento. Uma jornada profunda de cura e transformação abordando temas como Criança Interior, Adolescente, Relação com Pais e muito mais.',
     price: 2100.00,
     format: '10 meses / 2 encontros mensais',
-    image: defaultCourseImage,
+    image: 'https://i.ibb.co/5fXKTR0/Whats-App-Image-2026-01-23-at-18-10-33.jpg',
     type: 'mentoring',
     category: 'mentoring',
     gradient: 'from-[var(--cassia-gold)] to-[var(--cassia-purple-dark)]',

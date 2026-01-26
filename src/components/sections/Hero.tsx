@@ -108,7 +108,7 @@ export function Hero() {
             <div className="relative">
               <ImageWithFallback
                 src="https://i.ibb.co/mrqZ8sdn/a08e4f14-4dd8-421d-a7b0-ca30d2d87a11.png"
-                alt="Cássia Corviniy - Terapeuta Holística"
+                alt="Cássia Corviniy - Terapeuta Integrativa"
                 className="w-[85vw] max-w-[900px] object-cover mx-auto block"
                 style={{
                   width: isDesktop ? '700px' : '90vw',
@@ -133,7 +133,7 @@ export function Hero() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
           >
-            ✨ Transformação Mental, Física e Espiritual
+            Você não precisa ser outra pessoa. Você precisa se <strong>VER</strong>.
           </motion.h2>
 
           {/* SUBHEADLINE - MAIOR - Controlado via CSS */}
@@ -148,7 +148,7 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <strong style={{ fontWeight: 700, fontSize: isDesktop ? '26px' : '18px' }}>QUERER</strong> é o início de toda transformação.
+            <strong style={{ fontWeight: 700, fontSize: isDesktop ? '26px' : '18px' }}>QUERER</strong> é o início de toda a transformação.
           </motion.h2>
           
           {/* DESCRIÇÃO - MAIOR - Controlado via CSS */}
@@ -164,7 +164,7 @@ export function Hero() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.8 }}
           >
-            <strong>Terapeuta Holística e Mestra Dragonlight,</strong> guiando sua jornada de autoconhecimento e transformação espiritual.
+            Terapeuta Integrativa, Mestre Dragonlight e Mentora do Desenvolvimento Humano.
           </motion.p>
 
           {/* CTA Principal - Premium com glow pulsante forte */}

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -23,32 +24,8 @@ const services = [
     description: 'Atendimentos realizados na residência do cliente.',
   },
   {
-    title: 'Limpeza Energética do Ambiente',
-    description: 'Serviço de limpeza energética para ambientes residenciais e comerciais.',
-  },
-  {
     title: 'Atendimentos Empresariais',
-    description: 'Serviços de desenvolvimento de liderança e bem-estar para empresas.',
-  },
-  {
-    title: 'Saúde Mental (NR1)',
-    description: 'Atendimentos focados em saúde mental e bem-estar.',
-  },
-  {
-    title: 'Terapia Individual',
-    description: 'Sessões individuais de terapia integrativa.',
-  },
-  {
-    title: 'Oficinas',
-    description: 'Oficinas e workshops sobre diversos temas de autoconhecimento e desenvolvimento.',
-  },
-  {
-    title: 'Palestras',
-    description: 'Palestras sobre temas relacionados à terapia integrativa e desenvolvimento pessoal.',
-  },
-  {
-    title: 'Desenvolvimento de Líderes',
-    description: 'Programas de desenvolvimento de liderança empresarial.',
+    description: 'Saúde Mental (NR1), Desenvolvimento de Líderes, Palestras e Oficinas.',
   },
 ];
 

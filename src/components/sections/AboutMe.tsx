@@ -22,13 +22,19 @@ export function AboutMe() {
           
           <div className="prose prose-lg max-w-none text-left mt-8">
             <p className="text-lg text-[var(--cassia-purple-dark)]/80 leading-relaxed mb-4">
-              Sou <strong className="text-[var(--cassia-purple-dark)]">Cássia Corviniy</strong>, Terapeuta Integrativa, atuando há <strong>15 anos</strong>, com mais de <strong>6.500 atendimentos</strong> realizados em mais de <strong>5 países</strong>.
+              Sou <strong className="text-[var(--cassia-purple-dark)]">Cássia Corviniy</strong>, terapeuta integrativa, Mestre Dragonlight e mentora em desenvolvimento humano.
             </p>
             <p className="text-lg text-[var(--cassia-purple-dark)]/80 leading-relaxed mb-4">
-              Sou facilitadora do processo de <strong>Desenvolvimento de Liderança Empresarial</strong> há 4 anos e criadora do <strong>Método Eu Me Vejo</strong>.
+              Há mais de <strong>15 anos</strong> conduzo pessoas e há <strong>04</strong> líderes a romper bloqueios emocionais, ganhar clareza e viver com mais equilíbrio e direção.
+            </p>
+            <p className="text-lg text-[var(--cassia-purple-dark)]/80 leading-relaxed mb-4">
+              Já realizei mais de <strong>6.500 atendimentos</strong> em mais de <strong>5 países</strong>, sou facilitadora de <strong>Desenvolvimento de Liderança Empresarial</strong> e criadora do <strong>Método Eu Me Vejo</strong>.
+            </p>
+            <p className="text-lg text-[var(--cassia-purple-dark)]/80 leading-relaxed mb-4">
+              Acredito que quando você decide se transformar, tudo se torna possível.
             </p>
             <p className="text-lg text-[var(--cassia-purple-dark)]/80 leading-relaxed">
-              Acredito que quando uma pessoa <strong>QUER</strong> se transformar, ela pode tudo — e eu estou aqui para facilitar o seu processo. <strong>Boraaaa?!</strong>
+              Eu estou aqui para facilitar esse caminho.
             </p>
           </div>
         </motion.div>

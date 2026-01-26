@@ -396,7 +396,7 @@ export function Products() {
               style={{ boxShadow: 'var(--shadow-glow)' }}
             >
               <Sparkles className="w-4 h-4 mr-2" />
-              Produtos Holísticos
+              Produtos
             </Badge>
           </motion.div>
           
