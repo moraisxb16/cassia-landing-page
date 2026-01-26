@@ -8,6 +8,13 @@ export function Header() {
   const { totalItems, openCart } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
 
+  const scrollToDiagnostico = () => {
+    const el =
+      document.getElementById('agendar-diagnostico') ??
+      document.getElementById('diagnostico');
+    el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
   useEffect(() => {
     const onScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -128,7 +135,7 @@ export function Header() {
               className="hidden md:block px-4 py-2 text-sm font-medium text-white bg-[var(--cassia-purple)]/80 hover:bg-[var(--cassia-purple)] rounded-lg transition-all"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => document.getElementById('diagnostico')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={scrollToDiagnostico}
             >
               Agendar Atendimento
             </motion.button>

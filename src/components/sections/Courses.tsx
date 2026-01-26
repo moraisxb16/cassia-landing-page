@@ -343,6 +343,7 @@ export function Courses() {
                 </p>
                 <div className="flex justify-center w-full">
                   <Button
+                    id="agendar-diagnostico"
                     className="bg-[var(--cassia-purple)] hover:bg-[var(--cassia-purple-dark)] text-white"
                     onClick={() => {
                       // Abrir WhatsApp ou link de agendamento

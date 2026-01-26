@@ -14,6 +14,14 @@ export function Hero() {
     window.addEventListener('resize', checkScreen);
     return () => window.removeEventListener('resize', checkScreen);
   }, []);
+
+  const scrollToDiagnostico = () => {
+    const el =
+      document.getElementById('agendar-diagnostico') ??
+      document.getElementById('diagnostico');
+    el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
   return (
     <section className="hero-section relative overflow-hidden cassia-hero-gradient min-h-screen flex items-center justify-center">
       {/* Overlay sutil sobre o gradiente animado */}
@@ -196,7 +204,7 @@ export function Hero() {
                 scale: 1.03,
               }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => document.getElementById('diagnostico')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={scrollToDiagnostico}
             >
               <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
               Começar a minha transformação
