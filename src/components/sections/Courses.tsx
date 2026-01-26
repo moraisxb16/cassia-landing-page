@@ -313,7 +313,10 @@ export function Courses() {
             </Badge>
           </motion.div>
           
-          <h2 className="text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] via-[var(--cassia-purple)] to-[var(--cassia-gold)] mb-6">
+          <h2
+            id="transformacao-cura-energetica"
+            className="text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-[var(--cassia-purple-dark)] via-[var(--cassia-purple)] to-[var(--cassia-gold)] mb-6"
+          >
             Transformação e Cura Energética
           </h2>
           

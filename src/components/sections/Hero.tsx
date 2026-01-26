@@ -15,11 +15,18 @@ export function Hero() {
     return () => window.removeEventListener('resize', checkScreen);
   }, []);
 
-  const scrollToDiagnostico = () => {
-    const el =
-      document.getElementById('agendar-diagnostico') ??
-      document.getElementById('diagnostico');
-    el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const scrollToTransformacaoECura = () => {
+    const target =
+      document.getElementById('transformacao-cura-energetica') ??
+      document.getElementById('courses');
+
+    if (!target) return;
+
+    // Header fixo: aplicar offset para “cair certinho” no título da seção
+    const headerHeight = 80;
+    const y = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+
+    window.scrollTo({ top: y, behavior: 'smooth' });
   };
 
   return (
@@ -204,7 +211,7 @@ export function Hero() {
                 scale: 1.03,
               }}
               whileTap={{ scale: 0.98 }}
-              onClick={scrollToDiagnostico}
+              onClick={scrollToTransformacaoECura}
             >
               <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
               Começar a minha transformação
