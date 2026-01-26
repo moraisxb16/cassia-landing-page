@@ -15,9 +15,9 @@ export function Hero() {
     return () => window.removeEventListener('resize', checkScreen);
   }, []);
 
-  const scrollToTransformacaoECura = () => {
+  const scrollToCursosEAtendimentos = () => {
     const target =
-      document.getElementById('transformacao-cura-energetica') ??
+      document.getElementById('cursos-atendimentos-dragonlight') ??
       document.getElementById('courses');
 
     if (!target) return;
@@ -211,7 +211,7 @@ export function Hero() {
                 scale: 1.03,
               }}
               whileTap={{ scale: 0.98 }}
-              onClick={scrollToTransformacaoECura}
+              onClick={scrollToCursosEAtendimentos}
             >
               <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
               Começar a minha transformação
