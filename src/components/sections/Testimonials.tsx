@@ -6,8 +6,8 @@ import { Card, CardContent } from '../ui/card';
 const testimonials = [
   {
     id: 1,
-    name: 'Maria Silva',
-    text: 'Os atendimentos transformaram minha vida. Sinto-me mais conectada comigo mesma e com minha essência.',
+    name: 'GEOVANO LEITE',
+    text: 'Conheci a Cássia há pelo menos 5 anos, desde então muitas crenças vencidas e mais ainda, voltei a conversar e respeitar minha mãe, algo que não havia conseguido em mais de 20 anos mesmo frequentando igreja, esses foram alguns dos benefícios pessoais e na vida profissional, 1 dia após um ritual da prosperidade, desenvolvi a empresa que hoje realiza projetos pelo Brasil todo e gera muitos empregos diretos e indiretos!',
     rating: 5,
   },
   {
