@@ -301,6 +301,7 @@ export function Courses() {
           viewport={{ once: true }}
         >
           <motion.div
+            id="cursos-atendimentos-dragonlight"
             className="inline-block mb-6"
             whileHover={{ scale: 1.05 }}
           >

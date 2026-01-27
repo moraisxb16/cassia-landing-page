@@ -12,8 +12,8 @@ const testimonials = [
   },
   {
     id: 2,
-    name: 'Ana Costa',
-    text: 'Os cursos Dragonlight são profundos e transformadores. Recomendo para quem busca autoconhecimento real.',
+    name: 'MAÍRA MENDONÇA',
+    text: 'Fazer o curso da mesa violeta com a Ca foi um divisor de águas na minha vida! Tudo que precisou ser limpo foi tudo que precisou ficar ficou! A Ca é uma querida! Foi muito paciente e a didática foi ótima! Farei mais vezes e nao so esse! Que venha a mesa dourada! Obrigada.',
     rating: 5,
   },
   {
